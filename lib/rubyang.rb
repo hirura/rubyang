@@ -2,5 +2,7 @@
 
 require 'rubyang/version'
 
+require_relative 'rubyang/model'
+
 module Rubyang
 end
