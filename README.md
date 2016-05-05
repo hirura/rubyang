@@ -26,7 +26,69 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Add this line to head of your code:
+
+```ruby
+require 'rubyang'
+```
+
+You can specify YANG model as String:
+
+```ruby
+yang = <<EOB
+module rubyang-example {
+  namespace 'http://rubyang/example';
+  prefix 'rubyang-example';
+  container container1 {
+    leaf leaf1 {
+      type string;
+    }
+  }
+}
+EOB
+```
+
+And prepare DB for configurations:
+
+```ruby
+db = Rubyang::Database.new
+```
+
+You can load YANG model to DB:
+
+```ruby
+db.load_model Rubyang::Model::Parser.parse( yang )
+```
+
+Then configurations can be set with YANG model:
+
+```ruby
+db.configure.edit( "container1" ).edit( "leaf1" ).set( "hoge" )
+```
+
+And you can see configured data in XML format:
+
+```ruby
+puts db.configure.to_xml( pretty: true )
+# => <config xmlns='http://rubyang/config/0.1'>
+#      <container1 xmlns='http://rubyang/example'>
+#        <leaf1>hoge</leaf1>
+#      </container1>
+#    </config>
+```
+
+And also JSON format:
+
+```ruby
+puts db.configure.to_xml( pretty: true )
+# => {
+#      "config": {
+#        "container1": {
+#          "leaf1": "hoge"
+#        }
+#      }
+#    }
+```
 
 ## Development
 
