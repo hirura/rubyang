@@ -1,6 +1,7 @@
 # rubyang
 
 [![Build Status](https://travis-ci.org/hirura/rubyang.svg?branch=master)](https://travis-ci.org/hirura/rubyang)
+[![Coverage Status](https://coveralls.io/repos/github/hirura/rubyang/badge.svg?branch=master)](https://coveralls.io/github/hirura/rubyang?branch=master)
 
 YANG parser and tree structure data store
 
