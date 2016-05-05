@@ -3,9 +3,9 @@
 require_relative 'webui/app'
 
 module Rubyang
-	module Webui
+	module WebUI
 	end
 end
 
-Rubyang::Webui::App.run!
+Rubyang::WebUI::App.run!
 
