@@ -1,5 +1,7 @@
 # rubyang
 
+[![Build Status](https://travis-ci.org/hirura/rubyang.svg?branch=master)](https://travis-ci.org/hirura/rubyang)
+
 YANG parser and tree structure data store
 
 ## Installation
