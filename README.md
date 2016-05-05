@@ -80,7 +80,7 @@ puts db.configure.to_xml( pretty: true )
 And also JSON format:
 
 ```ruby
-puts db.configure.to_xml( pretty: true )
+puts db.configure.to_json( pretty: true )
 # => {
 #      "config": {
 #        "container1": {
