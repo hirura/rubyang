@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+		<title>Rubyang WebUI</title>
+		<!-- Bootstrap -->
+		<!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	</head>
+	<body>
+		<div class="container-fluid" style="background-color:black;color:white;height:50;">
+			<h1>Rubyang::WebUI</h1>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3 sidebar">
+					<ul class="nav nav-pills nav-stacked">
+						<li data-toggle="collapse" href="#collapse-A">
+							<a href="#"><span class="caret"></span> menu A</a>
+						</li>
+						<ul id="collapse-A" class="collapse" style="list-style-type:none;">
+							<li><a href="A-1"><span class="fa fa-angle-double-right fa-fw"></span> A-1</a>
+							<li><a href="A-2"><span class="fa fa-angle-double-right fa-fw"></span> A-2</a>
+							<li><a href="A-3"><span class="fa fa-angle-double-right fa-fw"></span> A-3</a>
+						</ul>
+						<li data-toggle="collapse" href="#collapse-B">
+							<a href="#"><span class="caret"></span> menu B</a>
+						</li>
+						<ul id="collapse-B" class="collapse" style="list-style-type:none;">
+							<li><a href="B-1"><span class="fa fa-angle-double-right fa-fw"> B-1</a>
+							<li><a href="B-2"><span class="fa fa-angle-double-right fa-fw"> B-2</a>
+							<li><a href="B-3"><span class="fa fa-angle-double-right fa-fw"> B-3</a>
+						</ul>
+					</ul>
+				</div>
+				<div class="col-md-9">
+					<%= yield %>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="myModalLabel"><i class="fa fa-clock-o"></i>Please Wait ...</h4>
+					</div>
+					<div class="modal-body center-block">
+						<div class="progress">
+							<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="myModalLabel"><i class="fa fa-clock-o"></i>Please Wait ...</h4>
+					</div>
+					<div class="modal-body center-block">
+						<div class="progress">
+							<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<!-- <script src="js/bootstrap.min.js"></script> -->
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+		<script type="text/javascript" src="/js/webui.js"></script>
+		<%= yield_content :javascript %>
+	</body>
+</html>

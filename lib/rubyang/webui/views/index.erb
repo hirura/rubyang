@@ -1,0 +1,48 @@
+<div class="page-header">
+	<h2>A Container</h2>
+</div>
+
+<div class="well">
+	<div class="" id="root" data-schemapath="/"></div>
+
+	<div>
+		<button type="button" class="btn btn-success button-ok" data-toggle="modal">OK</button>
+	</div>
+</div>
+
+<% content_for :javascript do %>
+	<script type="text/javascript">
+$(document).ready(function(){
+	$('#myModal2').modal();
+	$('#myModal2 .progress-bar').css('width', '33%');
+	$.ajax({
+		type: 'GET',
+		url: "api/schema",
+		dataType: 'json'
+	}).done(function(data){
+		$('#myModal2 .progress-bar').css('width', '67%');
+		make_form(data, 'root');
+		$.ajax({
+			type: 'GET',
+			url: "api/data",
+			dataType: 'json'
+		}).done(function(data){
+			set_config(data, 'root');
+			$('#myModal2 .progress-bar').css('width', '100%');
+			$('#myModal2').modal('hide');
+		}).fail(function(data){
+			alert('failed to load config');
+			$('#myModal2 .progress-bar').css('width', '100%');
+			$('#myModal2').modal('hide');
+		}).always(function(data){
+		});
+	}).fail(function(data){
+		alert('failed to load schema');
+		$('#myModal2 .progress-bar').css('width', '100%');
+		$('#myModal2').modal('hide');
+	}).always(function(data){
+	});
+});
+	</script>
+<% end %>
+
