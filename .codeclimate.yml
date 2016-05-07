@@ -27,3 +27,4 @@ exclude_paths:
 - spec/
 - vendor/
 - lib/rubyang/model/parser/parser.tab.rb
+- lib/rubyang/xpath/parser/parser.tab.rb
