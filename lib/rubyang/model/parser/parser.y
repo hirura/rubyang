@@ -1442,7 +1442,7 @@ rule
 	"string"			:	STRING
 					|	"string" "+" STRING
 							{
-								result = val[0] + val[1]
+								result = val[0] + val[2]
 							}
 
 	"stmtend"			:	";"

@@ -236,7 +236,7 @@ module Rubyang
 			end
 			class Pattern
 				def initialize
-					@pattern = Regexp.new( '.*' )
+					@pattern = Regexp.new( '^.*$' )
 				end
 				def valid? value
 					if @pattern =~ value
@@ -246,7 +246,8 @@ module Rubyang
 					end
 				end
 				def update arg
-					@pattern = Regexp.new( arg )
+					p arg
+					@pattern = Regexp.new( '^' + arg + '$' )
 				end
 				def to_s
 					@pattern.inspect
