@@ -2148,6 +2148,51 @@ describe Rubyang::Database do
 				end
 			end
 		end
+
+		describe 'type empty' do
+			describe 'without restrictions' do
+				let( :yang_str ){
+					<<-EOB
+						module module1 {
+							namespace "http://module1.rspec/";
+							prefix module1;
+							leaf leaf1 { type empty; }
+						}
+					EOB
+				}
+				context 'with valid value: ' do
+					let( :value ){ '0' }
+					let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+					subject {
+						db.load_model Rubyang::Model::Parser.parse( yang_str )
+						config = db.configure
+						leaf1 = config.edit 'leaf1'
+						config.to_xml( pretty: true )
+					}
+					it { is_expected.to eq doc_xml_pretty }
+				end
+				context 'with invalid value: a' do
+					let( :value ){ 'a' }
+					subject { ->{
+						db.load_model Rubyang::Model::Parser.parse( yang_str )
+						config = db.configure
+						leaf1 = config.edit 'leaf1'
+						leaf1.set value
+					} }
+					it { is_expected.to raise_exception Exception }
+				end
+				context 'with invalid value: ""' do
+					let( :value ){ '' }
+					subject { ->{
+						db.load_model Rubyang::Model::Parser.parse( yang_str )
+						config = db.configure
+						leaf1 = config.edit 'leaf1'
+						leaf1.set value
+					} }
+					it { is_expected.to raise_exception Exception }
+				end
+			end
+		end
 	end
 
 	describe 'test1' do

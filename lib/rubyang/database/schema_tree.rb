@@ -128,6 +128,15 @@ module Rubyang
 					result
 				end
 			end
+			class EmptyType < Type
+				def initialize
+					@arg = 'empty'
+				end
+				def valid?
+					result = true
+					result
+				end
+			end
 
 			class Path
 				attr_reader :path
@@ -731,6 +740,8 @@ module Rubyang
 						}
 					when 'leafref'
 						type = LeafrefType.new self, type_stmt.substmt( 'path' )[0].arg
+					when 'empty'
+						type = EmptyType.new
 					else
 						case type_stmt.arg
 						when /^[^:]+$/
