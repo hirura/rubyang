@@ -137,6 +137,20 @@ module Rubyang
 					result
 				end
 			end
+			class UnionType < Type
+				def initialize
+					@arg = 'union'
+					@types = Array.new
+				end
+				def add_type type
+					@types.push type
+				end
+				def valid? value
+					result = false
+					result ||= @types.inject( false ){ |r, t| r || t.valid?( value ) }
+					result
+				end
+			end
 
 			class Path
 				attr_reader :path
@@ -162,7 +176,7 @@ module Rubyang
 					self.update arg
 				end
 				def valid? value
-					if @range.find{ |min2, max2| (min2..max2).include?( value.to_i ) }
+					if @range.find{ |min2, max2| (min2..max2).include?( Integer(value) ) }
 						true
 					else
 						false
@@ -742,6 +756,11 @@ module Rubyang
 						type = LeafrefType.new self, type_stmt.substmt( 'path' )[0].arg
 					when 'empty'
 						type = EmptyType.new
+					when 'union'
+						type = UnionType.new
+						type_stmt.substmt( "type" ).each{ |s|
+							type.add_type( resolve_type s, yangs, current_module, typedef_list )
+						}
 					else
 						case type_stmt.arg
 						when /^[^:]+$/

@@ -2193,6 +2193,125 @@ describe Rubyang::Database do
 				end
 			end
 		end
+
+		describe 'type union' do
+			describe 'string and int32' do
+				describe 'without restrictions' do
+					let( :yang_str ){
+						<<-EOB
+							module module1 {
+								namespace "http://module1.rspec/";
+								prefix module1;
+								leaf leaf1 {
+									type union {
+										type string;
+										type int32;
+									}
+								}
+							}
+						EOB
+					}
+					context 'with valid value: 0' do
+						let( :value ){ '0' }
+						let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf1_text ){ leaf1_element.add_text( value ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf1 = config.edit 'leaf1'
+							leaf1.set value
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
+					end
+					context 'with valid value: a' do
+						let( :value ){ 'a' }
+						let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf1_text ){ leaf1_element.add_text( value ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf1 = config.edit 'leaf1'
+							leaf1.set value
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
+					end
+				end
+
+				describe 'with restrictions' do
+					describe 'with length "1" and range "-10..10"' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf leaf1 {
+										type union {
+											type string {
+												length 1;
+											}
+											type int32 {
+												range -10..10;
+											}
+										}
+									}
+								}
+							EOB
+						}
+						context 'with valid value: 1' do
+							let( :value ){ '1' }
+							let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+							let!( :leaf1_text ){ leaf1_element.add_text( value ) }
+							subject {
+								db.load_model Rubyang::Model::Parser.parse( yang_str )
+								config = db.configure
+								leaf1 = config.edit 'leaf1'
+								leaf1.set value
+								config.to_xml( pretty: true )
+							}
+							it { is_expected.to eq doc_xml_pretty }
+						end
+						context 'with valid value: a' do
+							let( :value ){ 'a' }
+							let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+							let!( :leaf1_text ){ leaf1_element.add_text( value ) }
+							subject {
+								db.load_model Rubyang::Model::Parser.parse( yang_str )
+								config = db.configure
+								leaf1 = config.edit 'leaf1'
+								leaf1.set value
+								config.to_xml( pretty: true )
+							}
+							it { is_expected.to eq doc_xml_pretty }
+						end
+						context 'with valid value: 10' do
+							let( :value ){ '10' }
+							let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+							let!( :leaf1_text ){ leaf1_element.add_text( value ) }
+							subject {
+								db.load_model Rubyang::Model::Parser.parse( yang_str )
+								config = db.configure
+								leaf1 = config.edit 'leaf1'
+								leaf1.set value
+								config.to_xml( pretty: true )
+							}
+							it { is_expected.to eq doc_xml_pretty }
+						end
+						context 'with invalid value: ab' do
+							let( :value ){ 'ab' }
+							subject { ->{
+								db.load_model Rubyang::Model::Parser.parse( yang_str )
+								config = db.configure
+								leaf1 = config.edit 'leaf1'
+								leaf1.set value
+							} }
+							it { is_expected.to raise_exception Exception }
+						end
+					end
+				end
+			end
+		end
 	end
 
 	describe 'test1' do
