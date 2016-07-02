@@ -1,0 +1,18 @@
+module rubyang {
+	namespace "http://github.com/hirura/rubyang";
+	prefix rubyang;
+
+	organization "rubyang";
+	contact "http://github.com/hirura/";
+	description "The module to support some basic features";
+
+	revision 2016-07-02 {
+		description "Initial revision. Just for testing.";
+	}
+
+	container rubyang {
+		leaf testleaf {
+			type string;
+		}
+	}
+}

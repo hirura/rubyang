@@ -5,7 +5,7 @@ require 'strscan'
 #require_relative 'parser/parser.tab.rb'
 
 module Rubyang
-	module Cli
+	class Cli
 		class Parser
 			def self.parse( str )
 				parser = self.new

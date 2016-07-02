@@ -1,5 +1,6 @@
 # coding: utf-8
 
+require 'drb/drb'
 require 'rexml/document'
 require 'rexml/formatters/pretty'
 require 'json'
@@ -9,6 +10,8 @@ require_relative 'helper'
 module Rubyang
 	class Database
 		class DataTree
+			include DRb::DRbUndumped
+
 			class Node
 				attr_reader :parent, :schema_tree, :schema, :children
 				def initialize parent, schema_tree, schema
@@ -512,8 +515,20 @@ module Rubyang
 
 			class Root < InteriorNode
 				def commit
-					backup = self.to_xml
-					@parent.history.push backup
+					begin
+						self.edit( "rubyang" ).edit( "component" ).children.each{ |c|
+							component = c.key_values.first
+							hook = c.edit("hook").value
+							file_path = c.edit("file-path").value
+							p component, hook, file_path
+						}
+					rescue => e
+						puts 'rescue in commit'
+						puts e
+					else 
+						backup = self.to_xml
+						@parent.history.push backup
+					end
 				end
 				def revert
 					backup = @parent.history.pop
