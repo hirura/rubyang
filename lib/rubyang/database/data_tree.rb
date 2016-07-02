@@ -525,7 +525,7 @@ module Rubyang
 					rescue => e
 						puts 'rescue in commit'
 						puts e
-					else 
+					ensure 
 						backup = self.to_xml
 						@parent.history.push backup
 					end
