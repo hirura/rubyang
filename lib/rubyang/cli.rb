@@ -102,9 +102,8 @@ module Rubyang
 				when /^set$/
 					begin
 						set @config_tree, tokens
-						@config_tree.commit
 					rescue => e
-						puts e
+						puts "Error: #{e}"
 					end
 				when /^show$/
 					show_type = tokens.shift
@@ -113,6 +112,12 @@ module Rubyang
 						puts @config_tree.to_xml( pretty: true )
 					when /^json$/
 						puts @config_tree.to_json( pretty: true )
+					end
+				when /^commit$/
+					begin
+						@config_tree.commit
+					rescue => e
+						puts "Error: #{e}"
 					end
 				end
 			end

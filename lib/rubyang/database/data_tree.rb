@@ -6,6 +6,7 @@ require 'rexml/formatters/pretty'
 require 'json'
 
 require_relative 'helper'
+require_relative 'component_manager'
 
 module Rubyang
 	class Database
@@ -516,12 +517,14 @@ module Rubyang
 			class Root < InteriorNode
 				def commit
 					begin
-						self.edit( "rubyang" ).edit( "component" ).children.each{ |c|
+						components = self.edit( "rubyang" ).edit( "component" ).children.map{ |c|
 							component = c.key_values.first
 							hook = c.edit("hook").value
 							file_path = c.edit("file-path").value
-							p component, hook, file_path
+							[component, hook, file_path]
 						}
+						self.root.parent.component_manager.update components
+						self.root.parent.component_manager.run "commit"
 					rescue => e
 						puts 'rescue in commit'
 						puts e
@@ -724,9 +727,11 @@ module Rubyang
 				end
 			end
 
+			attr_accessor :component_manager
 			def initialize schema_tree
 				@root = Root.new( self, schema_tree, schema_tree.root )
 				@history = Array.new
+				@component_manager = Rubyang::Database::ComponentManager.new
 			end
 			def history
 				@history

@@ -11,8 +11,23 @@ module rubyang {
 	}
 
 	container rubyang {
-		leaf testleaf {
-			type string;
+		list component {
+			key name;
+			leaf name {
+				type string;
+			}
+			leaf hook {
+				type enumeration {
+					//enum start;
+					enum commit;
+					//enum finish;
+				}
+			}
+			leaf file-path {
+				type string {
+					pattern '/.+\.rb';
+				}
+			}
 		}
 	}
 }

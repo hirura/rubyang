@@ -21,7 +21,8 @@ module Rubyang
 			end
 
 			def run
-				DRb.start_service( "drbunix:#{@sock_file}", @db, safe_level: 1 )
+				#DRb.start_service( "drbunix:#{@sock_file}", @db, safe_level: 1 )
+				DRb.start_service( "drbunix:#{@sock_file}", @db )
 				DRb.thread.join
 			end
 		end
