@@ -26,7 +26,11 @@ Or install it yourself as:
 
 ## Usage
 
-Add this line to head of your code:
+### Core
+
+You can use Rubyang as yang database or as server
+
+To use rubyang as database, add this line to head of your code:
 
 ```ruby
 require 'rubyang'
@@ -89,6 +93,43 @@ puts db.configure.to_json( pretty: true )
 #      }
 #    }
 ```
+
+And to use rubyang as server
+
+```ruby
+require 'rubyang/server/base'
+```
+
+and create some class inheriting Rubyang::Server::Base class
+
+```ruby
+class Example < Rubyang::Server::Base
+end
+```
+
+now you can run server
+
+```ruby
+example = Example.new
+example.run
+```
+
+you can connect to this server with cli.rb
+
+```ruby
+require 'rubyang/cli'
+
+cli = Rubyang::Cli.new
+cli.run
+```
+
+### Additional Component
+
+Rubyang provides component mechanism to develop some component for users.
+Users can develop some components and load those components.
+The components which is defined as "hook commit" in configuraion are called when commit is executed.
+
+Example component is stored in "/path/to/rubyang/component/example.rb"
 
 ## Development
 
