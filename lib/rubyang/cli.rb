@@ -125,5 +125,7 @@ module Rubyang
 	end
 end
 
-cli = Rubyang::Cli.new
-cli.run
+if __FILE__ == $0
+	cli = Rubyang::Cli.new
+	cli.run
+end
