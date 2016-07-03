@@ -1,13 +1,13 @@
 class Rubyang::Xpath::Parser
 
 rule
-	statement			:	"LocationPath"
+	statement			:	"Expr"
 							{
 								if Rubyang::Xpath::Parser::DEBUG
-									puts 'statement : LocationPath'
+									puts 'statement : Expr'
 									puts "val: #{val.inspect}"
 								end
-								result = val[0]
+								result = Rubyang::Xpath::Expr.new val[0]
 							}
 
 	"LocationPath"			:	"RelativeLocationPath"
@@ -37,7 +37,7 @@ rule
 								node_test = Rubyang::Xpath::NodeTest.new Rubyang::Xpath::NodeTest::NodeTestType::NAME_TEST, '/'
 								predicates = Rubyang::Xpath::Predicates.new
 								location_step = Rubyang::Xpath::LocationStep.new axis, node_test, predicates
-								result = Rubyang::Xpath::LocationSteps.new location_step
+								result = Rubyang::Xpath::LocationPath.new location_step
 							}
 					|	"/" "RelativeLocationPath"
 							{
@@ -49,10 +49,7 @@ rule
 								node_test = Rubyang::Xpath::NodeTest.new Rubyang::Xpath::NodeTest::NodeTestType::NAME_TEST, '/'
 								predicates = Rubyang::Xpath::Predicates.new
 								location_step = Rubyang::Xpath::LocationStep.new axis, node_test, predicates
-								location_steps = Array.new
-								location_steps.push location_step
-								location_steps.push *val[1]
-								result = Rubyang::Xpath::LocationSteps.new *location_steps
+								result = Rubyang::Xpath::LocationPath.new location_step, *(val[1].location_step_sequence)
 							}
 					|	"AbbreviatedAbsoluteLocationPath"
 							{
@@ -69,7 +66,7 @@ rule
 									puts '"RelativeLocationPath" : "Step"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::LocationSteps.new val[0]
+								result = Rubyang::Xpath::LocationPath.new val[0]
 							}
 					|	"RelativeLocationPath" "/" "Step"
 							{
@@ -77,7 +74,7 @@ rule
 									puts '"RelativeLocationPath" : "RelativeLocationPath" "/" "Step"'
 									puts "val: #{val.inspect}"
 								end
-								result = val[0].push val[2]
+								result = val[0].add val[2]
 							}
 					|	"AbbreviatedRelativeLocationPath"
 							{
@@ -129,7 +126,7 @@ rule
 					|	"Predicates" "Predicate"
 							{
 								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Predicates" : "Predicates"			"'
+									puts '"Predicates" : "Predicates" "Predicate"'
 									puts "val: #{val.inspect}"
 								end
 								result = val[0].push val[1]
@@ -274,7 +271,7 @@ rule
 									puts '"Predicate" : "[" "PredicateExpr" "]"'
 									puts "val: #{val.inspect}"
 								end
-								result = val[1]
+								result = Rubyang::Xpath::Predicate.new val[1]
 							}
 
 	"PredicateExpr"			:	"Expr"
@@ -283,7 +280,7 @@ rule
 									puts '"PredicateExpr" : "Expr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate.new val[0]
+								result = val[0]
 							}
 
 	"AbbreviatedAbsoluteLocationPath" :	"//" "RelativeLocationPath"
@@ -379,8 +376,8 @@ rule
 									puts '"PrimaryExpr" : "Literal"'
 									puts "val: #{val.inspect}"
 								end
-								literal = Rubyang::Xpath::Predicate::Literal.new val[0]
-								result = Rubyang::Xpath::Predicate::PrimaryExpr.new literal
+								literal = Rubyang::Xpath::Literal.new val[0]
+								result = Rubyang::Xpath::PrimaryExpr.new literal
 							}
 					|	"Number"
 							{
@@ -388,8 +385,8 @@ rule
 									puts '"PrimaryExpr" : "Number"'
 									puts "val: #{val.inspect}"
 								end
-								number = Rubyang::Xpath::Predicate::Number.new val[0]
-								result = Rubyang::Xpath::Predicate::PrimaryExpr.new number
+								number = Rubyang::Xpath::Number.new val[0]
+								result = Rubyang::Xpath::PrimaryExpr.new number
 							}
 					|	"FunctionCall"
 							{
@@ -397,7 +394,7 @@ rule
 									puts '"PrimaryExpr" : "FunctionCall"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::PrimaryExpr.new val[0]
+								result = Rubyang::Xpath::PrimaryExpr.new val[0]
 							}
 
 	"FunctionCall"			:	"FunctionName(" ")"
@@ -406,7 +403,7 @@ rule
 									puts '"FunctionCall" : "FunctionName(" ")"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::FunctionCall.new val[0]
+								result = Rubyang::Xpath::FunctionCall.new val[0]
 							}
 					|	"FunctionName(" "Arguments" ")"
 							{
@@ -414,7 +411,7 @@ rule
 									puts '"FunctionCall" : "FunctionName(" "Arguments" ")"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::FunctionCall.new val[0], val[1]
+								result = Rubyang::Xpath::FunctionCall.new val[0], val[1]
 							}
 
 	"Arguments"			:	"Argument"
@@ -449,7 +446,7 @@ rule
 									puts '"UnionExpr" : "PathExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::UnionExpr.new val[0]
+								result = Rubyang::Xpath::UnionExpr.new val[0]
 							}
 					|	"UnionExpr" "|" "PathExpr"
 							{
@@ -457,7 +454,7 @@ rule
 									puts '"UnionExpr" : "UnionExpr" "|" "PathExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::UnionExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::UnionExpr.new val[0], val[1], val[2]
 							}
 
 	"PathExpr"			:	"LocationPath"
@@ -466,7 +463,7 @@ rule
 									puts '"PathExpr" : "LocationPath"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::PathExpr.new val[0]
+								result = Rubyang::Xpath::PathExpr.new val[0]
 							}
 					|	"FilterExpr"
 							{
@@ -474,7 +471,7 @@ rule
 									puts '"PathExpr" : "FilterExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::PathExpr.new val[0]
+								result = Rubyang::Xpath::PathExpr.new val[0]
 							}
 					|	"FilterExpr" "/" "RelativeLocationPath"
 							{
@@ -482,7 +479,7 @@ rule
 									puts '"PathExpr" : "FilterExpr" "/" "RelativeLocationPath"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::PathExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::PathExpr.new val[0], val[1], val[2]
 							}
 					|	"FilterExpr" "//" "RelativeLocationPath"
 							{
@@ -490,7 +487,7 @@ rule
 									puts '"PathExpr" : "FilterExpr" "//" "RelativeLocationPath"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::PathExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::PathExpr.new val[0], val[1], val[2]
 							}
 
 	"FilterExpr"			:	"PrimaryExpr"
@@ -499,7 +496,7 @@ rule
 									puts '"FilterExpr" : "PrimaryExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::FilterExpr.new val[0]
+								result = Rubyang::Xpath::FilterExpr.new val[0]
 							}
 					|	"FilterExpr Predicat"
 							{
@@ -507,7 +504,7 @@ rule
 									puts '"FilterExpr" : "FilterExpr Predicat"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::FilterExpr.new val[0], val[1]
+								result = Rubyang::Xpath::FilterExpr.new val[0], val[1]
 							}
 
 	"OrExpr"			:	"AndExpr"
@@ -516,7 +513,7 @@ rule
 									puts '"OrExpr" : "AndExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::OrExpr.new val[0]
+								result = Rubyang::Xpath::OrExpr.new val[0]
 							}
 					|	"OrExpr" "or" "AndExpr"
 							{
@@ -524,7 +521,7 @@ rule
 									puts '"OrExpr" : "OrExpr" "or" "AndExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::OrExpr.new val[0], val[2]
+								result = Rubyang::Xpath::OrExpr.new val[0], val[2]
 							}
 
 	"AndExpr"			:	"EqualityExpr"
@@ -533,7 +530,7 @@ rule
 									puts '"AndExpr" : "EqualityExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::AndExpr.new val[0]
+								result = Rubyang::Xpath::AndExpr.new val[0]
 							}
 					|	"AndExpr" "and" "EqualityExpr"
 							{
@@ -541,7 +538,7 @@ rule
 									puts '"AndExpr" : "AndExpr" "and" "EqualityExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::AndExpr.new val[0], val[2]
+								result = Rubyang::Xpath::AndExpr.new val[0], val[2]
 							}
 
 	"EqualityExpr"			:	"RelationalExpr"
@@ -550,7 +547,7 @@ rule
 									puts '"EqualityExpr" : "RelationalExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::EqualityExpr.new val[0]
+								result = Rubyang::Xpath::EqualityExpr.new val[0]
 							}
 					|	"EqualityExpr" "=" "RelationalExpr"
 							{
@@ -558,7 +555,7 @@ rule
 									puts '"EqualityExpr" : "EqualityExpr" "=" "RelationalExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::EqualityExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::EqualityExpr.new val[0], val[1], val[2]
 							}
 					|	"EqualityExpr" "!=" "RelationalExpr"
 							{
@@ -566,7 +563,7 @@ rule
 									puts '"EqualityExpr" : "EqualityExpr" "!=" "RelationalExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::EqualityExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::EqualityExpr.new val[0], val[1], val[2]
 							}
 
 	"RelationalExpr"		:	"AdditiveExpr"
@@ -575,7 +572,7 @@ rule
 									puts '"RelationalExpr" : "AdditiveExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::RelationalExpr.new val[0]
+								result = Rubyang::Xpath::RelationalExpr.new val[0]
 							}
 					|	"RelationalExpr" "<" "AdditiveExpr"
 							{
@@ -583,7 +580,7 @@ rule
 									puts '"RelationalExpr" : "RelationalExpr" "<" "AdditiveExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::RelationalExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::RelationalExpr.new val[0], val[1], val[2]
 							}
 					|	"RelationalExpr" ">" "AdditiveExpr"
 							{
@@ -591,7 +588,7 @@ rule
 									puts '"RelationalExpr" : "RelationalExpr" ">" "AdditiveExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::RelationalExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::RelationalExpr.new val[0], val[1], val[2]
 							}
 					|	"RelationalExpr" "<=" "AdditiveExpr"
 							{
@@ -599,7 +596,7 @@ rule
 									puts '"RelationalExpr" : "RelationalExpr" "<=" "AdditiveExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::RelationalExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::RelationalExpr.new val[0], val[1], val[2]
 							}
 					|	"RelationalExpr" ">=" "AdditiveExpr"
 							{
@@ -607,7 +604,7 @@ rule
 									puts '"RelationalExpr" : "RelationalExpr" ">=" "AdditiveExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::RelationalExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::RelationalExpr.new val[0], val[1], val[2]
 							}
 
 	"AdditiveExpr"			:	"MultiplicativeExpr"
@@ -616,7 +613,7 @@ rule
 									puts '"AdditiveExpr" : "MultiplicativeExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::AdditiveExpr.new val[0]
+								result = Rubyang::Xpath::AdditiveExpr.new val[0]
 							}
 					|	"AdditiveExpr" "+" "MultiplicativeExpr"
 							{
@@ -624,7 +621,7 @@ rule
 									puts '"AdditiveExpr" : "AdditiveExpr" "+" "MultiplicativeExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::AdditiveExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::AdditiveExpr.new val[0], val[1], val[2]
 							}
 					|	"AdditiveExpr" "-" "MultiplicativeExpr"
 							{
@@ -632,7 +629,7 @@ rule
 									puts '"AdditiveExpr" : "AdditiveExpr" "-" "MultiplicativeExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::AdditiveExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::AdditiveExpr.new val[0], val[1], val[2]
 							}
 
 	"MultiplicativeExpr"		:	"UnaryExpr"
@@ -641,7 +638,7 @@ rule
 									puts '"MultiplicativeExpr" : "UnaryExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::MultiplicativeExpr.new val[0]
+								result = Rubyang::Xpath::MultiplicativeExpr.new val[0]
 							}
 					|	"MultiplicativeExpr" "*" "UnaryExpr"
 							{
@@ -649,7 +646,7 @@ rule
 									puts '"MultiplicativeExpr" : "MultiplicativeExpr" "*" "UnaryExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::MultiplicativeExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::MultiplicativeExpr.new val[0], val[1], val[2]
 							}
 					|	"MultiplicativeExpr" "div" "UnaryExpr"
 							{
@@ -657,7 +654,7 @@ rule
 									puts '"MultiplicativeExpr" : "MultiplicativeExpr" "div" "UnaryExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::MultiplicativeExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::MultiplicativeExpr.new val[0], val[1], val[2]
 							}
 					|	"MultiplicativeExpr" "mod" "UnaryExpr"
 							{
@@ -665,7 +662,7 @@ rule
 									puts '"MultiplicativeExpr" : "MultiplicativeExpr" "mod" "UnaryExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::MultiplicativeExpr.new val[0], val[1], val[2]
+								result = Rubyang::Xpath::MultiplicativeExpr.new val[0], val[1], val[2]
 							}
 
 	"UnaryExpr"			:	"UnionExpr"
@@ -674,7 +671,7 @@ rule
 									puts '"UnaryExp" : "UnionExpr"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::UnaryExpr.new val[0]
+								result = Rubyang::Xpath::UnaryExpr.new val[0]
 							}
 					|	"-" "UnaryExp"
 							{
@@ -682,7 +679,7 @@ rule
 									puts '"UnaryExp" : "-" "UnaryExp"'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::UnaryExpr.new val[1], val[0]
+								result = Rubyang::Xpath::UnaryExpr.new val[1], val[0]
 							}
 
 	"Number"			:	"Digits"
@@ -724,7 +721,7 @@ rule
 									puts '"FunctionName(" : "last("'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"position("
 							{
@@ -732,7 +729,7 @@ rule
 									puts '"FunctionName(" : "position("'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 								result = val[0]
 							}
 					|	"count("
@@ -741,7 +738,7 @@ rule
 									puts '"FunctionName(" : "count("'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 								result = val[0]
 							}
 					|	"id("
@@ -750,7 +747,7 @@ rule
 									puts '"FunctionName(" : "id("'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 								result = val[0]
 							}
 					|	"local-name("
@@ -760,7 +757,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"namespace-uri("
 							{
@@ -769,7 +766,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"name("
 							{
@@ -778,7 +775,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"string("
 							{
@@ -787,7 +784,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"concat("
 							{
@@ -796,7 +793,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"starts-with("
 							{
@@ -805,7 +802,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"contains("
 							{
@@ -814,7 +811,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"substring-before("
 							{
@@ -823,7 +820,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"substring-after("
 							{
@@ -832,7 +829,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"substring("
 							{
@@ -841,7 +838,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"string-length("
 							{
@@ -850,7 +847,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"normalize-space("
 							{
@@ -859,7 +856,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"translate("
 							{
@@ -868,7 +865,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"boolean("
 							{
@@ -877,7 +874,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"not("
 							{
@@ -886,7 +883,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"true("
 							{
@@ -895,7 +892,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"false("
 							{
@@ -904,7 +901,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"lang("
 							{
@@ -913,7 +910,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"number("
 							{
@@ -922,7 +919,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"sum("
 							{
@@ -931,7 +928,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"floor("
 							{
@@ -940,7 +937,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"ceiling("
 							{
@@ -949,7 +946,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"round("
 							{
@@ -958,7 +955,7 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[0]
-								result = Rubyang::Xpath::Predicate::FunctionCall::LAST
+								result = Rubyang::Xpath::FunctionCall::LAST
 							}
 					|	"current("
 							{
@@ -966,7 +963,7 @@ rule
 									puts '"FunctionName(" : "current("'
 									puts "val: #{val.inspect}"
 								end
-								result = Rubyang::Xpath::Predicate::FunctionCall::CURRENT
+								result = Rubyang::Xpath::FunctionCall::CURRENT
 							}
 
 	"VariableReference"		:	"$" "QName"

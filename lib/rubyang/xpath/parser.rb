@@ -112,17 +112,27 @@ module Rubyang
 
                                 until s.eos?
                                         token = s.scan( scanre )
-					#p token
+					if DEBUG
+						p token
+					end
 					next if "S" == scanre_list.find{ |s| s[1] =~ token }[0]
 					@tokens.push [scanre_list.find{ |s| s[1] =~ token }[0], token]
+					if DEBUG
+						p @tokens.last
+					end
                                 end
 
+				if DEBUG
+					p 'run do_parse'
+				end
                                 result = self.do_parse
 				result
                         end
 
                         def next_token
-                                #p @tokens.first
+				if DEBUG
+					p @tokens.first
+				end
                                 @tokens.shift
                         end
 		end

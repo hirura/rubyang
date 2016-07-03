@@ -40,18 +40,69 @@ module Rubyang
 						@parent.root
 					end
 				end
-				def evaluate_xpath location_steps, current=self
-					location_step = location_steps.first
-					candidates_by_axis = self.evaluate_xpath_axis( location_step, current )
-					candidates_by_node_test = candidates_by_axis.inject([]){ |cs, c| cs + c.evaluate_xpath_node_test( location_step, current ) }
-					candidates_by_predicates = candidates_by_node_test.inject([]){ |cs, c| cs + c.evaluate_xpath_predicates( location_step, current ) }
-					if location_steps[1..-1].size == 0
+
+				def evaluate_xpath xpath, current=self
+					if Rubyang::Xpath::Parser::DEBUG
+						require 'yaml'
+						puts
+						puts 'in evaluate_xpath:'
+						puts
+						puts 'xpath:'
+						puts xpath.to_yaml
+						puts
+						puts 'current:'
+						puts current.class
+						puts
+					end
+					evaluate_xpath_expr xpath, current
+				end
+
+				def evaluate_xpath_path location_path, current
+					if Rubyang::Xpath::Parser::DEBUG
+						require 'yaml'
+						puts
+						puts 'in evaluate_xpath_path:'
+						puts
+						puts 'location_path:'
+						puts location_path.to_yaml
+						puts
+						puts 'current:'
+						puts current.class
+						puts
+					end
+					first_location_step = location_path.location_step_sequence.first
+					candidates_by_axis = self.evaluate_xpath_axis( first_location_step, current )
+					candidates_by_node_test = candidates_by_axis.inject([]){ |cs, c| cs + c.evaluate_xpath_node_test( first_location_step, current ) }
+					candidates_by_predicates = candidates_by_node_test.inject([]){ |cs, c| cs + c.evaluate_xpath_predicates( first_location_step, current ) }
+					if location_path.location_step_sequence[1..-1].size == 0
 						candidates_by_predicates
 					else
-						candidates_by_predicates.inject([]){ |cs, c| c.evaluate_xpath( location_steps[1..-1], current ) }
+						candidates_by_predicates.inject([]){ |cs, c|
+							following_location_path = Rubyang::Xpath::LocationPath.new *(location_path.location_step_sequence[1..-1])
+							if Rubyang::Xpath::Parser::DEBUG
+								puts
+								puts 'following_location_path:'
+								puts following_location_path.to_yaml
+								puts
+							end
+							c.evaluate_xpath_path( following_location_path, current )
+						}
 					end
 				end
+
 				def evaluate_xpath_axis location_step, current
+					if Rubyang::Xpath::Parser::DEBUG
+						require 'yaml'
+						puts
+						puts 'in evaluate_xpath_axis:'
+						puts
+						puts 'location_step:'
+						puts location_step.to_yaml
+						puts
+						puts 'current:'
+						puts current.class
+						puts
+					end
 					case location_step.axis.name
 					when Rubyang::Xpath::Axis::SELF
 						[self]
@@ -70,6 +121,7 @@ module Rubyang
 						raise "location_step.axis.name: #{location_step.axis.name} NOT implemented"
 					end
 				end
+
 				def evaluate_xpath_node_test location_step, current
 					case location_step.node_test.node_test_type
 					when Rubyang::Xpath::NodeTest::NodeTestType::NAME_TEST
@@ -97,19 +149,30 @@ module Rubyang
 						raise ""
 					end
 				end
+
 				def evaluate_xpath_predicates location_step, current
 					case location_step.predicates.size
 					when 0
 						[self]
 					else
 						location_step.predicates.inject([]){ |cs, predicate|
-							self.evaluate_xpath_predicate_expr predicate.expr, current
+							self.evaluate_xpath_expr predicate.expr, current
 						}
 					end
 				end
-				def evaluate_xpath_predicate_expr expr, current
+
+				def evaluate_xpath_expr expr, current=self
 					case expr
-					when Rubyang::Xpath::Predicate::OrExpr
+					when Rubyang::Xpath::Expr
+						if Rubyang::Xpath::Parser::DEBUG
+							puts
+							puts "in Expr"
+							puts "op: #{expr.op}"
+							puts
+						end
+						op = expr.op
+						op_result = self.evaluate_xpath_expr( op, current )
+					when Rubyang::Xpath::OrExpr
 						if Rubyang::Xpath::Parser::DEBUG
 							puts
 							puts "in OrExpr"
@@ -119,14 +182,14 @@ module Rubyang
 						end
 						op1 = expr.op1
 						op2 = expr.op2
-						op1_result = self.evaluate_xpath_predicate_expr( op1, current )
+						op1_result = self.evaluate_xpath_expr( op1, current )
 						if op2 == nil
 							op1_result
 						else
-							op2_result = self.evaluate_xpath_predicate_expr( op2, current )
+							op2_result = self.evaluate_xpath_expr( op2, current )
 							op1_result | op2_result
 						end
-					when Rubyang::Xpath::Predicate::AndExpr
+					when Rubyang::Xpath::AndExpr
 						if Rubyang::Xpath::Parser::DEBUG
 							puts
 							puts "in AndExpr"
@@ -136,14 +199,14 @@ module Rubyang
 						end
 						op1 = expr.op1
 						op2 = expr.op2
-						op1_result = self.evaluate_xpath_predicate_expr( op1, current )
+						op1_result = self.evaluate_xpath_expr( op1, current )
 						if op2 == nil
 							op1_result
 						else
-							op2_result = self.evaluate_xpath_predicate_expr( op2, current )
+							op2_result = self.evaluate_xpath_expr( op2, current )
 							op1_result & op2_result
 						end
-					when Rubyang::Xpath::Predicate::EqualityExpr
+					when Rubyang::Xpath::EqualityExpr
 						if Rubyang::Xpath::Parser::DEBUG
 							puts
 							puts "in EqualityExpr"
@@ -155,13 +218,13 @@ module Rubyang
 						op1 = expr.op1
 						op2 = expr.op2
 						operator = expr.operator
-						op1_result = self.evaluate_xpath_predicate_expr( op1, current )
+						op1_result = self.evaluate_xpath_expr( op1, current )
 						if op2 == nil
 							op1_result
 						else
 							case operator
 							when /^\=$/
-								op2_result = self.evaluate_xpath_predicate_expr( op2, current )
+								op2_result = self.evaluate_xpath_expr( op2, current )
 								op1_result.select{ |a| op2_result.map{ |b| b.value }.include? a.value }.map{ |c| c.parent }
 							when /^\!\=$/
 								raise "Equality Expr: '!=' not implemented"
@@ -169,7 +232,7 @@ module Rubyang
 								raise "Equality Expr: other than '=' and '!=' not implemented"
 							end
 						end
-					when Rubyang::Xpath::Predicate::RelationalExpr
+					when Rubyang::Xpath::RelationalExpr
 						if Rubyang::Xpath::Parser::DEBUG
 							puts
 							puts "in RelationalExpr"
@@ -181,7 +244,7 @@ module Rubyang
 						op1 = expr.op1
 						op2 = expr.op2
 						operator = expr.operator
-						op1_result = self.evaluate_xpath_predicate_expr( op1, current )
+						op1_result = self.evaluate_xpath_expr( op1, current )
 						if op2 == nil
 							op1_result
 						else
@@ -198,7 +261,7 @@ module Rubyang
 								raise "Relational Expr: other than '>', '<', '>=' and '<=' not implemented"
 							end
 						end
-					when Rubyang::Xpath::Predicate::AdditiveExpr
+					when Rubyang::Xpath::AdditiveExpr
 						if Rubyang::Xpath::Parser::DEBUG
 							puts
 							puts "in AdditiveExpr"
@@ -210,7 +273,7 @@ module Rubyang
 						op1 = expr.op1
 						op2 = expr.op2
 						operator = expr.operator
-						op1_result = self.evaluate_xpath_predicate_expr( op1, current )
+						op1_result = self.evaluate_xpath_expr( op1, current )
 						if op2 == nil
 							op1_result
 						else
@@ -223,7 +286,7 @@ module Rubyang
 								raise "Additive Expr: other than '+' and '-' not implemented"
 							end
 						end
-					when Rubyang::Xpath::Predicate::MultiplicativeExpr
+					when Rubyang::Xpath::MultiplicativeExpr
 						if Rubyang::Xpath::Parser::DEBUG
 							puts
 							puts "in MultiplicativeExpr"
@@ -235,7 +298,7 @@ module Rubyang
 						op1 = expr.op1
 						op2 = expr.op2
 						operator = expr.operator
-						op1_result = self.evaluate_xpath_predicate_expr( op1, current )
+						op1_result = self.evaluate_xpath_expr( op1, current )
 						if op2 == nil
 							op1_result
 						else
@@ -248,7 +311,7 @@ module Rubyang
 								raise "Multiplicative Expr: other than '*' and '/' not implemented"
 							end
 						end
-					when Rubyang::Xpath::Predicate::UnaryExpr
+					when Rubyang::Xpath::UnaryExpr
 						if Rubyang::Xpath::Parser::DEBUG
 							puts
 							puts "in UnaryExpr"
@@ -258,7 +321,7 @@ module Rubyang
 						end
 						op1 = expr.op1
 						operator = expr.operator
-						op1_result = self.evaluate_xpath_predicate_expr( op1, current )
+						op1_result = self.evaluate_xpath_expr( op1, current )
 						case operator
 						when nil
 							op1_result
@@ -267,7 +330,7 @@ module Rubyang
 						else
 							raise "Unary Expr: other than '-' not implemented"
 						end
-					when Rubyang::Xpath::Predicate::UnionExpr
+					when Rubyang::Xpath::UnionExpr
 						if Rubyang::Xpath::Parser::DEBUG
 							puts
 							puts "in UnionExpr"
@@ -279,7 +342,7 @@ module Rubyang
 						op1 = expr.op1
 						op2 = expr.op2
 						operator = expr.operator
-						op1_result = self.evaluate_xpath_predicate_expr( op1, current )
+						op1_result = self.evaluate_xpath_expr( op1, current )
 						if op2 == nil
 							op1_result
 						else
@@ -290,7 +353,7 @@ module Rubyang
 								raise "Union Expr: other than '|' not implemented"
 							end
 						end
-					when Rubyang::Xpath::Predicate::PathExpr
+					when Rubyang::Xpath::PathExpr
 						if Rubyang::Xpath::Parser::DEBUG
 							puts
 							puts "in PathExpr"
@@ -303,20 +366,24 @@ module Rubyang
 						op2 = expr.op2
 						operator = expr.operator
 						case op1
-						when Rubyang::Xpath::LocationSteps
-							op1_result = self.evaluate_xpath( op1, current )
-						when Rubyang::Xpath::Predicate::FilterExpr
-							op1_result = self.evaluate_xpath_predicate_expr( op1, current )
+						when Rubyang::Xpath::LocationPath
+							op1_result = self.evaluate_xpath_path( op1, current )
+						when Rubyang::Xpath::FilterExpr
+							op1_result = self.evaluate_xpath_expr( op1, current )
 							if op2 == nil
 								op1_result
 							else
 								case operator
 								when /^\/$/
 									case op2
-									when Rubyang::Xpath::LocationSteps
-										current.evaluate_xpath (op1_result + op2), current
+									when Rubyang::Xpath::LocationPath
+										if !(op2.location_step_sequence[0].axis.name == Rubyang::Xpath::Axis::PARENT &&
+										     op2.location_step_sequence[0].node_test.node_test == Rubyang::Xpath::NodeTest::NodeType::NODE)
+											raise "unsupported path: #{op2}"
+										end
+										current.evaluate_xpath_path Rubyang::Xpath::LocationPath.new( *(op1_result.location_step_sequence + op2.location_step_sequence) ), current
 									else
-										raise "Path Expr: op1 is not LocationSteps"
+										raise "Path Expr: op1 is not LocationPath"
 									end
 								when /^\/\/$/
 									raise "Path Expr: '//' not implemented"
@@ -327,7 +394,7 @@ module Rubyang
 						else
 							raise ""
 						end
-					when Rubyang::Xpath::Predicate::FilterExpr
+					when Rubyang::Xpath::FilterExpr
 						if Rubyang::Xpath::Parser::DEBUG
 							puts
 							puts "in FilterExpr"
@@ -337,14 +404,14 @@ module Rubyang
 						end
 						op1 = expr.op1
 						op2 = expr.op2
-						op1_result = self.evaluate_xpath_predicate_expr( op1, current )
+						op1_result = self.evaluate_xpath_expr( op1, current )
 						if op2 == nil
 							op1_result
 						else
-							op2_result = self.evaluate_xpath_predicate_expr( op2.expr, current )
+							op2_result = self.evaluate_xpath_expr( op2.expr, current )
 							raise "Filter Expr: Filter Predicate not implemented"
 						end
-					when Rubyang::Xpath::Predicate::PrimaryExpr
+					when Rubyang::Xpath::PrimaryExpr
 						if Rubyang::Xpath::Parser::DEBUG
 							puts
 							puts "in PrimaryExpr"
@@ -353,16 +420,16 @@ module Rubyang
 						end
 						op1 = expr.op1
 						case op1
-						when Rubyang::Xpath::Predicate::Expr
+						when Rubyang::Xpath::Expr
 							raise "Primary Expr: '( Expr )' not implemented"
-						when Rubyang::Xpath::Predicate::FunctionCall
-							op1_result = self.evaluate_xpath_predicate_expr( op1, current )
+						when Rubyang::Xpath::FunctionCall
+							op1_result = self.evaluate_xpath_expr( op1, current )
 						when /^\$.*$/
 							raise "Primary Expr: 'Variable Reference' not implemented"
 						else
 							raise "Primary Expr: 'Literal' and 'Number' not implemented"
 						end
-					when Rubyang::Xpath::Predicate::FunctionCall
+					when Rubyang::Xpath::FunctionCall
 						if Rubyang::Xpath::Parser::DEBUG
 							puts
 							puts "in FunctionCall"
@@ -372,8 +439,8 @@ module Rubyang
 						end
 						name = expr.name
 						case name
-						when Rubyang::Xpath::Predicate::FunctionCall::CURRENT
-							Rubyang::Xpath::LocationSteps.new
+						when Rubyang::Xpath::FunctionCall::CURRENT
+							Rubyang::Xpath::LocationPath.new
 						else
 							raise "FunctionCall: #{name} not implemented"
 						end

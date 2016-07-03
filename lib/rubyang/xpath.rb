@@ -4,9 +4,21 @@ require_relative 'xpath/parser'
 
 module Rubyang
 	module Xpath
-		class LocationSteps < Array
-			def initialize *location_steps
-				self.push *location_steps
+		class Expr
+			attr_reader :op
+			def initialize op
+				@op = op
+			end
+		end
+
+		class LocationPath
+			attr_reader :location_step_sequence
+			def initialize *location_step_sequence
+				@location_step_sequence = location_step_sequence
+			end
+			def add *location_step_sequence
+				@location_step_sequence.push *location_step_sequence
+				self
 			end
 		end
 
@@ -86,139 +98,140 @@ module Rubyang
 		end
 
 		class Predicate
-			class Expr
-			end
-
-			class OrExpr < Expr
-				attr_reader :op1, :op2
-				def initialize op1, op2=nil
-					@op1 = op1
-					@op2 = op2
-				end
-			end
-
-			class AndExpr < Expr
-				attr_reader :op1, :op2
-				def initialize op1, op2=nil
-					@op1 = op1
-					@op2 = op2
-				end
-			end
-
-			class EqualityExpr < Expr
-				attr_reader :op1, :operator, :op2
-				def initialize op1, operator=nil, op2=nil
-					@op1 = op1
-					@operator = operator
-					@op2 = op2
-				end
-			end
-
-			class RelationalExpr < Expr
-				attr_reader :op1, :operator, :op2
-				def initialize op1, operator=nil, op2=nil
-					@op1 = op1
-					@operator = operator
-					@op2 = op2
-				end
-			end
-
-			class AdditiveExpr < Expr
-				attr_reader :op1, :operator, :op2
-				def initialize op1, operator=nil, op2=nil
-					@op1 = op1
-					@operator = operator
-					@op2 = op2
-				end
-			end
-
-			class MultiplicativeExpr < Expr
-				attr_reader :op1, :operator, :op2
-				def initialize op1, operator=nil, op2=nil
-					@op1 = op1
-					@operator = operator
-					@op2 = op2
-				end
-			end
-
-			class UnaryExpr < Expr
-				attr_reader :op1, :operator
-				def initialize op1, operator=nil
-					@op1 = op1
-					@operator = operator
-				end
-			end
-
-			class UnionExpr < Expr
-				attr_reader :op1, :operator, :op2
-				def initialize op1, operator=nil, op2=nil
-					@op1 = op1
-					@operator = operator
-					@op2 = op2
-				end
-			end
-
-			class PathExpr < Expr
-				attr_reader :op1, :operator, :op2
-				def initialize op1, operator=nil, op2=nil
-					@op1 = op1
-					@operator = operator
-					@op2 = op2
-				end
-			end
-
-			class FilterExpr < Expr
-				attr_reader :op1, :op2
-				def initialize op1, op2=nil
-					@op1 = op1
-					@op2 = op2
-				end
-			end
-
-			class PrimaryExpr < Expr
-				attr_reader :op1
-				def initialize op1
-					@op1 = op1
-				end
-			end
-
-			class Literal
-				attr_reader :value
-				def initialize value
-					@value = case value
-						 when /^"(?:[^"])*"/
-							 value.gsub(/^"/,'').gsub(/"$/,'').gsub(/\\n/,"\n").gsub(/\\t/,"\t").gsub(/\\"/,"\"").gsub(/\\\\/,"\\")
-						 when /^'(?:[^'])*'/
-							 value.gsub(/^'/,'').gsub(/'$/,'')
-						 else
-							 value
-						 end
-				end
-			end
-
-			class Number
-				attr_reader :value
-				def initialize value
-					@value = value.to_f.to_s
-				end
-			end
-
-			class FunctionCall
-				CURRENT ||= 'current'
-
-				attr_reader :name, :args
-				def initialize name, args=[]
-					@name = name
-					@args = args
-				end
-			end
-
 			attr_reader :expr
-
 			def initialize expr
 				@expr = expr
 			end
 		end
 
+		class OrExpr
+			attr_reader :op1, :op2
+			def initialize op1, op2=nil
+				@op1 = op1
+				@op2 = op2
+			end
+		end
+
+		class AndExpr
+			attr_reader :op1, :op2
+			def initialize op1, op2=nil
+				@op1 = op1
+				@op2 = op2
+			end
+		end
+
+		class EqualityExpr
+			attr_reader :op1, :operator, :op2
+			def initialize op1, operator=nil, op2=nil
+				@op1 = op1
+				@operator = operator
+				@op2 = op2
+			end
+		end
+
+		class RelationalExpr
+			attr_reader :op1, :operator, :op2
+			def initialize op1, operator=nil, op2=nil
+				@op1 = op1
+				@operator = operator
+				@op2 = op2
+			end
+		end
+
+		class AdditiveExpr
+			attr_reader :op1, :operator, :op2
+			def initialize op1, operator=nil, op2=nil
+				@op1 = op1
+				@operator = operator
+				@op2 = op2
+			end
+		end
+
+		class MultiplicativeExpr
+			attr_reader :op1, :operator, :op2
+			def initialize op1, operator=nil, op2=nil
+				@op1 = op1
+				@operator = operator
+				@op2 = op2
+			end
+		end
+
+		class UnaryExpr
+			attr_reader :op1, :operator
+			def initialize op1, operator=nil
+				@op1 = op1
+				@operator = operator
+			end
+		end
+
+		class UnionExpr
+			attr_reader :op1, :operator, :op2
+			def initialize op1, operator=nil, op2=nil
+				@op1 = op1
+				@operator = operator
+				@op2 = op2
+			end
+		end
+
+		class PathExpr
+			attr_reader :op1, :operator, :op2
+			def initialize op1, operator=nil, op2=nil
+				@op1 = op1
+				@operator = operator
+				@op2 = op2
+			end
+		end
+
+		class FilterExpr
+			attr_reader :op1, :op2
+			def initialize op1, op2=nil
+				@op1 = op1
+				@op2 = op2
+			end
+		end
+
+		class PrimaryExpr
+			attr_reader :op1
+			def initialize op1
+				@op1 = op1
+			end
+		end
+
+		class Literal
+			attr_reader :value
+			def initialize value
+				@value = case value
+					 when /^"(?:[^"])*"/
+						 value.gsub(/^"/,'').gsub(/"$/,'').gsub(/\\n/,"\n").gsub(/\\t/,"\t").gsub(/\\"/,"\"").gsub(/\\\\/,"\\")
+					 when /^'(?:[^'])*'/
+						 value.gsub(/^'/,'').gsub(/'$/,'')
+					 else
+						 value
+					 end
+			end
+		end
+
+		class Number
+			attr_reader :value
+			def initialize value
+				@value = value.to_f.to_s
+			end
+		end
+
+		class FunctionCall
+			CURRENT ||= 'current'
+
+			attr_reader :name, :args
+			def initialize name, args=[]
+				@name = name
+				@args = args
+			end
+		end
+
+		attr_reader :expr
+
+		def initialize expr
+			@expr = expr
+		end
 	end
 end
