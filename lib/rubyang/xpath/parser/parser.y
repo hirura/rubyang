@@ -368,7 +368,6 @@ rule
 									puts "val: #{val.inspect}"
 								end
 								result = val[1]
-								raise "'(' Expr ')' is not implemented"
 							}
 					|	"Literal"
 							{

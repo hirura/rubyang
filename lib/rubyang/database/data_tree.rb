@@ -41,6 +41,26 @@ module Rubyang
 					end
 				end
 
+				# when start
+				def evaluate_whens
+					@schema.whens.inject( Rubyang::Xpath::BasicType::Boolean.new true ){ |r, w|
+						puts
+						puts 'evaluate whens:'
+						puts 'r:'
+						puts r.value
+						puts 'w:'
+						puts w.arg
+						_when = r.and self.evaluate_xpath( w.xpath, self )
+						puts '_when:'
+						require 'yaml'
+						puts _when.to_yaml
+						puts 'evaluate whens done'
+						puts
+						r.and self.evaluate_xpath( w.xpath, self )
+					}
+				end
+				# end
+
 				def evaluate_xpath xpath, current=self
 					if Rubyang::Xpath::Parser::DEBUG
 						require 'yaml'
@@ -50,8 +70,14 @@ module Rubyang
 						puts 'xpath:'
 						puts xpath.to_yaml
 						puts
+						puts 'self:'
+						puts self.class
+						puts self.schema.arg
+						puts self.schema.value rescue ''
 						puts 'current:'
 						puts current.class
+						puts current.schema.arg
+						puts current.schema.value rescue ''
 						puts
 					end
 					evaluate_xpath_expr xpath, current
@@ -66,18 +92,48 @@ module Rubyang
 						puts 'location_path:'
 						puts location_path.to_yaml
 						puts
+						puts 'self:'
+						puts self.class
+						puts self.schema.arg
+						puts self.schema.value rescue ''
 						puts 'current:'
 						puts current.class
+						puts current.schema.arg
+						puts current.schema.value rescue ''
 						puts
 					end
 					first_location_step = location_path.location_step_sequence.first
+					if Rubyang::Xpath::Parser::DEBUG
+						require 'yaml'
+						puts
+						puts 'first_location_step:'
+						puts first_location_step.to_yaml
+					end
 					candidates_by_axis = self.evaluate_xpath_axis( first_location_step, current )
-					candidates_by_node_test = candidates_by_axis.inject([]){ |cs, c| cs + c.evaluate_xpath_node_test( first_location_step, current ) }
-					candidates_by_predicates = candidates_by_node_test.inject([]){ |cs, c| cs + c.evaluate_xpath_predicates( first_location_step, current ) }
+					if Rubyang::Xpath::Parser::DEBUG
+						require 'yaml'
+						puts
+						puts 'candidates_by_axis:'
+						puts candidates_by_axis.to_yaml
+					end
+					candidates_by_node_test = Rubyang::Xpath::BasicType::NodeSet.new candidates_by_axis.value.inject([]){ |cs, c| cs + c.evaluate_xpath_node_test( first_location_step, current ) }
+					if Rubyang::Xpath::Parser::DEBUG
+						require 'yaml'
+						puts
+						puts 'candidates_by_node_test:'
+						puts candidates_by_node_test.to_yaml
+					end
+					candidates_by_predicates = Rubyang::Xpath::BasicType::NodeSet.new candidates_by_node_test.value.inject([]){ |cs, c| cs + c.evaluate_xpath_predicates( first_location_step, current ) }
+					if Rubyang::Xpath::Parser::DEBUG
+						require 'yaml'
+						puts
+						puts 'candidates_by_predicates:'
+						puts candidates_by_predicates.to_yaml
+					end
 					if location_path.location_step_sequence[1..-1].size == 0
 						candidates_by_predicates
 					else
-						candidates_by_predicates.inject([]){ |cs, c|
+						Rubyang::Xpath::BasicType::NodeSet.new candidates_by_predicates.value.inject([]){ |cs, c|
 							following_location_path = Rubyang::Xpath::LocationPath.new *(location_path.location_step_sequence[1..-1])
 							if Rubyang::Xpath::Parser::DEBUG
 								puts
@@ -85,7 +141,7 @@ module Rubyang
 								puts following_location_path.to_yaml
 								puts
 							end
-							c.evaluate_xpath_path( following_location_path, current )
+							cs + c.evaluate_xpath_path( following_location_path, current ).value
 						}
 					end
 				end
@@ -99,17 +155,23 @@ module Rubyang
 						puts 'location_step:'
 						puts location_step.to_yaml
 						puts
+						puts 'self:'
+						puts self.class
+						puts self.schema.arg
+						puts self.schema.value rescue ''
 						puts 'current:'
 						puts current.class
+						puts current.schema.arg
+						puts current.schema.value rescue ''
 						puts
 					end
 					case location_step.axis.name
 					when Rubyang::Xpath::Axis::SELF
-						[self]
+						Rubyang::Xpath::BasicType::NodeSet.new [self]
 					when Rubyang::Xpath::Axis::PARENT
-						[@parent]
+						Rubyang::Xpath::BasicType::NodeSet.new [@parent]
 					when Rubyang::Xpath::Axis::CHILD
-						@children.inject([]){ |cs, c|
+						Rubyang::Xpath::BasicType::NodeSet.new @children.inject([]){ |cs, c|
 							cs + case c
 							when Rubyang::Database::DataTree::ListElement
 								c.children
@@ -123,12 +185,23 @@ module Rubyang
 				end
 
 				def evaluate_xpath_node_test location_step, current
+					puts 
+					p 'in node_test'
+					p self.class
+					p self.schema.arg
+					p self.value rescue ''
+					puts
 					case location_step.node_test.node_test_type
 					when Rubyang::Xpath::NodeTest::NodeTestType::NAME_TEST
 						if "/" == location_step.node_test.node_test
 							[self.root]
 						elsif self.schema.model.arg == location_step.node_test.node_test
-							[self]
+							case self
+							when Rubyang::Database::DataTree::List
+								self.children
+							else
+								[self]
+							end
 						else
 							[]
 						end
@@ -155,8 +228,24 @@ module Rubyang
 					when 0
 						[self]
 					else
-						location_step.predicates.inject([]){ |cs, predicate|
-							self.evaluate_xpath_expr predicate.expr, current
+						location_step.predicates.inject([self]){ |cs, predicate|
+							p 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+							p self.class
+							if cs.size > 0
+								result = cs[0].evaluate_xpath_expr predicate.expr, current
+								case result
+								when Rubyang::Xpath::BasicType::NodeSet
+									raise
+								when Rubyang::Xpath::BasicType::Boolean
+									if result.value == true then cs else [] end
+								when Rubyang::Xpath::BasicType::Number
+									raise
+								when Rubyang::Xpath::BasicType::String
+									raise
+								end
+							else
+								[]
+							end
 						}
 					end
 				end
@@ -187,7 +276,15 @@ module Rubyang
 							op1_result
 						else
 							op2_result = self.evaluate_xpath_expr( op2, current )
-							op1_result | op2_result
+							if op1_result.class == Rubyang::Xpath::BasicType::NodeSet && op2_result.class == Rubyang::Xpath::BasicType::NodeSet
+								if op1_result.empty? && op2_result.empty?
+									Rubyang::Xpath::BasicType::Boolean false
+								else
+									Rubyang::Xpath::BasicType::Boolean true
+								end
+							else
+								Rubyang::Xpath::BasicType::Boolean true
+							end
 						end
 					when Rubyang::Xpath::AndExpr
 						if Rubyang::Xpath::Parser::DEBUG
@@ -204,7 +301,13 @@ module Rubyang
 							op1_result
 						else
 							op2_result = self.evaluate_xpath_expr( op2, current )
-							op1_result & op2_result
+							if op1_result.class == Rubyang::Xpath::BasicType::NodeSet
+								Rubyang::Xpath::BasicType::Boolean false if op1_result.empty?
+							elsif op2_result.class == Rubyang::Xpath::BasicType::NodeSet
+								Rubyang::Xpath::BasicType::Boolean false if op2_result.empty?
+							else
+								Rubyang::Xpath::BasicType::Boolean true
+							end
 						end
 					when Rubyang::Xpath::EqualityExpr
 						if Rubyang::Xpath::Parser::DEBUG
@@ -222,14 +325,63 @@ module Rubyang
 						if op2 == nil
 							op1_result
 						else
-							case operator
-							when /^\=$/
-								op2_result = self.evaluate_xpath_expr( op2, current )
-								op1_result.select{ |a| op2_result.map{ |b| b.value }.include? a.value }.map{ |c| c.parent }
-							when /^\!\=$/
-								raise "Equality Expr: '!=' not implemented"
+							op2_result = self.evaluate_xpath_expr( op2, current )
+							if Rubyang::Xpath::Parser::DEBUG
+								require 'yaml'
+								puts
+								puts "in EqualityExpr else:"
+								puts "op1_result: #{op1_result.to_yaml}"
+								puts "op2_result: #{op2_result.to_yaml}"
+								puts
+							end
+							if op1_result.class == Rubyang::Xpath::BasicType::NodeSet && op2_result.class == Rubyang::Xpath::BasicType::String
+								case operator
+								when /^\=$/
+									#op1_result.select{ |a| op2_result.map{ |b| b.value }.include? a.value }.map{ |c| c.parent }
+									op1_result == op2_result
+								when /^\!\=$/
+									raise "Equality Expr: '!=' not implemented"
+								else
+									raise "Equality Expr: other than '=' and '!=' not implemented"
+								end
+							elsif op1_result.class == Rubyang::Xpath::BasicType::String && op2_result.class == Rubyang::Xpath::BasicType::NodeSet
+								case operator
+								when /^\=$/
+									op2_result.select{ |a| op1_result.map{ |b| b.value }.include? a.value }.map{ |c| c.parent }
+								when /^\!\=$/
+									raise "Equality Expr: '!=' not implemented"
+								else
+									raise "Equality Expr: other than '=' and '!=' not implemented"
+								end
+							elsif op1_result.class == Rubyang::Xpath::BasicType::Number && op2_result.class == Rubyang::Xpath::BasicType::Number
+								case operator
+								when /^\=$/
+									op1_result == op2_result
+								when /^\!\=$/
+									op1_result != op2_result
+								else
+									raise "Equality Expr: other than '=' and '!=' not implemented"
+								end
+							elsif op1_result.class == Rubyang::Xpath::BasicType::String && op2_result.class == Rubyang::Xpath::BasicType::String
+								case operator
+								when /^\=$/
+									op1_result == op2_result
+								when /^\!\=$/
+									op1_result != op2_result
+								else
+									raise "Equality Expr: other than '=' and '!=' not implemented"
+								end
+							elsif op1_result.class == Rubyang::Xpath::BasicType::NodeSet && op2_result.class == Rubyang::Xpath::BasicType::NodeSet
+								case operator
+								when /^\=$/
+									op1_result == op2_result
+								when /^\!\=$/
+									op1_result != op2_result
+								else
+									raise "Equality Expr: other than '=' and '!=' not implemented"
+								end
 							else
-								raise "Equality Expr: other than '=' and '!=' not implemented"
+								Rubyang::Xpath::BasicType::Boolean.new false
 							end
 						end
 					when Rubyang::Xpath::RelationalExpr
@@ -248,17 +400,22 @@ module Rubyang
 						if op2 == nil
 							op1_result
 						else
-							case operator
-							when /^\>$/
-								raise "Relational Expr: '>' not implemented"
-							when /^\<$/
-								raise "Relational Expr: '<' not implemented"
-							when /^\>\=$/
-								raise "Relational Expr: '>=' not implemented"
-							when /^\<\=$/
-								raise "Relational Expr: '<=' not implemented"
+							op2_result = self.evaluate_xpath_expr( op2, current )
+							if op1_result.class == Rubyang::Xpath::BasicType::Number && op2_result.class == Rubyang::Xpath::BasicType::Number
+								case operator
+								when /^\>$/
+									op1_result > op2_result
+								when /^\<$/
+									op1_result < op2_result
+								when /^\>\=$/
+									op1_result >= op2_result
+								when /^\<\=$/
+									op1_result <= op2_result
+								else
+									raise "Relational Expr: other than '>', '<', '>=' and '<=' not valid"
+								end
 							else
-								raise "Relational Expr: other than '>', '<', '>=' and '<=' not implemented"
+								Rubyang::Xpath::BasicType::Boolean.new false
 							end
 						end
 					when Rubyang::Xpath::AdditiveExpr
@@ -277,13 +434,18 @@ module Rubyang
 						if op2 == nil
 							op1_result
 						else
-							case operator
-							when /^\+$/
-								raise "Additive Expr: '+' not implemented"
-							when /^\-$/
-								raise "Additive Expr: '-' not implemented"
+							op2_result = self.evaluate_xpath_expr( op2, current )
+							if op1_result.class == Rubyang::Xpath::BasicType::Number && op2_result.class == Rubyang::Xpath::BasicType::Number
+								case operator
+								when /^\+$/
+									op1_result + op2_result
+								when /^\-$/
+									op1_result - op2_result
+								else
+									raise "Additive Expr: other than '+' and '-' not valid"
+								end
 							else
-								raise "Additive Expr: other than '+' and '-' not implemented"
+								Rubyang::Xpath::BasicType::Number.new Float::NAN
 							end
 						end
 					when Rubyang::Xpath::MultiplicativeExpr
@@ -302,13 +464,18 @@ module Rubyang
 						if op2 == nil
 							op1_result
 						else
-							case operator
-							when /^\*$/
-								raise "Multiplicative Expr: '*' not implemented"
-							when /^\/$/
-								raise "Multiplicative Expr: '/' not implemented"
+							op2_result = self.evaluate_xpath_expr( op2, current )
+							if op1_result.class == Rubyang::Xpath::BasicType::Number && op2_result.class == Rubyang::Xpath::BasicType::Number
+								case operator
+								when /^\*$/
+									op1_result * op2_result
+								when /^\/$/
+									op1_result / op2_result
+								else
+									raise "Multiplicative Expr: other than '*' and '/' not valid"
+								end
 							else
-								raise "Multiplicative Expr: other than '*' and '/' not implemented"
+								Rubyang::Xpath::BasicType::Number.new Float::NAN
 							end
 						end
 					when Rubyang::Xpath::UnaryExpr
@@ -326,9 +493,14 @@ module Rubyang
 						when nil
 							op1_result
 						when /^\-$/
-							raise "Unary Expr: '-' not implemented"
+							case op1_result
+							when Rubyang::Xpath::BasicType::Number
+								- op1_result
+							else
+								Rubyang::Xpath::BasicType::Number.new Float::NAN
+							end
 						else
-							raise "Unary Expr: other than '-' not implemented"
+							raise "Unary Expr: other than '-' not valid"
 						end
 					when Rubyang::Xpath::UnionExpr
 						if Rubyang::Xpath::Parser::DEBUG
@@ -346,6 +518,7 @@ module Rubyang
 						if op2 == nil
 							op1_result
 						else
+							op2_result = self.evaluate_xpath_expr( op2, current )
 							case operator
 							when /^\|$/
 								raise "Union Expr: '|' not implemented"
@@ -365,34 +538,32 @@ module Rubyang
 						op1 = expr.op1
 						op2 = expr.op2
 						operator = expr.operator
-						case op1
-						when Rubyang::Xpath::LocationPath
-							op1_result = self.evaluate_xpath_path( op1, current )
-						when Rubyang::Xpath::FilterExpr
-							op1_result = self.evaluate_xpath_expr( op1, current )
-							if op2 == nil
-								op1_result
-							else
-								case operator
-								when /^\/$/
-									case op2
-									when Rubyang::Xpath::LocationPath
-										if !(op2.location_step_sequence[0].axis.name == Rubyang::Xpath::Axis::PARENT &&
-										     op2.location_step_sequence[0].node_test.node_test == Rubyang::Xpath::NodeTest::NodeType::NODE)
-											raise "unsupported path: #{op2}"
-										end
-										current.evaluate_xpath_path Rubyang::Xpath::LocationPath.new( *(op1_result.location_step_sequence + op2.location_step_sequence) ), current
-									else
-										raise "Path Expr: op1 is not LocationPath"
-									end
-								when /^\/\/$/
-									raise "Path Expr: '//' not implemented"
-								else
-									raise "Path Expr: other than '/' and '//' not implemented"
-								end
-							end
+						op1_result = case op1
+							     when Rubyang::Xpath::LocationPath
+								     self.evaluate_xpath_path( op1, current )
+							     when Rubyang::Xpath::FilterExpr
+								     op1_result = self.evaluate_xpath_expr( op1, current )
+							     else
+								     raise "PathExpr: #{op1} not supported"
+							     end
+						if op2 == nil
+							op1_result
 						else
-							raise ""
+							case operator
+							when /^\/$/
+								case op1_result
+								when Rubyang::Database::DataTree::Node
+									op1_result.evaluate_xpath_path op2, current
+								when Rubyang::Xpath::LocationPath
+									self.evaluate_xpath_path Rubyang::Xpath::LocationPath.new( *(op1_result.location_step_sequence + op2.location_step_sequence) ), current
+								else
+									raise
+								end
+							when /^\/\/$/
+								raise "Path Expr: '//' not implemented"
+							else
+								raise "Path Expr: other than '/' and '//' not valid"
+							end
 						end
 					when Rubyang::Xpath::FilterExpr
 						if Rubyang::Xpath::Parser::DEBUG
@@ -409,7 +580,7 @@ module Rubyang
 							op1_result
 						else
 							op2_result = self.evaluate_xpath_expr( op2.expr, current )
-							raise "Filter Expr: Filter Predicate not implemented"
+							Rubyang::Xpath::BasicType::NodeSet.new
 						end
 					when Rubyang::Xpath::PrimaryExpr
 						if Rubyang::Xpath::Parser::DEBUG
@@ -420,14 +591,18 @@ module Rubyang
 						end
 						op1 = expr.op1
 						case op1
+						when Rubyang::Xpath::VariableReference
+							raise "Primary Expr: '#{op1}' not implemented"
 						when Rubyang::Xpath::Expr
-							raise "Primary Expr: '( Expr )' not implemented"
+							op1_result = self.evaluate_xpath_expr( op1, current )
+						when Rubyang::Xpath::Literal
+							Rubyang::Xpath::BasicType::String.new op1.value
+						when Rubyang::Xpath::Number
+							Rubyang::Xpath::BasicType::Number.new op1.value
 						when Rubyang::Xpath::FunctionCall
 							op1_result = self.evaluate_xpath_expr( op1, current )
-						when /^\$.*$/
-							raise "Primary Expr: 'Variable Reference' not implemented"
 						else
-							raise "Primary Expr: 'Literal' and 'Number' not implemented"
+							raise "Primary Expr: '#{op1}' not valid"
 						end
 					when Rubyang::Xpath::FunctionCall
 						if Rubyang::Xpath::Parser::DEBUG
@@ -440,12 +615,12 @@ module Rubyang
 						name = expr.name
 						case name
 						when Rubyang::Xpath::FunctionCall::CURRENT
-							Rubyang::Xpath::LocationPath.new
+							current
 						else
 							raise "FunctionCall: #{name} not implemented"
 						end
 					else
-						raise "Unrecognized predicate: #{predicate}"
+						raise "Unrecognized Expr: #{expr}"
 					end
 				end
 			end
@@ -548,6 +723,11 @@ module Rubyang
 						case child_schema.model
 						when Rubyang::Model::Container
 							child_node = Container.new( self, @schema_tree, child_schema )
+							# when start
+							unless child_node.evaluate_whens.value
+								raise "#{arg} is not valid because of 'when' conditions"
+							end
+							# end
 						when Rubyang::Model::Leaf
 							child_node = Leaf.new( self, @schema_tree, child_schema )
 						when Rubyang::Model::List
@@ -563,12 +743,12 @@ module Rubyang
 				end
 				def edit_xpath arg
 					xpath = Rubyang::Xpath::Parser.parse arg
-					elements = self.evaluate_xpath( xpath )
-					case elements.size
+					candidates = self.evaluate_xpath( xpath )
+					case candidates.value.size
 					when 0
 						raise "no such xpath: #{arg}"
 					when 1
-						elements.first
+						candidates.value.first
 					else
 						raise "too many match to xpath: #{arg}"
 					end

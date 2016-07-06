@@ -1,9 +1,201 @@
 # coding utf-8
 
 require_relative 'xpath/parser'
+require_relative 'database/data_tree'
 
 module Rubyang
 	module Xpath
+		module BasicType
+			class NodeSet
+				include Enumerable
+
+				attr_reader :value
+				def initialize value=[]
+					raise "#{self.class} argument must be Array" unless Array === value
+					value.each{ |v|
+						raise "#{v.class} argument must be Rubyang::Database::DataTree::Node" unless Rubyang::Database::DataTree::Node === v
+					}
+					@value = value
+				end
+
+				def each
+					@value.each do |v|
+						yield v
+					end
+				end
+
+				def to_boolean
+					value = if @value == [] then false else true end
+					Boolean.new value
+				end
+
+				def == right
+					case right
+					when NodeSet
+						p 'in =='
+						p @value.map{ |v| v.value }, right.value.map{ |v| v.value }
+						value = if (@value.map{ |v| v.value } & right.value.map{ |v| v.value }).size > 0 then true else false end
+						Boolean.new value
+					when Boolean
+						value = if @value.size > 0
+								if right.value then true else false end
+							else
+								if right.value then false else true end
+							end
+						Boolean.new value
+					when Number
+						value = @value.find{ |v|
+							case v
+							when NodeSet
+								"NodeSet in NodeSet is not implemented"
+							when Boolean
+								"Boolean in NodeSet is not implemented"
+							when Number
+								v.value == right.value
+							when String
+								v.value == right.value.to_s
+							end
+						}
+						Boolean.new value
+					when String
+						value = @value.any?{ |v| v.value == right.value }
+						Boolean.new value
+					end
+				end
+			end
+
+			class Boolean
+				attr_reader :value
+				def initialize value
+					raise "#{self.class} argument must be true or false" unless [true, false].include?( value )
+					@value = value
+				end
+
+				def to_boolean
+					self
+				end
+
+				def and right
+					value = (@value and right.to_boolean.value)
+					Boolean.new value
+				end
+
+				def or right
+					value = (@value or right.to_boolean.value)
+					Boolean.new value
+				end
+			end
+
+			class Number
+				attr_reader :value
+				def initialize value
+					@value = Float(value)
+				end
+
+				def to_boolean
+					value = if @value == Float(0) then false else true end
+					Boolean.new value
+				end
+
+				def -@
+					value = (- @value)
+					Number.new value
+				end
+
+				def + right
+					case right
+					when Number
+						value = (@value + right.value)
+						Number.new value
+					else
+						raise
+					end
+				end
+
+				def - right
+					case right
+					when Number
+						value = (@value - right.value)
+						Number.new value
+					else
+						raise
+					end
+				end
+
+				def * right
+					case right
+					when Number
+						value = (@value * right.value)
+						Number.new value
+					else
+						raise
+					end
+				end
+
+				def / right
+					case right
+					when Number
+						value = (@value / right.value)
+						Number.new value
+					else
+						raise
+					end
+				end
+
+				def == right
+					case right
+					when Number
+						value = (@value == right.value)
+						Boolean.new value
+					else
+						raise
+					end
+				end
+
+				def != right
+					case right
+					when Number
+						value = (@value != right.value)
+						Boolean.new value
+					else
+						raise
+					end
+				end
+			end
+
+			class String
+				attr_reader :value
+				def initialize value
+					@value = value
+				end
+
+				def to_boolean
+					value = if @value == '' then false else true end
+					Boolean.new value
+				end
+
+				def == right
+					case right
+					when String
+						value = (@value == right.value)
+						Boolean.new value
+					else
+						raise
+					end
+				end
+
+				def != right
+					case right
+					when String
+						value = (@value != right.value)
+						Boolean.new value
+					else
+						raise
+					end
+				end
+			end
+		end
+
 		class Expr
 			attr_reader :op
 			def initialize op
@@ -197,6 +389,13 @@ module Rubyang
 			end
 		end
 
+		class VariableReference
+			attr_reader :name
+			def initialize name
+				@name = name
+			end
+		end
+
 		class Literal
 			attr_reader :value
 			def initialize value
@@ -219,19 +418,40 @@ module Rubyang
 		end
 
 		class FunctionCall
-			CURRENT ||= 'current'
+			CURRENT          ||= :current
+			LAST             ||= :last
+			POSITION         ||= 'position'
+			COUNT            ||= 'count'
+			ID               ||= 'id'
+			LOCAL_NAME       ||= 'local-name'
+			NAMESPACE_URI    ||= 'namespace-uri'
+			NAME             ||= 'name'
+			STRING           ||= 'string'
+			CONCAT           ||= 'concat'
+			STARTS_WITH      ||= 'starts-with'
+			CONTAINS         ||= 'contains'
+			SUBSTRING_BEFORE ||= 'substring-before'
+			SUBSTRING_AFTER  ||= 'substring-after'
+			SUBSTRING        ||= 'substring'
+			STRING_LENGTH    ||= 'string-length'
+			NORMALIZE_SPACE  ||= 'normalize-space'
+			TRANSLATE        ||= 'translate'
+			BOOLEAN          ||= 'boolean'
+			NOT              ||= 'not'
+			TRUE             ||= 'true'
+			FALSE            ||= 'false'
+			LANG             ||= 'lang'
+			NUMBER           ||= 'number'
+			SUM              ||= 'sum'
+			FLOOR            ||= 'floor'
+			CEILING          ||= 'ceiling'
+			ROUND            ||= 'round'
 
 			attr_reader :name, :args
 			def initialize name, args=[]
 				@name = name
 				@args = args
 			end
-		end
-
-		attr_reader :expr
-
-		def initialize expr
-			@expr = expr
 		end
 	end
 end
