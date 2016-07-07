@@ -74,6 +74,13 @@ module Rubyang
 				}
 				@substmts = substmts
 			end
+			def to_s parent=true
+				head, vars, tail = "#<#{self.class.to_s}:0x#{(self.object_id << 1).to_s(16).rjust(14,'0')} ", Array.new, ">"
+				if parent
+					vars.push "@substmts=#{@substmts.map{|s| s.to_s(false)}}"
+				end
+				head + vars.join(', ') + tail
+			end
 			def substmt substmt, strict: false
 				raise TypeError unless String === substmt
 				if strict
@@ -140,6 +147,14 @@ module Rubyang
 				unless valid_arg? arg
 					raise ArgumentError, "Invalid Argument: '#{arg}'"
 				end
+			end
+			def to_s parent=true
+				head, vars, tail = "#<#{self.class.to_s}:0x#{(self.object_id << 1).to_s(16).rjust(14,'0')} ", Array.new, ">"
+				if parent
+					vars.push "@arg=#{@arg.to_s}"
+					vars.push "@substmts=#{@substmts.map{|s| s.to_s(false)}}"
+				end
+				head + vars.join(', ') + tail
 			end
 			def arg
 				@arg

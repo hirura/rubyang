@@ -21,6 +21,16 @@ module Rubyang
 					@schema = schema
 					@children = []
 				end
+				def to_s parent=true
+					head, vars, tail = "#<#{self.class.to_s}:0x#{(self.object_id << 1).to_s(16).rjust(14,'0')} ", Array.new, ">"
+					if parent
+						vars.push "@parent=#{@parent.to_s(false)}"
+						vars.push "@schema_tree=#{@schema_tree.to_s(false)}"
+						vars.push "@schema=#{@schema.to_s(true)}"
+						vars.push "@children=#{@children.to_s}"
+					end
+					head + vars.join(', ') + tail
+				end
 				def load_merge_xml_recursive doc_xml
 					doc_xml.each_element{ |e|
 						child = edit( e.name )
@@ -979,6 +989,15 @@ module Rubyang
 				@root = Root.new( self, schema_tree, schema_tree.root )
 				@history = Array.new
 				@component_manager = Rubyang::Database::ComponentManager.new
+			end
+			def to_s parent=true
+				head, vars, tail = "#<#{self.class.to_s}:0x#{(self.object_id << 1).to_s(16).rjust(14,'0')} ", Array.new, ">"
+				if parent
+					vars.push "@yang=#{@root.to_s}"
+					vars.push "@history=#{@history.to_s}"
+					vars.push "@component_manager=#{@component_manager.to_s}"
+				end
+				head + vars.join(', ') + tail
 			end
 			def history
 				@history

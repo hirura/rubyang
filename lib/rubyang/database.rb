@@ -14,6 +14,16 @@ module Rubyang
 			@data_tree   = DataTree.new   @schema_tree
 		end
 
+		def to_s parent=true
+			head, vars, tail = "#<#{self.class.to_s}:0x#{(self.object_id << 1).to_s(16).rjust(14,'0')} ", Array.new, ">"
+			if parent
+				vars.push "@yangs=#{@yangs.to_s}"
+				vars.push "@schema_tree=#{@schema_tree.to_s( false )}"
+				vars.push "@data_tree=#{@data_tree.to_s( false )}"
+			end
+			head + vars.join(', ') + tail
+		end
+
 		def load_model model
 			@schema_tree.load model
 		end

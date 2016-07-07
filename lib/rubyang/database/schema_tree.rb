@@ -352,6 +352,17 @@ module Rubyang
 					@parent = parent
 					@module = _module
 				end
+				def to_s parent=true
+					head, vars, tail = "#<#{self.class.to_s}:0x#{(self.object_id << 1).to_s(16).rjust(14,'0')} ", Array.new, ">"
+					if parent
+						vars.push "@yangs=#{@yangs.to_s}"
+						vars.push "@arg=#{@arg.to_s}"
+						vars.push "@yang=#{@yang.to_s(true)}"
+						vars.push "@parent=#{@parent.to_s(false)}"
+						vars.push "@module=#{@module.to_s(true)}"
+					end
+					head + vars.join(', ') + tail
+				end
 				def model
 					@yang
 				end
@@ -1145,6 +1156,14 @@ module Rubyang
 			def initialize yangs
 				@yangs = yangs
 				@root  = Root.new @yangs
+			end
+			def to_s parent=true
+				head, vars, tail = "#<#{self.class.to_s}:0x#{(self.object_id << 1).to_s(16).rjust(14,'0')} ", Array.new, ">"
+				if parent
+					vars.push "@yangs=#{@yangs.to_s}"
+					vars.push "@root=#{@root.to_s( false )}"
+				end
+				head + vars.join(', ') + tail
 			end
 			def root
 				@root
