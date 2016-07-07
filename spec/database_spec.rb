@@ -2727,5 +2727,61 @@ describe Rubyang::Database do
 			it { is_expected.to raise_exception Exception }
 		end
 	end
+
+	describe 'must' do
+		let( :yang_str ){
+			<<-EOB
+				module module1 {
+					namespace "http://module1.rspec/";
+					prefix module1;
+					container container1 {
+						must "leaf1 = leaf2";
+						leaf leaf1 {
+							type string;
+						}
+						leaf leaf2 {
+							type string;
+						}
+					}
+				}
+			EOB
+		}
+		context 'with valid value' do
+			let( :value ){ 'value' }
+			let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+			let!( :leaf1_element ){ container1_element.add_element( 'leaf1' ) }
+			let!( :leaf1_text ){ leaf1_element.add_text( value ) }
+			let!( :leaf2_element ){ container1_element.add_element( 'leaf2' ) }
+			let!( :leaf2_text ){ leaf2_element.add_text( value ) }
+			subject {
+				db.load_model Rubyang::Model::Parser.parse( yang_str )
+				config = db.configure
+				container1 = config.edit 'container1'
+				leaf1 = container1.edit 'leaf1'
+				leaf1.set value
+				leaf2 = container1.edit 'leaf2'
+				leaf2.set value
+				raise unless config.valid?
+				config.to_xml( pretty: true )
+			}
+			it { is_expected.to eq doc_xml_pretty }
+		end
+		context 'with invalid value' do
+			let( :value1 ){ 'value1' }
+			let( :value2 ){ 'value2' }
+			subject { ->{
+				db.load_model Rubyang::Model::Parser.parse( yang_str )
+				config = db.configure
+				container1 = config.edit 'container1'
+				leaf1 = container1.edit 'leaf1'
+				leaf1.set value1
+				leaf2 = container1.edit 'leaf2'
+				leaf2.set value2
+				raise unless config.valid?
+				config.to_xml( pretty: true )
+			} }
+			it { is_expected.to raise_exception Exception }
+		end
+	end
 end
 

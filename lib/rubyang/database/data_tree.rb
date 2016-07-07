@@ -5,6 +5,7 @@ require 'rexml/document'
 require 'rexml/formatters/pretty'
 require 'json'
 
+require_relative '../xpath'
 require_relative 'helper'
 require_relative 'component_manager'
 
@@ -20,6 +21,7 @@ module Rubyang
 					@schema_tree = schema_tree
 					@schema = schema
 					@children = []
+					@logger = Rubyang::Logger.instance
 				end
 				def to_s parent=true
 					head, vars, tail = "#<#{self.class.to_s}:0x#{(self.object_id << 1).to_s(16).rjust(14,'0')} ", Array.new, ">"
@@ -30,6 +32,22 @@ module Rubyang
 						vars.push "@children=#{@children.to_s}"
 					end
 					head + vars.join(', ') + tail
+				end
+				def valid? current=true
+					result = if current
+							 self.root.valid?
+						 else
+							 case self
+							 when Rubyang::Database::DataTree::Container
+								 @children.inject(self.evaluate_musts){ |r, c|
+									 r.and c.valid?( false )
+								 }
+							 else
+								 Rubyang::Xpath::BasicType::Boolean.new true
+							 end
+						 end
+					@logger.debug "#{self.class}#valid?: return: #{result}"
+					result
 				end
 				def load_merge_xml_recursive doc_xml
 					doc_xml.each_element{ |e|
@@ -65,6 +83,26 @@ module Rubyang
 						require 'yaml'
 						puts _when.to_yaml
 						puts 'evaluate whens done'
+						puts
+						r.and self.evaluate_xpath( w.xpath, self )
+					}
+				end
+				# end
+
+				# must start
+				def evaluate_musts
+					@schema.musts.inject( Rubyang::Xpath::BasicType::Boolean.new true ){ |r, w|
+						puts
+						puts 'evaluate musts:'
+						puts 'r:'
+						puts r.value
+						puts 'w:'
+						puts w.arg
+						must = r.and self.evaluate_xpath( w.xpath, self )
+						puts 'must:'
+						require 'yaml'
+						puts must.to_yaml
+						puts 'evaluate musts done'
 						puts
 						r.and self.evaluate_xpath( w.xpath, self )
 					}
@@ -288,12 +326,12 @@ module Rubyang
 							op2_result = self.evaluate_xpath_expr( op2, current )
 							if op1_result.class == Rubyang::Xpath::BasicType::NodeSet && op2_result.class == Rubyang::Xpath::BasicType::NodeSet
 								if op1_result.empty? && op2_result.empty?
-									Rubyang::Xpath::BasicType::Boolean false
+									Rubyang::Xpath::BasicType::Boolean.new false
 								else
-									Rubyang::Xpath::BasicType::Boolean true
+									Rubyang::Xpath::BasicType::Boolean.new true
 								end
 							else
-								Rubyang::Xpath::BasicType::Boolean true
+								Rubyang::Xpath::BasicType::Boolean.new true
 							end
 						end
 					when Rubyang::Xpath::AndExpr
@@ -312,11 +350,11 @@ module Rubyang
 						else
 							op2_result = self.evaluate_xpath_expr( op2, current )
 							if op1_result.class == Rubyang::Xpath::BasicType::NodeSet
-								Rubyang::Xpath::BasicType::Boolean false if op1_result.empty?
+								Rubyang::Xpath::BasicType::Boolean.new false if op1_result.empty?
 							elsif op2_result.class == Rubyang::Xpath::BasicType::NodeSet
-								Rubyang::Xpath::BasicType::Boolean false if op2_result.empty?
+								Rubyang::Xpath::BasicType::Boolean.new false if op2_result.empty?
 							else
-								Rubyang::Xpath::BasicType::Boolean true
+								Rubyang::Xpath::BasicType::Boolean.new true
 							end
 						end
 					when Rubyang::Xpath::EqualityExpr
@@ -772,6 +810,12 @@ module Rubyang
 			end
 
 			class Root < InteriorNode
+				def valid? current=true
+					result = @children.inject(Rubyang::Xpath::BasicType::Boolean.new true){ |r, c|
+						r.and c.valid?( false )
+					}
+					result.value
+				end
 				def commit
 					begin
 						components = self.edit( "rubyang" ).edit( "component" ).children.map{ |c|

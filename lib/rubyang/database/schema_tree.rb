@@ -27,6 +27,21 @@ module Rubyang
 			end
 			# end
 
+			# must start
+			class Must
+				attr_reader :arg, :xpath
+				def initialize schema_node, schema
+					@schema_node = schema_node
+					@schema = schema
+					@arg = schema.arg
+					@xpath = Rubyang::Xpath::Parser.parse @arg
+					@logger = Rubyang::Logger.instance
+					@logger.debug @xpath
+					@schema_node.evaluate_xpath @xpath
+				end
+			end
+			# end
+
 			class Type
 				attr_reader :arg
 			end
@@ -768,6 +783,7 @@ module Rubyang
 				def initialize yangs, arg, yang, parent, _module
 					super yangs, arg, yang, parent, _module
 					@children = []
+					@logger = Rubyang::Logger.instance
 				end
 
 				def load_yang yang, yangs=@yangs, parent_module=yang, current_module=yang, grouping_list=[], typedef_list=[]
@@ -796,6 +812,11 @@ module Rubyang
 						self.children.push Container.new( yangs, container_arg, yang, self, parent_module )
 						# when start
 						yang.substmt( "when" ).each{ |s|
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+						}
+						# end
+						# must start
+						yang.substmt( "must" ).each{ |s|
 							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
 						}
 						# end
@@ -848,6 +869,11 @@ module Rubyang
 						puts 'yang'
 						puts yang.to_yaml
 						self.whens.push When.new( self, yang )
+					# end
+					# must start
+					when Rubyang::Model::Must
+						@logger.debug yang
+						self.musts.push Must.new( self, yang )
 					# end
 					else
 						raise "#{yang.class} is not impletented yet"
@@ -1094,10 +1120,11 @@ module Rubyang
 			end
 
 			class Container < InteriorSchemaNode
-				attr_accessor :whens
+				attr_accessor :whens, :musts
 				def initialize *args
 					super
 					@whens = []
+					@musts = []
 				end
 				def to_json_recursive h
 					h['type'] = 'container'
