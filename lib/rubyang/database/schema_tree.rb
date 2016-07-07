@@ -357,9 +357,9 @@ module Rubyang
 					if parent
 						vars.push "@yangs=#{@yangs.to_s}"
 						vars.push "@arg=#{@arg.to_s}"
-						vars.push "@yang=#{@yang.to_s(true)}"
-						vars.push "@parent=#{@parent.to_s(false)}"
-						vars.push "@module=#{@module.to_s(true)}"
+						vars.push "@yang=#{@yang.to_s(false) rescue @yang.to_s}"
+						vars.push "@parent=#{@parent.to_s(false) rescue @parent.to_s}"
+						vars.push "@module=#{@module.to_s(false) rescue @module.to_s}"
 					end
 					head + vars.join(', ') + tail
 				end
