@@ -11,10 +11,10 @@ module Rubyang
 
 				attr_reader :value
 				def initialize value=[]
-					raise "#{self.class} argument must be Array" unless Array === value
+					raise "#{self.class} argument must be Array but #{value.class}" unless Array === value
 					value.each{ |v|
-						unless Rubyang::Database::DataTree::Node === v
-							raise "#{v.class} argument must be Rubyang::Database::DataTree::Node"
+						unless Rubyang::Database::DataTree::Leaf === v
+							raise "#{self.class} argument must be Rubyang::Database::DataTree::Leaf but #{v.class}"
 						end
 					}
 					@value = value
@@ -34,8 +34,6 @@ module Rubyang
 				def == right
 					case right
 					when NodeSet
-						p 'in =='
-						p @value.map{ |v| v.value }, right.value.map{ |v| v.value }
 						value = if (@value.map{ |v| v.value } & right.value.map{ |v| v.value }).size > 0 then true else false end
 						Boolean.new value
 					when Boolean
@@ -46,30 +44,24 @@ module Rubyang
 							end
 						Boolean.new value
 					when Number
-						value = @value.find{ |v|
-							case v
-							when NodeSet
-								"NodeSet in NodeSet is not implemented"
-							when Boolean
-								"Boolean in NodeSet is not implemented"
-							when Number
-								v.value == right.value
-							when String
-								v.value == right.value.to_s
-							end
-						}
+						value = @value.any?{ |v| Float(v.value) == right.value rescue false }
 						Boolean.new value
 					when String
 						value = @value.any?{ |v| v.value == right.value }
 						Boolean.new value
 					end
 				end
+
+				def != right
+					value = ! (self == right).value
+					Boolean.new value
+				end
 			end
 
 			class Boolean
 				attr_reader :value
 				def initialize value
-					raise "#{self.class} argument must be true or false" unless [true, false].include?( value )
+					raise "#{self.class} argument must be true or false but #{value.class}" unless [true, false].include?( value )
 					@value = value
 				end
 

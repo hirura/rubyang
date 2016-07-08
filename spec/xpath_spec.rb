@@ -6,12 +6,2218 @@ require 'yaml'
 
 describe Rubyang::Xpath do
 	describe Rubyang::Xpath::BasicType do
-		#describe NodeSet do
-		#context '# ' do
-		#let( :predicates1 ){ Rubyang::Xpath::Predicates.new }
-		#subject { Rubyang::Xpath::Parser.parse( xpath_str ).to_yaml }
-		#it { is_expected.to eq xpath_yaml }
-		#end
+		let( :yang_str_m0 ){
+			<<-EOB
+				module m0 {
+					namespace "http://m0.rspec/";
+					prefix m0;
+					leaf leaf0 { type string; }
+					leaf leaf_ { type string; }
+				}
+			EOB
+		}
+		let( :yang_str_m1 ){
+			<<-EOB
+				module m1 {
+					namespace "http://m1.rspec/";
+					prefix m1;
+					leaf leaf1 { type string; }
+					leaf leafA { type string; }
+				}
+			EOB
+		}
+		let( :yang_str_m2 ){
+			<<-EOB
+				module m2 {
+					namespace "http://m2.rspec/";
+					prefix m2;
+					leaf leaf2 { type string; }
+					leaf leafB { type string; }
+				}
+			EOB
+		}
+		let( :db_config ){
+			db = Rubyang::Database.new
+			db.load_model Rubyang::Model::Parser.parse( yang_str_m0 )
+			db.load_model Rubyang::Model::Parser.parse( yang_str_m1 )
+			db.load_model Rubyang::Model::Parser.parse( yang_str_m2 )
+			db.configure
+		}
+		let( :leaf0 ){ db_config.edit( 'leaf0' ).set( '0' ); db_config.edit( 'leaf0' ) }
+		let( :leaf1 ){ db_config.edit( 'leaf1' ).set( '1' ); db_config.edit( 'leaf1' ) }
+		let( :leaf2 ){ db_config.edit( 'leaf2' ).set( '2' ); db_config.edit( 'leaf2' ) }
+		let( :leaf_ ){ db_config.edit( 'leaf_' ).set( ''  ); db_config.edit( 'leaf_' ) }
+		let( :leafA ){ db_config.edit( 'leafA' ).set( 'A' ); db_config.edit( 'leafA' ) }
+		let( :leafB ){ db_config.edit( 'leafB' ).set( 'B' ); db_config.edit( 'leafB' ) }
+
+		describe Rubyang::Xpath::BasicType::NodeSet do
+			describe '#initialize' do
+				context '' do
+					let( :result ){ Rubyang::Xpath::BasicType::NodeSet.new }
+					subject { result.value }
+					it { is_expected.to eq [] }
+				end
+
+				context '[]' do
+					let( :result ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+					subject { result.value }
+					it { is_expected.to eq [] }
+				end
+
+				context 'leaf1' do
+					let( :result ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+					subject { result.value }
+					it { is_expected.to eq [leaf1] }
+				end
+
+				context 'leaf1, leaf2' do
+					let( :result ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+					subject { result.value }
+					it { is_expected.to eq [leaf1, leaf2] }
+				end
+			end
+
+			describe '#to_boolean' do
+				let( :result ){ node_set.to_boolean }
+				context '' do
+					let( :node_set ){ Rubyang::Xpath::BasicType::NodeSet.new }
+					subject { result.value }
+					it { is_expected.to eq false }
+				end
+
+				context '[]' do
+					let( :node_set ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+					subject { result.value }
+					it { is_expected.to eq false }
+				end
+
+				context 'leaf1' do
+					let( :node_set ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+					subject { result.value }
+					it { is_expected.to eq true }
+				end
+
+				context 'leaf1, leaf2' do
+					let( :node_set ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+					subject { result.value }
+					it { is_expected.to eq true }
+				end
+			end
+
+			describe '#==' do
+				let( :result ){ left == right }
+
+				describe 'left _' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+				end
+
+				describe 'left []' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+				end
+
+				describe 'left [leaf_]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+				end
+
+				describe 'left [leafA]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+				end
+
+				describe 'left [leaf0]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+				end
+
+				describe 'left [leaf1]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+				end
+
+				describe 'left [leafA, leafB]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+				end
+
+				describe 'left [leafA, leaf1]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+				end
+
+				describe 'left [leaf1, leaf2]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+				end
+			end
+
+			describe '#!=' do
+				let( :result ){ left != right }
+
+				describe 'left _' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+				end
+
+				describe 'left []' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+				end
+
+				describe 'left [leaf_]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+				end
+
+				describe 'left [leafA]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+				end
+
+				describe 'left [leaf0]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+				end
+
+				describe 'left [leaf1]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+				end
+
+				describe 'left [leafA, leafB]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+				end
+
+				describe 'left [leafA, leaf1]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+				end
+
+				describe 'left [leaf1, leaf2]' do
+					let( :left ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+					context 'right NodeSet.new' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf_])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf_] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf0])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf0] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leafA, leafB])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leafB] }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right NodeSet.new([leafA, leaf1])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leafA, leaf1] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right NodeSet.new([leaf1, leaf2])' do
+						let( :right ){ Rubyang::Xpath::BasicType::NodeSet.new [leaf1, leaf2] }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(true)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new true }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Boolean.new(false)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Boolean.new false }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(0)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 0 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right Number.new(1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new 1 }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right Number.new(-1)' do
+						let( :right ){ Rubyang::Xpath::BasicType::Number.new -1 }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'A\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new 'A' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'0\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '0' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+
+					context 'right String.new(\'1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '1' }
+						subject { result.value }
+						it { is_expected.to eq false }
+					end
+
+					context 'right String.new(\'-1\')' do
+						let( :right ){ Rubyang::Xpath::BasicType::String.new '-1' }
+						subject { result.value }
+						it { is_expected.to eq true }
+					end
+				end
+			end
+		end
 
 		describe Rubyang::Xpath::BasicType::Boolean do
 			describe '#initialize' do
