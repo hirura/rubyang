@@ -6,9 +6,6 @@ require 'rexml/document'
 require 'rexml/formatters/pretty'
 require 'json'
 
-describe 'RFC6020' do
-end
-
 describe Rubyang::Database do
 	let( :doc_xml_pretty ){
 		pretty_formatter = REXML::Formatters::Pretty.new( 2 )
