@@ -12,7 +12,11 @@ module Rubyang
 				attr_reader :value
 				def initialize value=[]
 					raise "#{self.class} argument must be Array" unless Array === value
-					raise "#{v.class} argument must be Rubyang::Database::DataTree::Node" unless value.any?{ |v| Rubyang::Database::DataTree::Node === v }
+					value.each{ |v|
+						unless Rubyang::Database::DataTree::Node === v
+							raise "#{v.class} argument must be Rubyang::Database::DataTree::Node"
+						end
+					}
 					@value = value
 				end
 
