@@ -13,8 +13,8 @@ module Rubyang
 				def initialize value=[]
 					raise "#{self.class} argument must be Array but #{value.class}" unless Array === value
 					value.each{ |v|
-						unless Rubyang::Database::DataTree::Leaf === v
-							raise "#{self.class} argument must be Rubyang::Database::DataTree::Leaf but #{v.class}"
+						unless Rubyang::Database::DataTree::Node === v
+							raise "#{self.class} argument must be Rubyang::Database::DataTree::Node but #{v.class}"
 						end
 					}
 					@value = value
@@ -32,8 +32,18 @@ module Rubyang
 				end
 
 				def == right
+					@value.each{ |v|
+						unless Rubyang::Database::DataTree::Leaf === v
+							raise "#{self.class} argument must be Rubyang::Database::DataTree::Leaf but #{v.class}"
+						end
+					}
 					case right
 					when NodeSet
+						right.value.each{ |v|
+							unless Rubyang::Database::DataTree::Leaf === v
+								raise "#{right.class} argument must be Rubyang::Database::DataTree::Leaf but #{v.class}"
+							end
+						}
 						value = if (@value.map{ |v| v.value } & right.value.map{ |v| v.value }).size > 0 then true else false end
 						Boolean.new value
 					when Boolean
