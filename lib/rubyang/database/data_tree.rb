@@ -33,6 +33,28 @@ module Rubyang
 					end
 					head + vars.join(', ') + tail
 				end
+				def to_xml pretty: false
+					doc = REXML::Document.new
+					self.to_xml_recursive doc, ''
+					if pretty
+						pretty_formatter = REXML::Formatters::Pretty.new( 2 )
+						pretty_formatter.compact = true
+						output = ''
+						pretty_formatter.write( doc, output )
+						output
+					else
+						doc.to_s
+					end
+				end
+				def to_json pretty: false
+					hash = Hash.new
+					self.to_json_recursive hash
+					if pretty
+						JSON.pretty_generate( hash )
+					else
+						JSON.generate( hash )
+					end
+				end
 				def valid? current=true
 					result = if current
 							 self.root.valid?
@@ -674,29 +696,7 @@ module Rubyang
 			end
 
 			class InteriorNode < Node
-				def to_xml pretty: false
-					doc = REXML::Document.new
-					self.to_xml_recursive doc
-					if pretty
-						pretty_formatter = REXML::Formatters::Pretty.new( 2 )
-						pretty_formatter.compact = true
-						output = ''
-						pretty_formatter.write( doc, output )
-						output
-					else
-						doc.to_s
-					end
-				end
-				def to_json pretty: false
-					hash = Hash.new
-					self.to_json_recursive hash
-					if pretty
-						JSON.pretty_generate( hash )
-					else
-						JSON.generate( hash )
-					end
-				end
-				def to_xml_recursive _doc, current_namespace=''
+				def to_xml_recursive _doc, current_namespace
 					doc = _doc.add_element( @schema.model.arg )
 					unless @schema.namespace == current_namespace
 						current_namespace = @schema.namespace
