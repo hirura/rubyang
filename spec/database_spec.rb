@@ -2311,32 +2311,6 @@ describe Rubyang::Database do
 		end
 	end
 
-	describe 'test1' do
-		let( :yang_str ){
-			<<-EOB
-				module module1 {
-					namespace "http://module1.rspec/";
-					prefix module1;
-					container container1 {
-						leaf leaf1 { type string; }
-					}
-				}
-			EOB
-		}
-		let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
-		let!( :leaf1_element ){ container1_element.add_element( 'leaf1' ) }
-		let!( :leaf1_text ){ leaf1_element.add_text( 'leaf1' ) }
-		subject {
-			db.load_model Rubyang::Model::Parser.parse( yang_str )
-			config = db.configure
-			container1 = config.edit 'container1'
-			leaf1 = container1.edit 'leaf1'
-			leaf1.set 'leaf1'
-			config.to_xml( pretty: true )
-		}
-		it { is_expected.to eq doc_xml_pretty }
-	end
-
 	describe 'test2' do
 		let( :yang_str1 ){
 			<<-EOB
