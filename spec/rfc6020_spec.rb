@@ -1524,8 +1524,96 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.1.6. The include Statement' do
+
+				# TODO
+				describe 'The argument is an identifier that is the name of the submodule to include' do
+				end # describe 'The argument is an identifier that is the name of the submodule to include'
+
+				# TODO
+				describe 'Modules are only allowed to include submodules that belong to that module, as defined by the "belongs-to" statement' do
+				end # describe 'Modules are only allowed to include submodules that belong to that module, as defined by the "belongs-to" statement'
+
+				# TODO
+				describe 'Submodules are only allowed to include other submodules belonging to the same module' do
+				end # describe 'Submodules are only allowed to include other submodules belonging to the same module'
+
+				# TODO
+				describe 'When a module includes a submodule, it incorporates the contents of the submodule into the node hierarchy of the module' do
+				end # describe 'When a module includes a submodule, it incorporates the contents of the submodule into the node hierarchy of the module'
+
+				# TODO
+				describe 'When a submodule includes another submodule, the target submodule\'s definitions are made available to the current submodule' do
+				end # describe 'When a submodule includes another submodule, the target submodule\'s definitions are made available to the current submodule'
+
+				# TODO
+				describe 'When the optional "revision-date" substatement is present, the specified revision of the submodule is included in the module' do
+				end # describe 'When the optional "revision-date" substatement is present, the specified revision of the submodule is included in the module'
+
+				# TODO
+				describe 'It is an error if the specified revision of the submodule does not exist' do
+				end # describe 'It is an error if the specified revision of the submodule does not exist'
+
+				# TODO
+				describe 'If no "revision-date" substatement is present, it is undefined which revision of the submodule is included' do
+				end # describe 'If no "revision-date" substatement is present, it is undefined which
+
+				# TODO
+				describe 'Multiple revisions of the same submodule MUST NOT be included' do
+				end # describe 'Multiple revisions of the same submodule MUST NOT be included'
+
+				# TODO
+				describe 'The includes\'s Substatements' do
+					describe 'revision-date' do
+					end # describe 'revision-date'
+				end # describe 'The includes\'s Substatements'
 			end # describe '7.1.6. The include Statement'
 
+			# TODO
+			describe '7.1.7. The organization Statement' do
+			end # describe '7.1.7. The organization Statement'
+
+			# TODO
+			describe '7.1.8. The contact Statement' do
+			end # describe '7.1.7. The contact Statement'
+
+			# TODO
+			describe '7.1.9. The revision Statement' do
+			end # describe '7.1.7. The revision Statement'
+
+			# TODO
+			describe '7.1.10. Usage Example' do
+				<<-EOB
+					module acme-system {
+						namespace "http://acme.example.com/system";
+						prefix "acme";
+						import ietf-yang-types {
+							prefix "yang";
+						}
+						include acme-types;
+						organization "ACME Inc.";
+						contact
+							"Joe L. User
+							 ACME, Inc.
+							 42 Anywhere Drive
+							 Nowhere, CA 95134
+							 USA
+							 Phone: +1 800 555 0100
+							 EMail: joe@acme.example.com";
+						description
+							"The module for entities implementing the ACME protocol.";
+						revision "2007-06-09" {
+							description "Initial revision.";
+						}
+						// definitions follow...
+					}
+				EOB
+			end # describe '7.1.10. Usage Example'
+
 		end # describe '7.1. The module Statement'
+
+		# TODO
+		describe '7.2. The submodule Statement' do
+		end # describe '7.2. The submodule Statement'
+
 	end # describe '7. YANG Statements'
 end # describe 'RFC6020'
