@@ -4003,6 +4003,790 @@ describe 'RFC6020' do
 		end # describe '7.19. Common Statements'
 
 	end # describe '7. YANG Statements'
+
+
+	# TODO
+	describe '8. Constraints' do
+
+		# TODO
+		describe '8.1. Constraints on Data' do
+		end # describe '8.1. Constraints on Data'
+
+		# TODO
+		describe '8.2. Hierarchy of Constraints' do
+		end # describe '8.2. Hierarchy of Constraints'
+
+		# TODO
+		describe '8.3. Constraint Enforcement Model' do
+		end # describe '8.3. Constraint Enforcement Model'
+
+		# TODO
+		describe '8.3.1. Payload Parsing' do
+		end # describe '8.3.1. Payload Parsing'
+
+		# TODO
+		describe '8.3.2. NETCONF <edit-config> Processing' do
+		end # describe '8.3.2. NETCONF <edit-config> Processing'
+
+		# TODO
+		describe '8.3.3. Validation' do
+		end # describe '8.3.3. Validation'
+
+	end # describe '8. Constraints'
+
+	# TODO
+	describe '9. Built-In Types' do
+
+		# TODO
+		describe '9.1. Canonical Representation' do
+		end # describe '9.1. Canonical Representation'
+
+		# TODO
+		describe '9.2. The Integer Built-In Types' do
+
+			<<-EOB
+   int8  represents integer values between -128 and 127, inclusively.
+   int16  represents integer values between -32768 and 32767, inclusively.
+   int32  represents integer values between -2147483648 and 2147483647, inclusively.
+   int64  represents integer values between -9223372036854775808 and 9223372036854775807, inclusively.
+   uint8  represents integer values between 0 and 255, inclusively.
+   uint16  represents integer values between 0 and 65535, inclusively.
+   uint32  represents integer values between 0 and 4294967295, inclusively.
+   uint64  represents integer values between 0 and 18446744073709551615, inclusively.
+			EOB
+
+		end # describe '9.2. The Integer Built-In Types'
+
+		# TODO
+		describe '9.2.1.  Lexical Representation' do
+
+			<<-EOB
+   Examples:
+     // legal values
+     +4711                       // legal positive value
+     4711                        // legal positive value
+     -123                        // legal negative value
+     0xf00f                      // legal positive hexadecimal value
+     -0xf                        // legal negative hexadecimal value
+     052                         // legal positive octal value
+     // illegal values
+     - 1                         // illegal intermediate space
+			EOB
+		end # describe '9.2.1.  Lexical Representation'
+
+		# TODO
+		describe '9.2.1. Lexical Representation' do
+		end # describe '9.2.1. Lexical Representation'
+
+		# TODO
+		describe '9.2.2. Canonical Form' do
+		end # describe '9.2.2. Canonical Form'
+
+		# TODO
+		describe '9.2.3. Restrictions' do
+		end # describe '9.2.3. Restrictions'
+
+		# TODO
+		describe '9.2.4. The range Statement' do
+		end # describe '9.2.4. The range Statement'
+
+		# TODO
+		describe '9.2.4.1.  The range\'s Substatements' do
+
+			description 'description' do
+				'0..1'
+			end # description 'description'
+
+			description 'error-app-tag' do
+				'0..1'
+			end # description 'error-app-tag'
+
+			description 'error-message' do
+				'0..1'
+			end # description 'error-message'
+
+			description 'reference' do
+				'0..1'
+			end # description 'reference'
+
+		end # describe '9.2.4.1.  The range\'s Substatements'
+
+		# TODO
+		describe '9.2.5. Usage Example' do
+
+			<<-EOB
+     typedef my-base-int32-type {
+	 type int32 {
+	     range "1..4 | 10..20";
+	 }
+     }
+     typedef my-type1 {
+	 type my-base-int32-type {
+	     // legal range restriction
+	     range "11..max"; // 11..20
+	 }
+     }
+     typedef my-type2 {
+	 type my-base-int32-type {
+	     // illegal range restriction
+	     range "11..100";
+	 }
+     }
+			EOB
+		end # describe '9.2.5. Usage Example'
+
+		# TODO
+		describe '9.3. The decimal64 Built-In Type' do
+		end # describe '9.3. The decimal64 Built-In Type'
+
+		# TODO
+		describe '9.3.1. Lexical Representation' do
+		end # describe '9.3.1. Lexical Representation'
+
+		# TODO
+		describe '9.3.2. Canonical Form' do
+		end # describe '9.3.2. Canonical Form'
+
+		# TODO
+		describe '9.3.3. Restrictions' do
+		end # describe '9.3.3. Restrictions'
+
+		# TODO
+		describe '9.3.4. The fraction-digits Statement' do
+
+			<<-EOB
+     +----------------+-----------------------+----------------------+
+     | fraction-digit | min                   | max                  |
+     +----------------+-----------------------+----------------------+
+     | 1              | -922337203685477580.8 | 922337203685477580.7 |
+     | 2              | -92233720368547758.08 | 92233720368547758.07 |
+     | 3              | -9223372036854775.808 | 9223372036854775.807 |
+     | 4              | -922337203685477.5808 | 922337203685477.5807 |
+     | 5              | -92233720368547.75808 | 92233720368547.75807 |
+     | 6              | -9223372036854.775808 | 9223372036854.775807 |
+     | 7              | -922337203685.4775808 | 922337203685.4775807 |
+     | 8              | -92233720368.54775808 | 92233720368.54775807 |
+     | 9              | -9223372036.854775808 | 9223372036.854775807 |
+     | 10             | -922337203.6854775808 | 922337203.6854775807 |
+     | 11             | -92233720.36854775808 | 92233720.36854775807 |
+     | 12             | -9223372.036854775808 | 9223372.036854775807 |
+     | 13             | -922337.2036854775808 | 922337.2036854775807 |
+     | 14             | -92233.72036854775808 | 92233.72036854775807 |
+     | 15             | -9223.372036854775808 | 9223.372036854775807 |
+     | 16             | -922.3372036854775808 | 922.3372036854775807 |
+     | 17             | -92.23372036854775808 | 92.23372036854775807 |
+     | 18             | -9.223372036854775808 | 9.223372036854775807 |
+     +----------------+-----------------------+----------------------+
+			EOB
+		end # describe '9.3.4. The fraction-digits Statement'
+
+		# TODO
+		describe '9.3.5. Usage Example' do
+
+			<<-EOB
+     typedef my-decimal {
+	 type decimal64 {
+	     fraction-digits 2;
+	     range "1 .. 3.14 | 10 | 20..max";
+	 }
+     }
+			EOB
+
+		end # describe '9.3.5. Usage Example'
+
+		# TODO
+		describe '9.4. The string Built-In Type' do
+		end # describe '9.4. The string Built-In Type'
+
+		# TODO
+		describe '9.4.1. Lexical Representation' do
+		end # describe '9.4.1. Lexical Representation'
+
+		# TODO
+		describe '9.4.2. Canonical Form' do
+		end # describe '9.4.2. Canonical Form'
+
+		# TODO
+		describe '9.4.3. Restrictions' do
+		end # describe '9.4.3. Restrictions'
+
+		# TODO
+		describe '9.4.4. The length Statement' do
+		end # describe '9.4.4. The length Statement'
+
+		# TODO
+		describe '9.4.4.1.  The length\'s Substatements' do
+
+			describe 'description' do
+				'0..1'
+			end # describe 'description'
+
+			describe 'error-app-tag' do
+				'0..1'
+			end # describe 'error-app-tag'
+
+			describe 'error-message' do
+				'0..1'
+			end # describe 'error-message'
+
+			describe 'reference' do
+				'0..1'
+			end # describe 'reference'
+
+		end # describe '9.4.4.1.  The length\'s Substatements'
+
+		# TODO
+		describe '9.4.5. Usage Example' do
+
+			<<-EOB
+     typedef my-base-str-type {
+	 type string {
+	     length "1..255";
+	 }
+     }
+
+     type my-base-str-type {
+	 // legal length refinement
+	 length "11 | 42..max"; // 11 | 42..255
+     }
+
+     type my-base-str-type {
+	 // illegal length refinement
+	 length "1..999";
+     }
+			EOB
+
+		end # describe '9.4.5. Usage Example'
+
+		# TODO
+		describe '9.4.6. The pattern Statement' do
+		end # describe '9.4.6. The pattern Statement'
+
+		# TODO
+		describe '9.4.6.1.  The pattern\'s Substatements' do
+
+			describe 'description' do
+				'0..1'
+			end # describe 'description'
+
+			describe 'error-app-tag' do
+				'0..1'
+			end # describe 'error-app-tag'
+
+			describe 'error-message' do
+				'0..1'
+			end # describe 'error-message'
+
+			describe 'reference' do
+				'0..1'
+			end # describe 'reference'
+
+		end # describe '9.4.6.1.  The pattern\'s Substatements'
+
+		# TODO
+		describe '9.4.7. Usage Example' do
+
+			<<-EOB
+   With the following type:
+     type string {
+	 length "0..4";
+	 pattern "[0-9a-fA-F]*";
+     }
+   the following strings match:
+     AB          // legal
+     9A00        // legal
+   and the following strings do not match:
+     00ABAB      // illegal, too long
+     xx00        // illegal, bad characters
+			EOB
+
+		end # describe '9.4.7. Usage Example'
+
+		# TODO
+		describe '9.5. The boolean Built-In Type' do
+		end # describe '9.5. The boolean Built-In Type'
+
+		# TODO
+		describe '9.5.1. Lexical Representation' do
+		end # describe '9.5.1. Lexical Representation'
+
+		# TODO
+		describe '9.5.2. Canonical Form' do
+		end # describe '9.5.2. Canonical Form'
+
+		# TODO
+		describe '9.5.3. Restrictions' do
+		end # describe '9.5.3. Restrictions'
+
+		# TODO
+		describe '9.6. The enumeration Built-In Type' do
+		end # describe '9.6. The enumeration Built-In Type'
+
+		# TODO
+		describe '9.6.1. Lexical Representation' do
+		end # describe '9.6.1. Lexical Representation'
+
+		# TODO
+		describe '9.6.2. Canonical Form' do
+		end # describe '9.6.2. Canonical Form'
+
+		# TODO
+		describe '9.6.3. Restrictions' do
+		end # describe '9.6.3. Restrictions'
+
+		# TODO
+		describe '9.6.4. The enum Statement' do
+		end # describe '9.6.4. The enum Statement'
+
+		# TODO
+		describe '9.6.4.1.  The enum\'s Substatements' do
+
+			describe 'description' do
+				'0..1'
+			end # describe 'description'
+
+			describe 'reference' do
+				'0..1'
+			end # describe 'reference'
+
+			describe 'status' do
+				'0..1'
+			end # describe 'status'
+
+			describe 'value' do
+				'0..1'
+			end # describe 'value'
+
+		end # describe '9.6.4.1.  The enum\'s Substatements'
+
+		# TODO
+		describe '9.6.4.2. The value Statement' do
+		end # describe '9.6.4.2. The value Statement'
+
+		# TODO
+		describe '9.6.5. Usage Example' do
+
+			<<-EOB
+     leaf myenum {
+	 type enumeration {
+	     enum zero;
+	     enum one;
+	     enum seven {
+		 value 7;
+	     }
+	 }
+     }
+   The lexical representation of the leaf "myenum" with value "seven" is:
+     <myenum>seven</myenum>
+			EOB
+
+		end # describe '9.6.5. Usage Example'
+
+		# TODO
+		describe '9.7. The bits Built-In Type' do
+		end # describe '9.7. The bits Built-In Type'
+
+		# TODO
+		describe '9.7.1. Restrictions' do
+		end # describe '9.7.1. Restrictions'
+
+		# TODO
+		describe '9.7.2. Lexical Representation' do
+		end # describe '9.7.2. Lexical Representation'
+
+		# TODO
+		describe '9.7.3. Canonical Form' do
+		end # describe '9.7.3. Canonical Form'
+
+		# TODO
+		describe '9.7.4. The bit Statement' do
+		end # describe '9.7.4. The bit Statement'
+
+		# TODO
+		describe '9.7.4.1. The bit\'s Substatements' do
+
+			describe 'description' do
+				'0..1'
+			end # describe 'description'
+
+			describe 'reference' do
+				'0..1'
+			end # describe 'reference'
+
+			describe 'status' do
+				'0..1'
+			end # describe 'status'
+
+			describe 'position' do
+				'0..1'
+			end # describe 'position'
+
+		end # describe '9.7.4.1. The bit\'s Substatements'
+
+		# TODO
+		describe '9.7.4.2.  The position Statement' do
+		end # describe '9.7.4.2.  The position Statement'
+
+		# TODO
+		describe '9.7.5. Usage Example' do
+
+			<<-EOB
+   Given the following leaf:
+     leaf mybits {
+	 type bits {
+	     bit disable-nagle {
+		 position 0;
+	     }
+	     bit auto-sense-speed {
+		 position 1;
+	     }
+	     bit 10-Mb-only {
+		 position 2;
+	     }
+	 }
+	 default "auto-sense-speed";
+     }
+   The lexical representation of this leaf with bit values disable-nagle and 10-Mb-only set would be:
+     <mybits>disable-nagle 10-Mb-only</mybits>
+			EOB
+
+		end # describe '9.7.5. Usage Example'
+
+		# TODO
+		describe '9.8. The binary Built-In Type' do
+		end # describe '9.8. The binary Built-In Type'
+
+		# TODO
+		describe '9.8.1. Restrictions' do
+		end # describe '9.8.1. Restrictions'
+
+		# TODO
+		describe '9.8.2. Lexical Representation' do
+		end # describe '9.8.2. Lexical Representation'
+
+		# TODO
+		describe '9.8.3. Canonical Form' do
+		end # describe '9.8.3. Canonical Form'
+
+		# TODO
+		describe '9.9. The leafref Built-In Type' do
+		end # describe '9.9. The leafref Built-In Type'
+
+		# TODO
+		describe '9.9.1. Restrictions' do
+		end # describe '9.9.1. Restrictions'
+
+		# TODO
+		describe '9.9.2. The path Statement' do
+		end # describe '9.9.2. The path Statement'
+
+		# TODO
+		describe '9.9.3. Lexical Representation' do
+		end # describe '9.9.3. Lexical Representation'
+
+		# TODO
+		describe '9.9.4. Canonical Form' do
+		end # describe '9.9.4. Canonical Form'
+
+		# TODO
+		describe '9.9.5. Usage Example' do
+
+			<<-EOB
+   With the following list:
+     list interface {
+	 key "name";
+	 leaf name {
+	     type string;
+	 }
+	 leaf admin-status {
+	     type admin-status;
+	 }
+	 list address {
+	     key "ip";
+	     leaf ip {
+		 type yang:ip-address;
+	     }
+	 }
+     }
+   The following leafref refers to an existing interface:
+     leaf mgmt-interface {
+	 type leafref {
+	     path "../interface/name";
+	 }
+     }
+   An example of a corresponding XML snippet:
+     <interface>
+       <name>eth0</name>
+     </interface>
+     <interface>
+       <name>lo</name>
+     </interface>
+     <mgmt-interface>eth0</mgmt-interface>
+   The following leafrefs refer to an existing address of an interface:
+     container default-address {
+	 leaf ifname {
+	     type leafref {
+		 path "../../interface/name";
+	     }
+	 }
+	 leaf address {
+	     type leafref {
+		 path "../../interface[name = current()/../ifname]"
+		    + "/address/ip";
+	     }
+	 }
+     }
+   An example of a corresponding XML snippet:
+     <interface>
+       <name>eth0</name>
+       <admin-status>up</admin-status>
+       <address>
+	 <ip>192.0.2.1</ip>
+       </address>
+       <address>
+	 <ip>192.0.2.2</ip>
+       </address>
+     </interface>
+     <interface>
+       <name>lo</name>
+       <admin-status>up</admin-status>
+       <address>
+	 <ip>127.0.0.1</ip>
+       </address>
+     </interface>
+
+     <default-address>
+       <ifname>eth0</ifname>
+       <address>192.0.2.2</address>
+     </default-address>
+   The following list uses a leafref for one of its keys.  This is similar to a foreign key in a relational database.
+     list packet-filter {
+	 key "if-name filter-id";
+	 leaf if-name {
+	     type leafref {
+		 path "/interface/name";
+	     }
+	 }
+	 leaf filter-id {
+	     type uint32;
+	 }
+	 ...
+     }
+   An example of a corresponding XML snippet:
+     <interface>
+       <name>eth0</name>
+       <admin-status>up</admin-status>
+       <address>
+	 <ip>192.0.2.1</ip>
+       </address>
+       <address>
+	 <ip>192.0.2.2</ip>
+       </address>
+     </interface>
+
+     <packet-filter>
+       <if-name>eth0</if-name>
+       <filter-id>1</filter-id>
+       ...
+     </packet-filter>
+     <packet-filter>
+       <if-name>eth0</if-name>
+       <filter-id>2</filter-id>
+       ...
+     </packet-filter>
+   The following notification defines two leafrefs to refer to an existing admin-status:
+     notification link-failure {
+	 leaf if-name {
+	     type leafref {
+		 path "/interface/name";
+	     }
+	 }
+	 leaf admin-status {
+	     type leafref {
+		 path
+		   "/interface[name = current()/../if-name]"
+		 + "/admin-status";
+	     }
+	 }
+     }
+   An example of a corresponding XML notification:
+     <notification
+       xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
+       <eventTime>2008-04-01T00:01:00Z</eventTime>
+       <link-failure xmlns="http://acme.example.com/system">
+	 <if-name>eth0</if-name>
+	 <admin-status>up</admin-status>
+       </link-failure>
+     </notification>
+			EOB
+
+		end # describe '9.9.5. Usage Example'
+
+		# TODO
+		describe '9.10. The identityref Built-In Type' do
+		end # describe '9.10. The identityref Built-In Type'
+
+		# TODO
+		describe '9.10.1. Restrictions' do
+		end # describe '9.10.1. Restrictions'
+
+		# TODO
+		describe '9.10.2. The identityref\'s base Statement' do
+		end # describe '9.10.2. The identityref\'s base Statement'
+
+		# TODO
+		describe '9.10.3. Lexical Representation' do
+		end # describe '9.10.3. Lexical Representation'
+
+		# TODO
+		describe '9.10.4. Canonical Form' do
+		end # describe '9.10.4. Canonical Form'
+
+		# TODO
+		describe '9.10.5. Usage Example' do
+
+			<<-EOB
+   With the identity definitions in Section 7.16.3 and the following module:
+     module my-crypto {
+
+	 namespace "http://example.com/my-crypto";
+	 prefix mc;
+
+	 import "crypto-base" {
+	     prefix "crypto";
+	 }
+
+	 identity aes {
+	     base "crypto:crypto-alg";
+	 }
+
+	 leaf crypto {
+	     type identityref {
+		 base "crypto:crypto-alg";
+	     }
+	 }
+     }
+   the leaf "crypto" will be encoded as follows, if the value is the "des3" identity defined in the "des" module:
+     <crypto xmlns:des="http://example.com/des">des:des3</crypto>
+   Any prefixes used in the encoding are local to each instance
+   encoding.  This means that the same identityref may be encoded
+   differently by different implementations.  For example, the following
+   example encodes the same leaf as above:
+     <crypto xmlns:x="http://example.com/des">x:des3</crypto>
+   If the "crypto" leaf's value instead is "aes" defined in the "my-crypto" module, it can be encoded as:
+     <crypto xmlns:mc="http://example.com/my-crypto">mc:aes</crypto>
+   or, using the default namespace:
+     <crypto>aes</crypto>
+			EOB
+
+		end # describe '9.10.5. Usage Example'
+
+		# TODO
+		describe '9.11. The empty Built-In Type' do
+		end # describe '9.11. The empty Built-In Type'
+
+		# TODO
+		describe '9.11.1. Restrictions' do
+		end # describe '9.11.1. Restrictions'
+
+		# TODO
+		describe '9.11.2. Lexical Representation' do
+		end # describe '9.11.2. Lexical Representation'
+
+		# TODO
+		describe '9.11.3. Canonical Form' do
+		end # describe '9.11.3. Canonical Form'
+
+		# TODO
+		describe '9.11.4. Usage Example' do
+
+			<<-EOB
+   The following leaf
+     leaf enable-qos {
+	 type empty;
+     }
+   will be encoded as
+     <enable-qos/>
+   if it exists.
+			EOB
+
+		end # describe '9.11.4. Usage Example'
+
+		# TODO
+		describe '9.12. The union Built-In Type' do
+
+			<<-EOB
+   Example:
+     type union {
+	 type int32;
+	 type enumeration {
+	     enum "unbounded";
+	 }
+     }
+			EOB
+
+		end # describe '9.12. The union Built-In Type'
+
+		# TODO
+		describe '9.12.1. Restrictions' do
+		end # describe '9.12.1. Restrictions'
+
+		# TODO
+		describe '9.12.2. Lexical Representation' do
+		end # describe '9.12.2. Lexical Representation'
+
+		# TODO
+		describe '9.12.3. Canonical Form' do
+		end # describe '9.12.3. Canonical Form'
+
+		# TODO
+		describe '9.13. The instance-identifier Built-In Type' do
+		end # describe '9.13. The instance-identifier Built-In Type'
+
+		# TODO
+		describe '9.13.1. Restrictions' do
+		end # describe '9.13.1. Restrictions'
+
+		# TODO
+		describe '9.13.2. The require-instance Statement' do
+		end # describe '9.13.2. The require-instance Statement'
+
+		# TODO
+		describe '9.13.3. Lexical Representation' do
+		end # describe '9.13.3. Lexical Representation'
+
+		# TODO
+		describe '9.13.4. Canonical Form' do
+		end # describe '9.13.4. Canonical Form'
+
+		# TODO
+		describe '9.13.5. Usage Example' do
+
+			<<-EOB
+   The following are examples of instance identifiers:
+     /* instance-identifier for a container */
+     /ex:system/ex:services/ex:ssh
+
+     /* instance-identifier for a leaf */
+     /ex:system/ex:services/ex:ssh/ex:port
+
+     /* instance-identifier for a list entry */
+     /ex:system/ex:user[ex:name='fred']
+
+     /* instance-identifier for a leaf in a list entry */
+     /ex:system/ex:user[ex:name='fred']/ex:type
+
+     /* instance-identifier for a list entry with two keys */
+     /ex:system/ex:server[ex:ip='192.0.2.1'][ex:port='80']
+
+     /* instance-identifier for a leaf-list entry */
+     /ex:system/ex:services/ex:ssh/ex:cipher[.='blowfish-cbc']
+
+     /* instance-identifier for a list entry without keys */
+     /ex:stats/ex:port[3]
+			EOB
+		end # describe '9.13.5. Usage Example'
+	end # describe '9. Built-In Types'
 end # describe 'RFC6020'
 
 <<-EOB
@@ -5650,7 +6434,7 @@ end # describe 'RFC6020'
 	 leaf admin-status {
 	     type leafref {
 		 path
-		   "/interface[name = current()/../if-name]"
+"/interface[name = current()/../if-name]"
 		 + "/admin-status";
 	     }
 	 }
