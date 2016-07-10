@@ -2311,63 +2311,6 @@ describe Rubyang::Database do
 		end
 	end
 
-	describe 'test2' do
-		let( :yang_str1 ){
-			<<-EOB
-				module testmodule00 {
-					yang-version "1";
-					namespace "http://test/module00";
-					prefix testprefix00;
-					typedef hoge00 { type int32; }
-				}
-			EOB
-		}
-		let( :yang_str2 ){
-			<<-EOB
-				module testmodule01 {
-					yang-version "1";
-					namespace "http://test/module01";
-					prefix testprefix01;
-					import testmodule00 { prefix testmodule00; }
-					typedef hoge01 { type testmodule00:hoge00; }
-				}
-			EOB
-		}
-		let( :yang_str3 ){
-			<<-EOB
-				module module1 {
-					namespace "http://module1.rspec/";
-					prefix module1;
-					yang-version "1";
-					import testmodule01 { prefix testmodule01; }
-					container c1 {
-						typedef c1type { type uint8; }
-						leaf fuga { type testmodule01:hoge01; }
-						leaf c1leaf { type c1type; }
-					}
-				}
-			EOB
-		}
-		let!( :c1_element ){ root_xml.add_element( 'c1' ).add_namespace( 'http://module1.rspec/' ) }
-		let!( :fuga_element ){ c1_element.add_element( 'fuga' ) }
-		let!( :fuga_text ){ fuga_element.add_text( '8' ) }
-		let!( :c1leaf_element ){ c1_element.add_element( 'c1leaf' ) }
-		let!( :c1leaf_text ){ c1leaf_element.add_text( '5' ) }
-		subject {
-			db.load_model Rubyang::Model::Parser.parse( yang_str1 )
-			db.load_model Rubyang::Model::Parser.parse( yang_str2 )
-			db.load_model Rubyang::Model::Parser.parse( yang_str3 )
-			config = db.configure
-			c1 = config.edit 'c1'
-			fuga = c1.edit 'fuga'
-			fuga.set '8'
-			c1leaf = c1.edit 'c1leaf'
-			c1leaf.set '5'
-			config.to_xml( pretty: true )
-		}
-		it { is_expected.to eq doc_xml_pretty }
-	end
-
 	describe 'test3' do
 		let( :yang_str1 ){
 			<<-EOB

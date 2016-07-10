@@ -1384,6 +1384,148 @@ describe 'RFC6020' do
 					end
 				end
 			end # describe '7.1.1. The module\'s Substatements'
+
+			# TODO
+			describe '7.1.2. The yang-version Statement' do
+				describe 'MUST contain the value"1"' do
+					context 'valid valud: "1"' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									yang-version 1;
+								}
+							EOB
+						}
+						let!( :dummy ){ root_xml }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
+					end
+
+					context 'invalid valud: "2"' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									yang-version 2;
+								}
+							EOB
+						}
+						subject { ->{
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+						} }
+						it { is_expected.to raise_exception Exception }
+					end
+				end # describe 'MUST contain the value"1"'
+			end # describe '7.1.2. The yang-version Statement'
+
+			# TODO
+			describe '7.1.3. The namespace Statement' do
+			end # describe '7.1.3. The namespace Statement'
+
+			# TODO
+			describe '7.1.4. The prefix Statement' do
+			end # describe '7.1.4. The prefix Statement'
+
+			# TODO
+			describe '7.1.5. The import Statement' do
+				# TODO
+				describe 'the importing module may use any grouping and typedef defined at the top level in the imported module or its submodules' do
+					context 'typedef' do
+						let( :yang_str1 ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec";
+									prefix module1;
+									typedef typedef1 { type string; }
+								}
+							EOB
+						}
+						let( :yang_str2 ){
+							<<-EOB
+								module module2 {
+									namespace "http://module2.rspec";
+									prefix module2;
+									import module1 { prefix module1; }
+									typedef typedef2 { type module1:typedef1; }
+								}
+							EOB
+						}
+						let( :yang_str3 ){
+							<<-EOB
+								module module3 {
+									namespace "http://module3.rspec/";
+									prefix module3;
+									import module2 { prefix module2; }
+									leaf leaf1 { type module2:typedef2; }
+								}
+							EOB
+						}
+						let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module3.rspec/' ) }
+						let!( :leaf1_text ){ leaf1_element.add_text( 'leaf1' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str1 )
+							db.load_model Rubyang::Model::Parser.parse( yang_str2 )
+							db.load_model Rubyang::Model::Parser.parse( yang_str3 )
+							config = db.configure
+							leaf1 = config.edit 'leaf1'
+							leaf1.set 'leaf1'
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
+					end
+				end # describe 'the importing module may use any grouping and typedef defined at the top level in the imported module or its submodules'
+
+				# TODO
+				describe 'the importing module may use any extension, feature, and identity defined in the imported module or its submodules' do
+				end # describe 'the importing module may use any extension, feature, and identity defined in the imported module or its submodules' do
+
+				# TODO
+				describe 'the importing module may use any node in the imported module\'s schema tree in "must", "path", and "when" statements, or as the target node in "augment" and "deviation" statements' do
+				end # describe 'the importing module may use any node in the imported module\'s schema tree in "must", "path", and "when" statements, or as the target node in "augment" and "deviation" statements'
+
+				# TODO
+				describe 'Multiple "import" statements may be specified to import from different modules' do
+				end # describe 'Multiple "import" statements may be specified to import from different modules'
+
+				# TODO
+				describe 'When the optional "revision-date" substatement is present' do
+					describe 'any typedef, grouping, extension, feature, and identity referenced by definitions in the local module are taken from the specified revision of the imported module' do
+					end # describe 'any typedef, grouping, extension, feature, and identity referenced by definitions in the local module are taken from the specified revision of the imported module'
+
+					describe 'It is an error if the specified revision of the imported module does not exist' do
+					end # describe 'It is an error if the specified revision of the imported module does not exist'
+				end # describe 'When the optional "revision-date" substatement is present'
+
+				# TODO
+				describe 'The import\'s Substatements' do
+					# TODO
+					describe 'prefix' do
+					end # describe 'prefix'
+
+					# TODO
+					describe 'revision-date' do
+					end # describe 'revision-date'
+				end # describe 'The import\'s Substatements'
+
+				# TODO
+				describe '7.1.5.1 The import\'s revision-date Statement' do
+					# TODO
+					context 'The "revision-date" statement MUST match the most recent "revision" statement in the imported module' do
+					end # context 'The "revision-date" statement MUST match the most recent "revision" statement in the imported module'
+				end # describe '7.1.5.1 The import\'s revision-date Statement'
+			end # describe '7.1.5. The import Statement'
+
+			# TODO
+			describe '7.1.6. The include Statement' do
+			end # describe '7.1.6. The include Statement'
+
 		end # describe '7.1. The module Statement'
 	end # describe '7. YANG Statements'
 end # describe 'RFC6020'
