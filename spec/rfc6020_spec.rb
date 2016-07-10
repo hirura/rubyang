@@ -4093,19 +4093,19 @@ describe 'RFC6020' do
 		# TODO
 		describe '9.2.4.1.  The range\'s Substatements' do
 
-			description 'description' do
+			describe 'description' do
 				'0..1'
 			end # description 'description'
 
-			description 'error-app-tag' do
+			describe 'error-app-tag' do
 				'0..1'
 			end # description 'error-app-tag'
 
-			description 'error-message' do
+			describe 'error-message' do
 				'0..1'
 			end # description 'error-message'
 
-			description 'reference' do
+			describe 'reference' do
 				'0..1'
 			end # description 'reference'
 
