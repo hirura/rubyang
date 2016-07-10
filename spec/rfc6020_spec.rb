@@ -1935,6 +1935,31 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.2.3. Usage Example' do
+				<<-EOB
+					submodule acme-types {
+						belongs-to "acme-system" {
+							prefix "acme";
+						}
+						import ietf-yang-types {
+							prefix "yang";
+						}
+						organization "ACME Inc.";
+						contact
+							"Joe L. User
+							 ACME, Inc.
+							 42 Anywhere Drive
+							 Nowhere, CA 95134
+							 USA
+							 Phone: +1 800 555 0100
+							 EMail: joe@acme.example.com";
+						description
+							"This submodule defines common ACME types.";
+						revision "2007-06-09" {
+							description "Initial revision.";
+						}
+						// definitions follows...
+					}
+				EOB
 			end # describe '7.2.3. Usage Example'
 		end # describe '7.2. The submodule Statement'
 
