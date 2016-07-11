@@ -3435,6 +3435,27 @@ describe 'RFC6020' do
 		# TODO
 		describe '7.11. The grouping Statement' do
 
+			describe 'The "grouping" statement is not a data definition statement and, as such, does not define any nodes in the schema tree' do
+			end # describe 'The "grouping" statement is not a data definition statement and, as such, does not define any nodes in the schema tree'
+
+			describe 'Once a grouping is defined, it can be referenced in a "uses" statement' do
+			end # describe 'Once a grouping is defined, it can be referenced in a "uses" statement'
+
+			describe 'A grouping MUST NOT reference itself, neither directly nor indirectly through a chain of other groupings' do
+			end # describe 'A grouping MUST NOT reference itself, neither directly nor indirectly through a chain of other groupings'
+
+			describe 'If the grouping is defined at the top level of a YANG module or submodule, the grouping’s identifier MUST be unique within the module' do
+			end # describe 'If the grouping is defined at the top level of a YANG module or submodule, the grouping’s identifier MUST be unique within the module'
+
+			describe 'Identifiers appearing inside the grouping are resolved relative to the scope in which the grouping is defined, not where it is used' do
+			end # describe 'Identifiers appearing inside the grouping are resolved relative to the scope in which the grouping is defined, not where it is used'
+
+			describe 'Prefix mappings, type names, grouping names, and extension usage are evaluated in the hierarchy where the "grouping" statement appears' do
+			end # describe 'Prefix mappings, type names, grouping names, and extension usage are evaluated in the hierarchy where the "grouping" statement appears'
+
+			describe 'For extensions, this means that extensions are applied to the grouping node, not the uses node' do
+			end # describe 'For extensions, this means that extensions are applied to the grouping node, not the uses node'
+
 			# TODO
 			describe '7.11.1. The grouping\'s Substatements' do
 
@@ -3490,7 +3511,6 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.11.2. Usage Example' do
-			end # describe '7.11.2. Usage Example'
 
 			<<-EOB
      import ietf-inet-types {
@@ -3507,10 +3527,19 @@ describe 'RFC6020' do
 	 }
      }
 			EOB
+
+			end # describe '7.11.2. Usage Example'
+
 		end # describe '7.11. The grouping Statement'
 
 		# TODO
 		describe '7.12. The uses Statement' do
+
+			describe 'It takes one argument, which is the name of the grouping' do
+			end # describe 'It takes one argument, which is the name of the grouping'
+
+			describe 'The identifiers defined in the grouping are not bound to a namespace until the contents of the grouping are added to the schema tree via a "uses" statement that does not appear inside a "grouping" statement, at which point they are bound to the namespace of the current module' do
+			end # describe 'The identifiers defined in the grouping are not bound to a namespace until the contents of the grouping are added to the schema tree via a "uses" statement that does not appear inside a "grouping" statement, at which point they are bound to the namespace of the current module'
 
 			# TODO
 			describe '7.12.1. The uses\'s Substatements' do
@@ -3547,6 +3576,37 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.12.2. The refine Statement' do
+
+				describe 'If a node in the grouping is not present as a target node of a "refine" statement, it is not refined, and thus used exactly as it was defined in the grouping' do
+				end # describe 'If a node in the grouping is not present as a target node of a "refine" statement, it is not refined, and thus used exactly as it was defined in the grouping'
+
+				describe 'The argument string is a descendant schema node identifier' do
+				end # describe 'The argument string is a descendant schema node identifier'
+
+				describe 'A leaf or choice node may get a default value, or a new default value if it already had one' do
+				end # describe 'A leaf or choice node may get a default value, or a new default value if it already had one'
+
+				describe 'Any node may get a specialized "description" string' do
+				end # describe 'Any node may get a specialized "description" string'
+
+				describe 'Any node may get a specialized "reference" string' do
+				end # describe 'Any node may get a specialized "reference" string'
+
+				describe 'Any node may get a different "config" statement' do
+				end # describe 'Any node may get a different "config" statement'
+
+				describe 'A leaf, anyxml, or choice node may get a different "mandatory" statement' do
+				end # describe 'A leaf, anyxml, or choice node may get a different "mandatory" statement'
+
+				describe 'A container node may get a "presence" statement' do
+				end # describe 'A container node may get a "presence" statement'
+
+				describe 'A leaf, leaf-list, list, container, or anyxml node may get additional "must" expressions' do
+				end # describe 'A leaf, leaf-list, list, container, or anyxml node may get additional "must" expressions'
+
+				describe 'A leaf-list or list node may get a different "min-elements" or "max-elements" statement.' do
+				end # describe 'A leaf-list or list node may get a different "min-elements" or "max-elements" statement.'
+
 			end # describe '7.12.2. The refine Statement'
 
 			# TODO
@@ -3555,7 +3615,6 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.12.4. Usage Example' do
-			end # describe '7.12.4. Usage Example'
 
 			<<-EOB
    we can do:
@@ -3601,6 +3660,9 @@ describe 'RFC6020' do
 	 }
      }
 			EOB
+
+			end # describe '7.12.4. Usage Example'
+
 		end # describe '7.12. The uses Statement'
 
 		# TODO
@@ -3873,6 +3935,39 @@ describe 'RFC6020' do
 		# TODO
 		describe '7.15. The augment Statement' do
 
+			describe 'The "augment" statement allows a module or submodule to add to the schema tree defined in an external module' do
+			end # describe 'The "augment" statement allows a module or submodule to add to the schema tree defined in an external module'
+
+			describe 'or the current module and its submodules' do
+			end # describe 'or the current module and its submodules'
+
+			describe 'and to add to the nodes from a grouping in a "uses" statement' do
+			end # describe 'and to add to the nodes from a grouping in a "uses" statement'
+
+			describe 'The target node MUST be either a container, list, choice, case, input, output, or notification node' do
+			end # describe 'The target node MUST be either a container, list, choice, case, input, output, or notification node'
+
+			describe 'The argument string is a schema node identifier' do
+			end # describe 'The argument string is a schema node identifier'
+
+			describe 'If the "augment" statement is on the top level in a module or submodule, the absolute form of a schema node identifier MUST be used' do
+			end # describe 'If the "augment" statement is on the top level in a module or submodule, the absolute form of a schema node identifier MUST be used'
+
+			describe 'If the "augment" statement is a substatement to the "uses" statement, the descendant form MUST be used' do
+			end # describe 'If the "augment" statement is a substatement to the "uses" statement, the descendant form MUST be used'
+
+			describe 'If the target node is a container, list, case, input, output, or notification node, the "container", "leaf", "list", "leaf-list", "uses", and "choice" statements can be used within the "augment" statement' do
+			end # describe 'If the target node is a container, list, case, input, output, or notification node, the "container", "leaf", "list", "leaf-list", "uses", and "choice" statements can be used within the "augment" statement'
+
+			describe ' If the target node is a choice node, the "case" statement, or a case shorthand statement (see Section 7.9.2) can be used within the "augment" statement' do
+			end # describe ' If the target node is a choice node, the "case" statement, or a case shorthand statement (see Section 7.9.2) can be used within the "augment" statement'
+
+			describe 'If the target node is in another module, then nodes added by the augmentation MUST NOT be mandatory nodes' do
+			end # describe 'If the target node is in another module, then nodes added by the augmentation MUST NOT be mandatory nodes'
+
+			describe 'The "augment" statement MUST NOT add multiple nodes with the same name from the same module to the target node' do
+			end # describe 'The "augment" statement MUST NOT add multiple nodes with the same name from the same module to the target node'
+
 			# TODO
 			describe '7.15.1. The augment\'s Substatements' do
 
@@ -3932,11 +4027,14 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.15.2. XML Mapping Rules' do
+
+			describe 'All data nodes defined in the "augment" statement are defined as XML elements in the XML namespace of the module where the "augment" is specified' do
+			end # describe 'All data nodes defined in the "augment" statement are defined as XML elements in the XML namespace of the module where the "augment" is specified'
+
 			end # describe '7.15.2. XML Mapping Rules'
 
 			# TODO
 			describe '7.15.3. Usage Example' do
-			end # describe '7.15.3. Usage Example'
 
 			<<-EOB
    In namespace http://example.com/schema/interfaces, we have:
@@ -4005,6 +4103,9 @@ describe 'RFC6020' do
        </ex:protocol>
      </ex:system>
 			EOB
+
+			end # describe '7.15.3. Usage Example'
+
 		end # describe '7.15. The augment Statement'
 
 		# TODO
