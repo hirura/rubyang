@@ -1966,6 +1966,12 @@ describe 'RFC6020' do
 		# TODO
 		describe '7.3. The typedef Statement' do
 
+			describe 'The "typedef" statement\'s argument is an identifier that is the name of the type to be defined, and MUST be followed by a block of substatements that holds detailed typedef information.' do
+			end # The "typedef" statement\'s argument is an identifier that is the name of the type to be defined, and MUST be followed by a block of substatements that holds detailed typedef information.
+
+			describe 'The name of the type MUST NOT be one of the YANG built-in types.  If the typedef is defined at the top level of a YANG module or submodule, the name of the type to be defined MUST be unique within the module.' do
+			end # The name of the type MUST NOT be one of the YANG built-in types.  If the typedef is defined at the top level of a YANG module or submodule, the name of the type to be defined MUST be unique within the module.
+
 			# TODO
 			describe '7.3.1. The typedef\'s Substatements' do
 			end # describe '7.3.1. The typedef\'s Substatements'
@@ -1996,14 +2002,32 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.3.2. The typedef\'s type Statement' do
+
+				describe 'The "type" statement, which MUST be present, defines the base type from which this type is derived.' do
+				end # The "type" statement, which MUST be present, defines the base type from which this type is derived.
 			end # describe '7.3.2. The typedef\'s type Statement'
+
 
 			# TODO
 			describe '7.3.3. The units Statement' do
+
+				describe 'The "units" statement, which is optional, takes as an argument a string that contains a textual definition of the units associated with the type.' do
+				end # The "units" statement, which is optional, takes as an argument a string that contains a textual definition of the units associated with the type.
 			end # describe '7.3.3. The units Statement'
+
 
 			# TODO
 			describe '7.3.4. The typedef\'s default Statement' do
+
+				describe 'The value of the "default" statement MUST be valid according to the type specified in the "type" statement.' do
+				end # The value of the "default" statement MUST be valid according to the type specified in the "type" statement.
+
+				describe 'If the base type has a default value, and the new derived type does not specify a new default value, the base type\'s default value is also the default value of the new derived type.' do
+				end # If the base type has a default value, and the new derived type does not specify a new default value, the base type\'s default value is also the default value of the new derived type.
+
+				describe 'If the type\'s default value is not valid according to the new restrictions specified in a derived type or leaf definition, the derived type or leaf definition MUST specify a new default value compatible with the restrictions.' do
+				end # If the type\'s default value is not valid according to the new restrictions specified in a derived type or leaf definition, the derived type or leaf definition MUST specify a new default value compatible with the restrictions.
+
 			end # describe '7.3.4. The typedef\'s default Statement'
 
 			# TODO
@@ -2140,6 +2164,41 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.5.3. The must Statement' do
+				describe 'The "must" statement, which is optional, takes as an argument a string that contains an XPath expression' do
+				end # The "must" statement, which is optional, takes as an argument a string that contains an XPath expression
+
+				describe 'When a datastore is validated, all "must" constraints are conceptually evaluated once for each data node in the data tree, and for all leafs with default values in use' do
+				end # When a datastore is validated, all "must" constraints are conceptually evaluated once for each data node in the data tree, and for all leafs with default values in use
+
+				describe 'If a data node does not exist in the data tree, and it does not have a default value, its "must" statements are not evaluated.' do
+				end # If a data node does not exist in the data tree, and it does not have a default value, its "must" statements are not evaluated.
+
+				describe 'All such constraints MUST evaluate to true for the data to be valid.' do
+				end # All such constraints MUST evaluate to true for the data to be valid.
+
+				describe 'The context node is the node in the data tree for which the "must" statement is defined.' do
+				end # The context node is the node in the data tree for which the "must" statement is defined.
+
+				describe 'The accessible tree is made up of all nodes in the data tree, and all leafs with default values in use' do
+				end # The accessible tree is made up of all nodes in the data tree, and all leafs with default values in use
+
+				describe 'If the context node represents configuration, the tree is the data in the NETCONF datastore where the context node exists.  The XPath root node has all top-level configuration data nodes in all modules as children' do
+				end # If the context node represents configuration, the tree is the data in the NETCONF datastore where the context node exists.  The XPath root node has all top-level configuration data nodes in all modules as children
+
+				describe 'If the context node represents state data, the tree is all state data on the device, and the <running/> datastore.  The XPath root node has all top-level data nodes in all modules as children' do
+				end # If the context node represents state data, the tree is all state data on the device, and the <running/> datastore.  The XPath root node has all top-level data nodes in all modules as children
+
+				describe 'If the context node represents notification content, the tree is the notification XML instance document.  The XPath root node has the element representing the notification being defined as the only child' do
+				end # If the context node represents notification content, the tree is the notification XML instance document.  The XPath root node has the element representing the notification being defined as the only child
+
+				describe 'If the context node represents RPC input parameters, the tree is the RPC XML instance document.  The XPath root node has the element representing the RPC operation being defined as the only child' do
+				end # If the context node represents RPC input parameters, the tree is the RPC XML instance document.  The XPath root node has the element representing the RPC operation being defined as the only child
+
+				describe 'If the context node represents RPC output parameters, the tree is the RPC reply instance document.  The XPath root node has the elements representing the RPC output parameters as children' do
+				end # If the context node represents RPC output parameters, the tree is the RPC reply instance document.  The XPath root node has the elements representing the RPC output parameters as children
+
+				describe 'The result of the XPath expression is converted to a boolean value using the standard XPath rules' do
+				end # The result of the XPath expression is converted to a boolean value using the standard XPath rules
 			end # describe '7.5.3. The must Statement'
 
 			# TODO
@@ -2162,12 +2221,22 @@ describe 'RFC6020' do
 				end # describe 'reference'
 			end # describe '7.5.4. The must\'s Substatements'
 
+
 			# TODO
 			describe '7.5.4.1. The error-message Statement' do
+
+				describe 'The "error-message" statement, which is optional, takes a string as an argument.  If the constraint evaluates to false, the string is passed as <error-message> in the <rpc-error>' do
+				end # The "error-message" statement, which is optional, takes a string as an argument.  If the constraint evaluates to false, the string is passed as <error-message> in the <rpc-error>
 			end # describe '7.5.4.1. The error-message Statement'
+
 			# TODO
 			describe '7.5.4.2. The error-app-tag Statement' do
+
+				describe 'The "error-app-tag" statement, which is optional, takes a string as an argument.  If the constraint evaluates to false, the string is passed as <error-app-tag> in the <rpc-error>' do
+				end # The "error-app-tag" statement, which is optional, takes a string as an argument.  If the constraint evaluates to false, the string is passed as <error-app-tag> in the <rpc-error>
+
 			end # describe '7.5.4.2. The error-app-tag Statement'
+
 			# TODO
 			describe '7.5.4.3. Usage Example of must and error-message' do
 			end # describe '7.5.4.3. Usage Example of must and error-message'
@@ -2196,6 +2265,10 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.5.5. The presence Statement' do
+
+				describe 'If a container has the "presence" statement, the container\'s existence in the data tree carries some meaning.  Otherwise, the container is used to give some structure to the data, and it carries no meaning by itself' do
+				end # If a container has the "presence" statement, the container\'s existence in the data tree carries some meaning.  Otherwise, the container is used to give some structure to the data, and it carries no meaning by itself
+
 			end # describe '7.5.5. The presence Statement'
 
 			# TODO
@@ -2257,6 +2330,19 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.6.1. The leaf\'s default value' do
+
+				describe 'If no such ancestor exists in the schema tree, the default value MUST be used.' do
+				end # describe 'If no such ancestor exists in the schema tree, the default value MUST be used.'
+
+				describe 'Otherwise, if this ancestor is a case node, the default value MUST be used if any node from the case exists in the data tree, or if the case node is the choice’s default case, and no nodes from any other case exist in the data tree' do
+				end # describe 'Otherwise, if this ancestor is a case node, the default value MUST be used if any node from the case exists in the data tree, or if the case node is the choice’s default case, and no nodes from any other case exist in the data tree'
+
+				describe 'Otherwise, the default value MUST be used if the ancestor node exists in the data tree' do
+				end # describe 'Otherwise, the default value MUST be used if the ancestor node exists in the data tree'
+
+				describe 'If a leaf has a "default" statement, the leaf’s default value is the value of the "default" statement.  Otherwise, if the leaf’s type has a default value, and the leaf is not mandatory, then the leaf’s default value is the type’s default value' do
+				end # describe 'If a leaf has a "default" statement, the leaf’s default value is the value of the "default" statement.  Otherwise, if the leaf’s type has a default value, and the leaf is not mandatory, then the leaf’s default value is the type’s default value'
+
 			end # describe '7.6.1. The leaf\'s default value'
 
 			# TODO
@@ -2310,14 +2396,47 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.6.3. The leaf\'s type Statement' do
+
+				describe 'The "type" statement, which MUST be present, takes as an argument the name of an existing built-in or derived type' do
+				end # describe 'The "type" statement, which MUST be present, takes as an argument the name of an existing built-in or derived type'
+
 			end # describe '7.6.3. The leaf\'s type Statement'
 
 			# TODO
 			describe '7.6.4. The leaf\'s default Statement' do
+
+				describe 'The value of the "default" statement MUST be valid according to the type specified in the leaf’s "type" statement' do
+				end # describe 'The value of the "default" statement MUST be valid according to the type specified in the leaf’s "type" statement'
+
+				describe 'The "default" statement MUST NOT be present on nodes where "mandatory" is true' do
+				end # describe 'The "default" statement MUST NOT be present on nodes where "mandatory" is true'
+
 			end # describe '7.6.4. The leaf\'s default Statement'
 
 			# TODO
 			describe '7.6.5. The leaf\'s mandatory Statement' do
+
+				describe 'The "mandatory" statement, which is optional, takes as an argument the string "true" or "false"' do
+				end # describe 'The "mandatory" statement, which is optional, takes as an argument the string "true" or "false"'
+
+				describe 'If not specified, the default is "false"' do
+				end # describe 'If not specified, the default is "false"'
+
+				describe 'If "mandatory" is "true", the behavior of the constraint depends on the type of the leaf’s closest ancestor node in the schema tree that is not a non-presence container' do
+				end # describe 'If "mandatory" is "true", the behavior of the constraint depends on the type of the leaf’s closest ancestor node in the schema tree that is not a non-presence container'
+
+				describe 'If no such ancestor exists in the schema tree, the leaf MUST exist' do
+				end # describe 'If no such ancestor exists in the schema tree, the leaf MUST exist'
+
+				describe 'Otherwise, if this ancestor is a case node, the leaf MUST exist if any node from the case exists in the data tree' do
+				end # describe 'Otherwise, if this ancestor is a case node, the leaf MUST exist if any node from the case exists in the data tree'
+
+				describe 'Otherwise, the leaf MUST exist if the ancestor node exists in the data tree' do
+				end # describe 'Otherwise, the leaf MUST exist if the ancestor node exists in the data tree'
+
+				describe '' do
+				end # describe ''
+
 			end # describe '7.6.5. The leaf\'s mandatory Statement'
 
 			# TODO
@@ -2330,9 +2449,8 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.6.8. Usage Example' do
-			end # describe '7.6.8. Usage Example'
 
-			<<-EOB
+				<<-EOB
      leaf port {
 	 type inet:port-number;
 	 default 22;
@@ -2359,11 +2477,19 @@ describe 'RFC6020' do
 	 </config>
        </edit-config>
      </rpc>
-			EOB
+				EOB
+			end # describe '7.6.8. Usage Example'
+
 		end # describe '7.6. The leaf Statement'
 
 		# TODO
 		describe '7.7. The leaf-list Statement' do
+
+			describe 'The values in a leaf-list MUST be unique' do
+			end # describe 'The values in a leaf-list MUST be unique'
+
+			describe 'If the type referenced by the leaf-list has a default value, it has no effect in the leaf-list' do
+			end # describe 'If the type referenced by the leaf-list has a default value, it has no effect in the leaf-list'
 
 			# TODO
 			describe '7.7.1. Ordering' do
@@ -2424,23 +2550,58 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.7.3. The min-elements Statement' do
+
+				describe 'If no "min-elements" statement is present, it defaults to zero' do
+				end # describe 'If no "min-elements" statement is present, it defaults to zero'
+
+				describe 'The behavior of the constraint depends on the type of the leaf-list’s or list’s closest ancestor node in the schema tree that is not a non- presence container' do
+				end # describe 'The behavior of the constraint depends on the type of the leaf-list’s or list’s closest ancestor node in the schema tree that is not a non- presence container'
+
+				describe 'If this ancestor is a case node, the constraint is enforced if any other node from the case exists' do
+				end # describe 'If this ancestor is a case node, the constraint is enforced if any other node from the case exists'
+
+				describe 'Otherwise, it is enforced if the ancestor node exists' do
+				end # describe 'Otherwise, it is enforced if the ancestor node exists'
+
 			end # describe '7.7.3. The min-elements Statement'
 
 			# TODO
 			describe '7.7.4. The max-elements Statement' do
+
+				describe 'If no "max-elements" statement is present, it defaults to "unbounded"' do
+				end # describe 'If no "max-elements" statement is present, it defaults to "unbounded"'
+
 			end # describe '7.7.4. The max-elements Statement'
 
 			# TODO
 			describe '7.7.5. The ordered-by Statement' do
+
+				describe 'The argument is one of the strings "system" or "user"' do
+				end # describe 'The argument is one of the strings "system" or "user"'
+
+				describe 'If not present, order defaults to "system"' do
+				end # describe 'If not present, order defaults to "system"'
+
+				describe 'This statement is ignored if the list represents state data, RPC output parameters, or notification content' do
+				end # describe 'This statement is ignored if the list represents state data, RPC output parameters, or notification content'
+
+				# TODO
+				describe '7.7.5.1. ordered-by system' do
+
+					describe 'The entries in the list are sorted according to an unspecified order' do
+					end # describe 'The entries in the list are sorted according to an unspecified order'
+
+				end # describe '7.7.5.1. ordered-by system'
+
+				# TODO
+				describe '7.7.5.2. ordered-by user' do
+
+					describe 'The entries in the list are sorted according to an order defined by the user' do
+					end # describe 'The entries in the list are sorted according to an order defined by the user'
+
+				end # describe '7.7.5.2. ordered-by user'
+
 			end # describe '7.7.5. The ordered-by Statement'
-
-			# TODO
-			describe '7.7.5.1. ordered-by system' do
-			end # describe '7.7.5.1. ordered-by system'
-
-			# TODO
-			describe '7.7.5.2. ordered-by user' do
-			end # describe '7.7.5.2. ordered-by user'
 
 			# TODO
 			describe '7.7.6. XML Mapping Rules' do
@@ -2452,7 +2613,6 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.7.8. Usage Example' do
-			end # describe '7.7.8. Usage Example'
 
 			<<-EOB
      leaf-list allow-user  {
@@ -2512,6 +2672,9 @@ describe 'RFC6020' do
        </edit-config>
      </rpc>
 			EOB
+
+			end # describe '7.7.8. Usage Example'
+
 		end # describe '7.7. The leaf-list Statement'
 
 		# TODO
@@ -2608,15 +2771,64 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.8.2. The list\'s key Statement' do
+
+				describe 'The "key" statement, which MUST be present if the list represents configuration' do
+				end # describe 'The "key" statement, which MUST be present if the list represents configuration'
+
+				describe 'and MAY be present otherwise, takes as an argument a string that specifies a space-separated list of leaf identifiers of this list' do
+				end # describe 'and MAY be present otherwise, takes as an argument a string that specifies a space-separated list of leaf identifiers of this list'
+
+				describe 'A leaf identifier MUST NOT appear more than once in the key' do
+				end # describe 'A leaf identifier MUST NOT appear more than once in the key'
+
+				describe 'Each such leaf identifier MUST refer to a child leaf of the list' do
+				end # describe 'Each such leaf identifier MUST refer to a child leaf of the list'
+
+				describe 'The leafs can be defined directly in substatements to the list, or in groupings used in the list' do
+				end # describe 'The leafs can be defined directly in substatements to the list, or in groupings used in the list'
+
+				describe 'The combined values of all the leafs specified in the key are used to uniquely identify a list entry' do
+				end # describe 'The combined values of all the leafs specified in the key are used to uniquely identify a list entry'
+
+				describe 'All key leafs MUST be given values when a list entry is created' do
+				end # describe 'All key leafs MUST be given values when a list entry is created'
+
+				describe 'any default values in the key leafs or their types are ignored' do
+				end # describe 'any default values in the key leafs or their types are ignored'
+
+				describe 'any mandatory statement in the key leafs are ignored' do
+				end # describe 'any mandatory statement in the key leafs are ignored'
+
+				describe 'A leaf that is part of the key can be of any built-in or derived type' do
+				end # describe 'A leaf that is part of the key can be of any built-in or derived type'
+
+				describe 'except it MUST NOT be the built-in type "empty"' do
+				end # describe 'except it MUST NOT be the built-in type "empty"'
+
+				describe 'All key leafs in a list MUST have the same value for their "config" as the list itself' do
+				end # describe 'All key leafs in a list MUST have the same value for their "config" as the list itself'
+
 			end # describe '7.8.2. The list\'s key Statement'
 
 			# TODO
 			describe '7.8.3. The list\'s unique Statement' do
+
+				describe 'The "unique" statement is used to put constraints on valid list entries.  It takes as an argument a string that contains a space- separated list of schema node identifiers, which MUST be given in the descendant form' do
+				end # describe 'The "unique" statement is used to put constraints on valid list entries.  It takes as an argument a string that contains a space- separated list of schema node identifiers, which MUST be given in the descendant form'
+
+				describe 'Each such schema node identifier MUST refer to a leaf' do
+				end # describe 'Each such schema node identifier MUST refer to a leaf'
+
+				describe 'If one of the referenced leafs represents configuration data, then all of the referenced leafs MUST represent configuration data' do
+				end # describe 'If one of the referenced leafs represents configuration data, then all of the referenced leafs MUST represent configuration data'
+
+				describe 'The "unique" constraint specifies that the combined values of all the leaf instances specified in the argument string, including leafs with default values, MUST be unique within all list entry instances in which all referenced leafs exist' do
+				end # describe 'The "unique" constraint specifies that the combined values of all the leaf instances specified in the argument string, including leafs with default values, MUST be unique within all list entry instances in which all referenced leafs exist'
+
 			end # describe '7.8.3. The list\'s unique Statement'
 
 			# TODO
 			describe '7.8.3.1.  Usage Example' do
-			end # describe '7.8.3.1.  Usage Example'
 
 			<<-EOB
 		With the following list:
@@ -2662,12 +2874,42 @@ describe 'RFC6020' do
 			</server>
 			EOB
 
+			end # describe '7.8.3.1.  Usage Example'
+
 			# TODO
 			describe '7.8.4. The list\'s Child Node Statements' do
 			end # describe '7.8.4. The list\'s Child Node Statements'
 
 			# TODO
 			describe '7.8.5. XML Mapping Rules' do
+
+				describe 'A list is encoded as a series of XML elements, one for each entry in the list' do
+				end # describe 'A list is encoded as a series of XML elements, one for each entry in the list'
+
+				describe 'Each element’s local name is the list\'s identifier, and its namespace is the module\'s XML namespace' do
+				end # describe 'Each element\'s local name is the list’s identifier, and its namespace is the module\'s XML namespace'
+
+				describe 'The list’s key nodes are encoded as subelements to the list\'s identifier element, in the same order as they are defined within the "key" statement' do
+				end # describe 'The list’s key nodes are encoded as subelements to the list\'s identifier element, in the same order as they are defined within the "key" statement'
+
+				describe 'The rest of the list\'s child nodes are encoded as subelements to the list element, after the keys' do
+				end # describe 'The rest of the list\'s child nodes are encoded as subelements to the list element, after the keys'
+
+				describe 'If the list defines RPC input or output parameters, the subelements are encoded in the same order as they are defined within the "list" statement' do
+				end # describe 'If the list defines RPC input or output parameters, the subelements are encoded in the same order as they are defined within the "list" statement'
+
+				describe 'Otherwise, the subelements are encoded in any order' do
+				end # describe 'Otherwise, the subelements are encoded in any order'
+
+				describe 'The XML elements representing list entries MUST appear in the order specified by the user if the list is "ordered-by user"' do
+				end # describe 'The XML elements representing list entries MUST appear in the order specified by the user if the list is "ordered-by user"'
+
+				describe 'otherwise the order is implementation-dependent' do
+				end # describe 'otherwise the order is implementation-dependent'
+
+				describe 'The XML elements representing list entries MAY be interleaved with other sibling elements, unless the list defines RPC input or output parameters' do
+				end # describe 'The XML elements representing list entries MAY be interleaved with other sibling elements, unless the list defines RPC input or output parameters'
+
 			end # describe '7.8.5. XML Mapping Rules'
 			# TODO
 			describe '7.8.6. NETCONF <edit-config> Operations' do
@@ -2870,10 +3112,17 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.9.2. The choice\'s case Statement' do
-			end # describe '7.9.2. The choice\'s case Statement'
 
-			<<-EOB
-   For example, the following is illegal:
+				describe 'The identifier is used to identify the case node in the schema tree' do
+				end # describe 'The identifier is used to identify the case node in the schema tree'
+
+				describe 'A case node does not exist in the data tree' do
+				end # describe 'A case node does not exist in the data tree'
+
+				describe 'The identifiers of all these child nodes MUST be unique within all cases in a choice' do
+
+					describe 'For example, the following is illegal:' do
+						<<-EOB
      choice interface-type {     // This example is illegal YANG
 	 case a {
 	     leaf ethernet { ... }
@@ -2882,17 +3131,35 @@ describe 'RFC6020' do
 	     container ethernet { ...}
 	 }
      }
-   example:
-     choice interface-type {
-	 container ethernet { ... }
-     }
-   is equivalent to:
-     choice interface-type {
-	 case ethernet {
-	     container ethernet { ... }
-	 }
-     }
-			EOB
+						EOB
+					end # describe 'For example, the following is illegal:'
+
+				end # describe 'The identifiers of all these child nodes MUST be unique within all cases in a choice'
+
+				describe 'As a shorthand, the "case" statement can be omitted if the branch contains a single "anyxml", "container", "leaf", "list", or "leaf-list" statement' do
+				end # describe 'As a shorthand, the "case" statement can be omitted if the branch contains a single "anyxml", "container", "leaf", "list", or "leaf-list" statement'
+
+				describe 'In this case, the identifier of the case node is the same as the identifier in the branch statement' do
+
+				describe 'The following examples are equivalent:' do
+					<<-EOB
+					choice interface-type {
+					         container ethernet { ... }
+						      }
+					EOB
+					<<-EOB
+					choice interface-type {
+					         case ethernet {
+						              container ethernet { ... }
+							               }
+								            }
+					EOB
+
+				end # describe 'The following examples are equivalent:'
+
+				end # describe 'In this case, the identifier of the case node is the same as the identifier in the branch statement'
+
+			end # describe '7.9.2. The choice\'s case Statement'
 
 			# TODO
 			describe '7.9.2.1.  The case\'s Substatements' do
@@ -2949,7 +3216,32 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.9.3. The choice\'s default Statement' do
-			end # describe '7.9.3. The choice\'s default Statement'
+
+				describe 'The "default" statement indicates if a case should be considered as the default if no child nodes from any of the choice’s cases exist' do
+				end # describe 'The "default" statement indicates if a case should be considered as the default if no child nodes from any of the choice’s cases exist'
+
+				describe 'The argument is the identifier of the "case" statement' do
+				end # describe 'The argument is the identifier of the "case" statement'
+
+				describe 'If the "default" statement is missing, there is no default case' do
+				end # describe 'If the "default" statement is missing, there is no default case'
+
+				describe ' The "default" statement MUST NOT be present on choices where "mandatory" is true' do
+				end # describe ' The "default" statement MUST NOT be present on choices where "mandatory" is true'
+
+				describe 'The default values for nodes under the default case are used if none of the nodes under any of the cases are present' do
+				end # describe 'The default values for nodes under the default case are used if none of the nodes under any of the cases are present'
+
+				describe 'There MUST NOT be any mandatory nodes (Section 3.1) directly under the default case' do
+				end # describe 'There MUST NOT be any mandatory nodes (Section 3.1) directly under the default case'
+
+				describe 'Default values for child nodes under a case are only used if one of the nodes under that case is present, or if that case is the default case' do
+				end # describe 'Default values for child nodes under a case are only used if one of the nodes under that case is present, or if that case is the default case'
+
+				describe 'If none of the nodes under a case are present and the case is not the default case, the default values of the cases’ child nodes are ignored' do
+				end # describe 'If none of the nodes under a case are present and the case is not the default case, the default values of the cases’ child nodes are ignored'
+
+				describe ' In this example, the choice defaults to "interval", and the default value will be used if none of "daily", "time-of-day", or "manual" are present.  If "daily" is present, the default value for "time-of-day" will be used' do
 
 			<<-EOB
      container transfer {
@@ -2981,8 +3273,29 @@ describe 'RFC6020' do
      }
 			EOB
 
+				end # describe ' In this example, the choice defaults to "interval", and the default value will be used if none of "daily", "time-of-day", or "manual" are present.  If "daily" is present, the default value for "time-of-day" will be used'
+
+			end # describe '7.9.3. The choice\'s default Statement'
+
 			# TODO
 			describe '7.9.4. The choice\'s mandatory Statement' do
+
+				describe 'If "mandatory" is "true", at least one node from exactly one of the choice’s case branches MUST exist' do
+				end # describe 'If "mandatory" is "true", at least one node from exactly one of the choice’s case branches MUST exist'
+
+				describe 'If not specified, the default is "false"' do
+				end # describe 'If not specified, the default is "false"'
+
+				describe 'The behavior of the constraint depends on the type of the choice’s closest ancestor node in the schema tree which is not a non-presence container:' do
+
+					describe 'If this ancestor is a case node, the constraint is enforced if any other node from the case exists' do
+					end # describe 'If this ancestor is a case node, the constraint is enforced if any other node from the case exists'
+
+					describe 'Otherwise, it is enforced if the ancestor node exists' do
+					end # describe 'Otherwise, it is enforced if the ancestor node exists'
+
+				end # describe 'The behavior of the constraint depends on the type of the choice’s closest ancestor node in the schema tree which is not a non-presence container:'
+
 			end # describe '7.9.4. The choice\'s mandatory Statement'
 
 			# TODO
@@ -2995,7 +3308,6 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.9.7. Usage Example' do
-			end # describe '7.9.7. Usage Example'
 
 			<<-EOB
    Given the following choice:
@@ -3035,11 +3347,22 @@ describe 'RFC6020' do
 					</edit-config>
 					</rpc>
 			EOB
+
+			end # describe '7.9.7. Usage Example'
+
 		end # describe '7.9. The choice Statement'
 
 		# TODO
 		describe '7.10. The anyxml Statement' do
 
+			describe 'The "anyxml" statement is used to represent an unknown chunk of XML' do
+			end # describe 'The "anyxml" statement is used to represent an unknown chunk of XML'
+
+			describe 'An anyxml node cannot be augmented' do
+			end # describe 'An anyxml node cannot be augmented'
+
+			describe 'An anyxml node exists in zero or one instances in the data tree' do
+			end # describe 'An anyxml node exists in zero or one instances in the data tree'
 
 			# TODO
 			describe '7.10.1. The anyxml\'s Substatements' do
@@ -3078,6 +3401,17 @@ describe 'RFC6020' do
 
 			end # describe '7.10.1. The anyxml\'s Substatements'
 
+			# TODO
+			describe '7.10.2. XML Mapping Rules' do
+			end # describe '7.10.2. XML Mapping Rules'
+
+			# TODO
+			describe '7.10.3. NETCONF <edit-config> Operations' do
+			end # describe '7.10.3. NETCONF <edit-config> Operations'
+
+			# TODO
+			describe '7.10.4. Usage Example' do
+
 			<<-EOB
    Given the following "anyxml" statement:
      anyxml data;
@@ -3094,17 +3428,8 @@ describe 'RFC6020' do
      </data>
 			EOB
 
-			# TODO
-			describe '7.10.2. XML Mapping Rules' do
-			end # describe '7.10.2. XML Mapping Rules'
-
-			# TODO
-			describe '7.10.3. NETCONF <edit-config> Operations' do
-			end # describe '7.10.3. NETCONF <edit-config> Operations'
-
-			# TODO
-			describe '7.10.4. Usage Example' do
 			end # describe '7.10.4. Usage Example'
+
 		end # describe '7.10. The anyxml Statement'
 
 		# TODO
