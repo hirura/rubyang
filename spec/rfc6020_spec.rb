@@ -4134,11 +4134,29 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.16.2. The base Statement' do
+
+				describe 'If no "base" statement is present, the identity is defined from scratch' do
+				end # describe 'If no "base" statement is present, the identity is defined from scratch'
+
+				describe 'If a prefix is present on the base name, it refers to an identity defined in the module that was imported with that prefix, or the local module if the prefix matches the local module’s prefix' do
+				end # describe 'If a prefix is present on the base name, it refers to an identity defined in the module that was imported with that prefix, or the local module if the prefix matches the local module’s prefix'
+
+				describe 'Otherwise, an identity with the matching name MUST be defined in the current module or an included submodule' do
+				end # describe 'Otherwise, an identity with the matching name MUST be defined in the current module or an included submodule'
+
+				describe 'Since submodules cannot include the parent module, any identities in the module that need to be exposed to submodules MUST be defined in a submodule' do
+				end # describe 'Since submodules cannot include the parent module, any identities in the module that need to be exposed to submodules MUST be defined in a submodule'
+
+				describe 'Submodules can then include this submodule to find the definition of the identity' do
+				end # describe 'Submodules can then include this submodule to find the definition of the identity'
+
+				describe 'An identity MUST NOT reference itself, neither directly nor indirectly through a chain of other identities' do
+				end # describe 'An identity MUST NOT reference itself, neither directly nor indirectly through a chain of other identities'
+
 			end # describe '7.16.2. The base Statement'
 
 			# TODO
 			describe '7.16.3. Usage Example' do
-			end # describe '7.16.3. Usage Example'
 
 			<<-EOB
      module crypto-base {
@@ -4170,10 +4188,31 @@ describe 'RFC6020' do
 	 }
      }
 			EOB
+
+			end # describe '7.16.3. Usage Example'
+
 		end # describe '7.16. The identity Statement'
 
 		# TODO
 		describe '7.17. The extension Statement' do
+
+				describe 'This new statement definition can be imported and used by other modules' do
+				end # describe 'This new statement definition can be imported and used by other modules'
+
+				describe 'The statement’s argument is an identifier that is the new keyword for the extension and must be followed by a block of substatements that holds detailed extension information' do
+				end # describe 'The statement’s argument is an identifier that is the new keyword for the extension and must be followed by a block of substatements that holds detailed extension information'
+
+				describe 'The extension can be used like a normal YANG statement, with the statement name followed by an argument if one is defined by the extension, and an optional block of substatements' do
+				end # describe 'The extension can be used like a normal YANG statement, with the statement name followed by an argument if one is defined by the extension, and an optional block of substatements'
+
+				describe 'The statement’s name is created by combining the prefix of the module in which the extension was defined, a colon (":"), and the extension’s keyword, with no interleaving whitespace' do
+				end # describe 'The statement’s name is created by combining the prefix of the module in which the extension was defined, a colon (":"), and the extension’s keyword, with no interleaving whitespace'
+
+				describe 'The substatements of an extension are defined by the extension, using some mechanism outside the scope of this specification' do
+				end # describe 'The substatements of an extension are defined by the extension, using some mechanism outside the scope of this specification'
+
+				describe 'Syntactically, the substatements MUST be YANG statements, or also defined using "extension" statements' do
+				end # describe 'Syntactically, the substatements MUST be YANG statements, or also defined using "extension" statements'
 
 			# TODO
 			describe '7.17.1. The extension\'s Substatements' do
@@ -4198,20 +4237,40 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.17.2. The argument Statement' do
+
+				describe 'If no argument statement is present, the keyword expects no argument when it is used' do
+				end # describe 'If no argument statement is present, the keyword expects no argument when it is used'
+
+				describe 'The argument\'s name is used in the YIN mapping, where it is used as an XML attribute or element name, depending on the argument’s "yin- element" statement' do
+				end # describe 'The argument\'s name is used in the YIN mapping, where it is used as an XML attribute or element name, depending on the argument’s "yin- element" statement'
+
+				# TODO
+				describe '7.17.2.1.  The argument\'s Substatements' do
+
+					describe 'yin-element' do
+						'0..1'
+					end # describe 'yin-element'
+
+				end # describe '7.17.2.1.  The argument\'s Substatements'
+
+				# TODO
+				describe '7.17.2.2.  The yin-element Statement' do
+
+					describe 'The "yin-element" statement, which is optional, takes as an argument the string "true" or "false"' do
+					end # describe 'The "yin-element" statement, which is optional, takes as an argument the string "true" or "false"'
+
+					describe 'If no "yin-element" statement is present, it defaults to "false"' do
+					end # describe 'If no "yin-element" statement is present, it defaults to "false"'
+
+					describe '' do
+					end # describe ''
+
+					describe '' do
+					end # describe ''
+
+				end # describe '7.17.2.2.  The yin-element Statement'
+
 			end # describe '7.17.2. The argument Statement'
-
-			# TODO
-			describe '7.17.2.1.  The argument\'s Substatements' do
-
-				describe 'yin-element' do
-					'0..1'
-				end # describe 'yin-element'
-
-			end # describe '7.17.2.1.  The argument\'s Substatements'
-
-			# TODO
-			describe '7.17.2.2.  The yin-element Statement' do
-			end # describe '7.17.2.2.  The yin-element Statement'
 
 			# TODO
 			describe '7.17.3. Usage Example' do
@@ -4248,6 +4307,9 @@ describe 'RFC6020' do
 
 		# TODO
 		describe '7.18. Conformance-Related Statements' do
+
+			describe '' do
+			end # describe ''
 
 			# TODO
 			describe '7.18.1. The feature Statement' do
@@ -4410,10 +4472,62 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.19.1. The config Statement' do
+
+				describe 'The "config" statement takes as an argument the string "true" or "false"' do
+				end # describe 'The "config" statement takes as an argument the string "true" or "false"'
+
+				describe 'If "config" is "true", the definition represents configuration' do
+
+				describe 'Data nodes representing configuration will be part of the reply to a <get-config> request, and can be sent in a <copy-config> or <edit-config> request' do
+				end # describe 'Data nodes representing configuration will be part of the reply to a <get-config> request, and can be sent in a <copy-config> or <edit-config> request'
+
+				end # describe 'If "config" is "true", the definition represents configuration'
+
+				describe 'If "config" is "false", the definition represents state data' do
+
+				describe 'Data nodes representing state data will be part of the reply to a <get>, but not to a <get-config> request, and cannot be sent in a <copy-config> or <edit-config> request' do
+				end # describe 'Data nodes representing state data will be part of the reply to a <get>, but not to a <get-config> request, and cannot be sent in a <copy-config> or <edit-config> request'
+
+				end # describe 'If "config" is "false", the definition represents state data'
+
+				describe 'If "config" is not specified, the default is the same as the parent schema node’s "config" value' do
+				end # describe 'If "config" is not specified, the default is the same as the parent schema node’s "config" value'
+
+				describe 'If the parent node is a "case" node, the value is the same as the "case" node\'s parent "choice" node' do
+				end # describe 'If the parent node is a "case" node, the value is the same as the "case" node\'s parent "choice" node'
+
+				describe 'If the top node does not specify a "config" statement, the default is "true"' do
+				end # describe 'If the top node does not specify a "config" statement, the default is "true"'
+
+				describe 'If a node has "config" set to "false", no node underneath it can have "config" set to "true"' do
+				end # describe 'If a node has "config" set to "false", no node underneath it can have "config" set to "true"'
+
 			end # describe '7.19.1. The config Statement'
 
 			# TODO
 			describe '7.19.2. The status Statement' do
+
+				describe 'The "status" statement takes as an argument one of the strings "current", "deprecated", or "obsolete"' do
+				end # describe 'The "status" statement takes as an argument one of the strings "current", "deprecated", or "obsolete"'
+
+				describe '"current" means that the definition is current and valid' do
+				end # describe '"current" means that the definition is current and valid'
+
+				describe '"deprecated" indicates an obsolete definition, but it permits new/ continued implementation in order to foster interoperability with older/existing implementations' do
+				end # describe '"deprecated" indicates an obsolete definition, but it permits new/ continued implementation in order to foster interoperability with older/existing implementations'
+
+				describe '"obsolete" means the definition is obsolete and SHOULD NOT be implemented and/or can be removed from implementations' do
+				end # describe '"obsolete" means the definition is obsolete and SHOULD NOT be implemented and/or can be removed from implementations'
+
+				describe 'If no status is specified, the default is "current"' do
+				end # describe 'If no status is specified, the default is "current"'
+
+				describe 'If a definition is "current", it MUST NOT reference a "deprecated" or "obsolete" definition within the same module' do
+				end # describe 'If a definition is "current", it MUST NOT reference a "deprecated" or "obsolete" definition within the same module'
+
+				describe 'If a definition is "deprecated", it MUST NOT reference an "obsolete" definition within the same module' do
+				end # describe 'If a definition is "deprecated", it MUST NOT reference an "obsolete" definition within the same module'
+
 			end # describe '7.19.2. The status Statement'
 
 			<<-EOB
@@ -4431,11 +4545,17 @@ describe 'RFC6020' do
 
 			# TODO
 			describe '7.19.3. The description Statement' do
+
+				describe 'The "description" statement takes as an argument a string that contains a human-readable textual description of this definition' do
+				end # describe 'The "description" statement takes as an argument a string that contains a human-readable textual description of this definition'
+
 			end # describe '7.19.3. The description Statement'
 
 			# TODO
 			describe '7.19.4. The reference Statement' do
-			end # describe '7.19.4. The reference Statement'
+
+				describe 'The "reference" statement takes as an argument a string that is used to specify a textual cross-reference to an external document, either another module that defines related management information, or a document that provides additional information relevant to this definition' do
+				end # describe 'The "reference" statement takes as an argument a string that is used to specify a textual cross-reference to an external document, either another module that defines related management information, or a document that provides additional information relevant to this definition'
 
 			<<-EOB
    For example, a typedef for a "uri" data type could look like:
@@ -4447,8 +4567,41 @@ describe 'RFC6020' do
      }
 			EOB
 
+			end # describe '7.19.4. The reference Statement'
+
 			# TODO
 			describe '7.19.5. The when Statement' do
+
+				describe 'If the "when" statement is a child of an "augment" statement, then the context node is the augment’s target node in the data tree, if the target node is a data node.  Otherwise, the context node is the closest ancestor node to the target node that is also a data node' do
+				end # describe 'If the "when" statement is a child of an "augment" statement, then the context node is the augment’s target node in the data tree, if the target node is a data node.  Otherwise, the context node is the closest ancestor node to the target node that is also a data node'
+
+				describe 'If the "when" statement is a child of a "uses", "choice", or "case" statement, then the context node is the closest ancestor node to the "uses", "choice", or "case" node that is also a data node' do
+				end # describe 'If the "when" statement is a child of a "uses", "choice", or "case" statement, then the context node is the closest ancestor node to the "uses", "choice", or "case" node that is also a data node'
+
+				describe 'If the "when" statement is a child of any other data definition statement, the context node is the data definition’s node in the data tree' do
+				end # describe 'If the "when" statement is a child of any other data definition statement, the context node is the data definition’s node in the data tree'
+
+				describe 'The accessible tree is made up of all nodes in the data tree, and all leafs with default values in use' do
+				end # describe 'The accessible tree is made up of all nodes in the data tree, and all leafs with default values in use'
+
+				describe 'If the context node represents configuration, the tree is the data in the NETCONF datastore where the context node exists.  The XPath root node has all top-level configuration data nodes in all modules as children' do
+				end # describe 'If the context node represents configuration, the tree is the data in the NETCONF datastore where the context node exists.  The XPath root node has all top-level configuration data nodes in all modules as children'
+
+				describe 'If the context node represents state data, the tree is all state data on the device, and the <running/> datastore.  The XPath root node has all top-level data nodes in all modules as children' do
+				end # describe 'If the context node represents state data, the tree is all state data on the device, and the <running/> datastore.  The XPath root node has all top-level data nodes in all modules as children'
+
+				describe 'If the context node represents notification content, the tree is the notification XML instance document.  The XPath root node has the element representing the notification being defined as the only child' do
+				end # describe 'If the context node represents notification content, the tree is the notification XML instance document.  The XPath root node has the element representing the notification being defined as the only child'
+
+				describe 'If the context node represents RPC input parameters, the tree is the RPC XML instance document.  The XPath root node has the element representing the RPC operation being defined as the only child' do
+				end # describe 'If the context node represents RPC input parameters, the tree is the RPC XML instance document.  The XPath root node has the element representing the RPC operation being defined as the only child'
+
+				describe 'If the context node represents RPC output parameters, the tree is the RPC reply instance document.  The XPath root node has the elements representing the RPC output parameters as children' do
+				end # describe 'If the context node represents RPC output parameters, the tree is the RPC reply instance document.  The XPath root node has the elements representing the RPC output parameters as children'
+
+				describe 'The result of the XPath expression is converted to a boolean value using the standard XPath rules' do
+				end # describe 'The result of the XPath expression is converted to a boolean value using the standard XPath rules'
+
 			end # describe '7.19.5. The when Statement'
 
 		end # describe '7.19. Common Statements'
