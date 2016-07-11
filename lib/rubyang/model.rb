@@ -62,7 +62,7 @@ module Rubyang
 				}
 				# raise if received susstatements does not satisfy defined substatements' cardinality
 				self.substatements.each{ |k, v|
-					unless v.include? substmts.select{ |s| StmtMap.find( s ).intern == k }.size
+					unless v.include? substmts.count{ |s| StmtMap.find( s ).intern == k }
 						raise ArgumentError, "substatement #{StmtMap.find( k )} is not in #{self.class} #{k}'s cardinality"
 					end
 				}
