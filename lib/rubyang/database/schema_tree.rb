@@ -228,7 +228,7 @@ module Rubyang
 				end
 				def update arg
 					new_range = Array.new
-					arg.gsub( ' ', '' ).split( '|' ).each{ |range_part|
+					arg.delete( ' ' ).split( '|' ).each{ |range_part|
 						case range_part
 						when /[^\.]+\.\.[^\.]+/
 							min, max = range_part.split('..')
@@ -271,7 +271,7 @@ module Rubyang
 				end
 				def update arg
 					new_length = Array.new
-					arg.gsub( ' ', '' ).split( '|' ).each{ |length_part|
+					arg.delete( ' ' ).split( '|' ).each{ |length_part|
 						case length_part
 						when /[^\.]+\.\.[^\.]+/
 							min, max = length_part.split('..')
