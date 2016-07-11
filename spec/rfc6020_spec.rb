@@ -4608,32 +4608,147 @@ describe 'RFC6020' do
 
 	end # describe '7. YANG Statements'
 
-
 	# TODO
 	describe '8. Constraints' do
 
 		# TODO
 		describe '8.1. Constraints on Data' do
+
+			describe 'If the constraint is defined on configuration data, it MUST be true in a valid configuration data tree' do
+			end # describe 'If the constraint is defined on configuration data, it MUST be true in a valid configuration data tree'
+
+			describe 'If the constraint is defined on state data, it MUST be true in a reply to a <get> operation without a filter' do
+			end # describe 'If the constraint is defined on state data, it MUST be true in a reply to a <get> operation without a filter'
+
+			describe 'If the constraint is defined on notification content, it MUST be true in any notification instance' do
+			end # describe 'If the constraint is defined on notification content, it MUST be true in any notification instance'
+
+			describe 'If the constraint is defined on RPC input parameters, it MUST be true in an invocation of the RPC operation' do
+			end # describe 'If the constraint is defined on RPC input parameters, it MUST be true in an invocation of the RPC operation'
+
+			describe 'If the constraint is defined on RPC output parameters, it MUST be true in the RPC reply' do
+			end # describe 'If the constraint is defined on RPC output parameters, it MUST be true in the RPC reply'
+
 		end # describe '8.1. Constraints on Data'
 
 		# TODO
 		describe '8.2. Hierarchy of Constraints' do
+
+			describe '"must", "mandatory", "min-elements", and "max-elements" constraints are not enforced if the parent node has a "when" or "if-feature" property that is not satisfied on the current device' do
+			end # describe '"must", "mandatory", "min-elements", and "max-elements" constraints are not enforced if the parent node has a "when" or "if-feature" property that is not satisfied on the current device'
+
+			describe ' In this example, the "mandatory" constraint on the "longitude" leaf are not enforced on devices that lack the "has-gps" feature:' do
+
+				<<-EOB
+				container location {
+				           if-feature has-gps;
+					              leaf longitude {
+							                     mandatory true;
+									     ... }
+									            }
+				EOB
+
+			end # describe ' In this example, the "mandatory" constraint on the "longitude" leaf are not enforced on devices that lack the "has-gps" feature:'
+
 		end # describe '8.2. Hierarchy of Constraints'
 
 		# TODO
 		describe '8.3. Constraint Enforcement Model' do
+
+			describe 'For configuration data, there are three windows when constraints MUST be enforced:' do
+
+				describe 'during parsing of RPC payloads' do
+				end # describe 'during parsing of RPC payloads'
+
+				describe 'during processing of NETCONF operations' do
+				end # describe 'during processing of NETCONF operations'
+
+				describe 'during validation' do
+				end # describe 'during validation'
+
+			end # describe 'For configuration data, there are three windows when constraints MUST be enforced:'
+
 		end # describe '8.3. Constraint Enforcement Model'
 
 		# TODO
 		describe '8.3.1. Payload Parsing' do
+
+			describe 'When content arrives in RPC payloads, it MUST be well-formed XML, following the hierarchy and content rules defined by the set of models the device implements' do
+
+			describe 'If a leaf data value does not match the type constraints for the leaf, including those defined in the type’s "range", "length", and "pattern" properties, the server MUST reply with an "invalid-value" error-tag in the rpc-error, and with the error- app-tag and error-message associated with the constraint, if any exist' do
+			end # describe 'If a leaf data value does not match the type constraints for the leaf, including those defined in the type’s "range", "length", and "pattern" properties, the server MUST reply with an "invalid-value" error-tag in the rpc-error, and with the error- app-tag and error-message associated with the constraint, if any exist'
+
+			describe 'If all keys of a list entry are not present, the server MUST reply with a "missing-element" error-tag in the rpc-error' do
+			end # describe 'If all keys of a list entry are not present, the server MUST reply with a "missing-element" error-tag in the rpc-error'
+
+			describe 'If data for more than one case branch of a choice is present, the server MUST reply with a "bad-element" in the rpc-error' do
+			end # describe 'If data for more than one case branch of a choice is present, the server MUST reply with a "bad-element" in the rpc-error'
+
+			describe 'If data for a node tagged with "if-feature" is present, and the feature is not supported by the device, the server MUST reply with an "unknown-element" error-tag in the rpc-error' do
+			end # describe 'If data for a node tagged with "if-feature" is present, and the feature is not supported by the device, the server MUST reply with an "unknown-element" error-tag in the rpc-error'
+
+			describe 'If data for a node tagged with "when" is present, and the "when" condition evaluates to "false", the server MUST reply with an "unknown-element" error-tag in the rpc-error' do
+			end # describe 'If data for a node tagged with "when" is present, and the "when" condition evaluates to "false", the server MUST reply with an "unknown-element" error-tag in the rpc-error'
+
+			describe 'For insert handling, if the value for the attributes "before" and "after" are not valid for the type of the appropriate key leafs, the server MUST reply with a "bad-attribute" error-tag in the rpc- error' do
+			end # describe 'For insert handling, if the value for the attributes "before" and "after" are not valid for the type of the appropriate key leafs, the server MUST reply with a "bad-attribute" error-tag in the rpc- error'
+
+			describe 'If the attributes "before" and "after" appears in any element that is not a list whose "ordered-by" property is "user", the server MUST reply with an "unknown-attribute" error-tag in the rpc-error' do
+			end # describe 'If the attributes "before" and "after" appears in any element that is not a list whose "ordered-by" property is "user", the server MUST reply with an "unknown-attribute" error-tag in the rpc-error'
+
+			end # describe 'When content arrives in RPC payloads, it MUST be well-formed XML, following the hierarchy and content rules defined by the set of models the device implements'
+
 		end # describe '8.3.1. Payload Parsing'
 
 		# TODO
 		describe '8.3.2. NETCONF <edit-config> Processing' do
+
+			describe 'During this processing, the following errors MUST be detected:' do
+
+				describe 'Delete requests for non-existent data' do
+				end # describe 'Delete requests for non-existent data'
+
+				describe 'Create requests for existent data' do
+				end # describe 'Create requests for existent data'
+
+				describe 'Insert requests with "before" or "after" parameters that do not exist' do
+				end # describe 'Insert requests with "before" or "after" parameters that do not exist'
+
+			end # describe 'During this processing, the following errors MUST be detected:'
+
+			describe 'During <edit-config> processing:' do
+
+				describe 'If the NETCONF operation creates data nodes under a "choice", any existing nodes from other "case" branches are deleted by the server' do
+				end # describe 'If the NETCONF operation creates data nodes under a "choice", any existing nodes from other "case" branches are deleted by the server'
+
+				describe 'If the NETCONF operation modifies a data node such that any node’s "when" expression becomes false, then the node with the "when" expression is deleted by the server' do
+				end # describe 'If the NETCONF operation modifies a data node such that any node’s "when" expression becomes false, then the node with the "when" expression is deleted by the server'
+
+			end # describe 'During <edit-config> processing:'
+
 		end # describe '8.3.2. NETCONF <edit-config> Processing'
 
 		# TODO
 		describe '8.3.3. Validation' do
+
+			describe 'If the datastore is <running/> or <startup/>, these constraints MUST be enforced at the end of the <edit-config> or <copy-config> operation' do
+			end # describe 'If the datastore is <running/> or <startup/>, these constraints MUST be enforced at the end of the <edit-config> or <copy-config> operation'
+
+			describe 'If the datastore is <candidate/>, the constraint enforcement is delayed until a <commit> or <validate> operation' do
+			end # describe 'If the datastore is <candidate/>, the constraint enforcement is delayed until a <commit> or <validate> operation'
+
+			describe 'Any "must" constraints MUST evaluate to "true"' do
+			end # describe 'Any "must" constraints MUST evaluate to "true"'
+
+			describe 'Any referential integrity constraints defined via the "path" statement MUST be satisfied' do
+			end # describe 'Any referential integrity constraints defined via the "path" statement MUST be satisfied'
+
+			describe 'Any "unique" constraints on lists MUST be satisfied' do
+			end # describe 'Any "unique" constraints on lists MUST be satisfied'
+
+			describe 'The "min-elements" and "max-elements" constraints are enforced for lists and leaf-lists' do
+			end # describe 'The "min-elements" and "max-elements" constraints are enforced for lists and leaf-lists'
+
 		end # describe '8.3.3. Validation'
 
 	end # describe '8. Constraints'
