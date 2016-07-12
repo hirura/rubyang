@@ -2869,15 +2869,67 @@ describe 'RFC6020' do
 				end # describe 'presence'
 
 				describe 'reference' do
-					'0..1'
 
 					context '0 reference' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit 'container1'
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '1 reference' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										reference reference1;
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit 'container1'
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '2 references' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										reference reference1;
+										reference reference2;
+									}
+								}
+							EOB
+						}
+						subject { ->{
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+						} }
+						it { is_expected.to raise_exception Exception }
 					end
 
 				end # describe 'reference'
@@ -2911,15 +2963,92 @@ describe 'RFC6020' do
 				end # describe 'typedef'
 
 				describe 'uses' do
-					'0..n'
 
 					context '0 uses' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit 'container1'
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '1 uses' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									grouping grouping1 {
+										leaf leaf1 { type string; }
+									}
+									container container1 {
+										uses grouping1;
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf1_element ){ container1_element.add_element( 'leaf1' ) }
+						let!( :leaf1_text ){ leaf1_element.add_text( 'leaf1' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit( 'container1' )
+							leaf1 = container1.edit( 'leaf1' )
+							leaf1.set 'leaf1'
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '2 usess' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									grouping grouping1 {
+										leaf leaf1 { type string; }
+									}
+									grouping grouping2 {
+										leaf leaf2 { type string; }
+									}
+									container container1 {
+										uses grouping1;
+										uses grouping2;
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf1_element ){ container1_element.add_element( 'leaf1' ) }
+						let!( :leaf1_text ){ leaf1_element.add_text( 'leaf1' ) }
+						let!( :leaf2_element ){ container1_element.add_element( 'leaf2' ) }
+						let!( :leaf2_text ){ leaf2_element.add_text( 'leaf2' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit( 'container1' )
+							leaf1 = container1.edit( 'leaf1' )
+							leaf1.set 'leaf1'
+							leaf2 = container1.edit( 'leaf2' )
+							leaf2.set 'leaf2'
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 				end # describe 'uses'
