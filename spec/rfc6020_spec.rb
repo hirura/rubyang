@@ -3841,12 +3841,81 @@ describe 'RFC6020' do
 					'0..n'
 
 					context '0 must' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf leaf1 {
+										type string;
+									}
+								}
+							EOB
+						}
+						let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf1_text ){ leaf1_element.add_text( 'leaf1' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf1 = config.edit( 'leaf1' )
+							leaf1.set( 'leaf1' )
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '1 must' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf leaf1 {
+										type string;
+										must 1;
+									}
+								}
+							EOB
+						}
+						let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf1_text ){ leaf1_element.add_text( 'leaf1' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf1 = config.edit( 'leaf1' )
+							leaf1.set( 'leaf1' )
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '2 musts' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf leaf1 {
+										type string;
+										must 1;
+										must 2;
+									}
+								}
+							EOB
+						}
+						let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf1_text ){ leaf1_element.add_text( 'leaf1' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf1 = config.edit( 'leaf1' )
+							leaf1.set( 'leaf1' )
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 				end # describe 'must'
