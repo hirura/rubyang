@@ -2510,13 +2510,13 @@ describe 'RFC6020' do
 					'0..n'
 				end # describe 'if'
 
-				describe 'max' do
+				describe 'max-elements' do
 					'0..1'
-				end # describe 'max'
+				end # describe 'max-elements'
 
-				describe 'min' do
+				describe 'min-elements' do
 					'0..1'
-				end # describe 'min'
+				end # describe 'min-elements'
 
 				describe 'must' do
 					'0..n'
