@@ -65,7 +65,8 @@ module Rubyang
 									 r.and c.valid?( false )
 								 }
 							 when Rubyang::Database::DataTree::LeafList
-								 Rubyang::Xpath::BasicType::Boolean.new self.evaluate_min_elements
+								 tmp = Rubyang::Xpath::BasicType::Boolean.new( self.evaluate_min_elements )
+								 tmp.and Rubyang::Xpath::BasicType::Boolean.new( self.evaluate_max_elements )
 							 else
 								 Rubyang::Xpath::BasicType::Boolean.new true
 							 end
@@ -138,6 +139,17 @@ module Rubyang
 					if @schema.min_elements.size > 0
 						@logger.debug "#{self.class}#evaluate_min_elements: @schema.min_elements.first.arg: #{@schema.min_elements.first.arg}"
 						if @children.size >= @schema.min_elements.first.arg.to_i then true else false end
+					else
+						true
+					end
+				end
+				# end
+
+				# min-elements start
+				def evaluate_max_elements
+					if @schema.max_elements.size > 0
+						@logger.debug "#{self.class}#evaluate_max_elements: @schema.max_elements.first.arg: #{@schema.max_elements.first.arg}"
+						if @children.size <= @schema.max_elements.first.arg.to_i then true else false end
 					else
 						true
 					end

@@ -52,6 +52,16 @@ module Rubyang
 			end
 			# end
 
+			# max-elements start
+			class MaxElements
+				attr_reader :arg
+				def initialize schema_node
+					@schema_node = schema_node
+					@arg = schema_node.arg
+				end
+			end
+			# end
+
 			class Type
 				attr_reader :arg
 			end
@@ -835,6 +845,11 @@ module Rubyang
 							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
 						}
 						# end
+						# max-elements start
+						yang.substmt( "max-elements" ).each{ |s|
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+						}
+						# end
 					when Rubyang::Model::List
 						list_arg = yang.arg
 						grouping_list += yang.substmt( 'grouping' )
@@ -885,6 +900,11 @@ module Rubyang
 					when Rubyang::Model::MinElements
 						@logger.debug yang
 						self.min_elements.push MinElements.new( yang )
+					# end
+					# max-elements start
+					when Rubyang::Model::MaxElements
+						@logger.debug yang
+						self.max_elements.push MaxElements.new( yang )
 					# end
 					else
 						raise "#{yang.class} is not impletented yet"
@@ -1183,11 +1203,14 @@ module Rubyang
 
 			class LeafList < LeafSchemaNode
 				# min-elements start
-				attr_reader :min_elements
+				# max-elements start
+				attr_reader :min_elements, :max_elements
 				def initialize *args
 					super
 					@min_elements = []
+					@max_elements = []
 				end
+				# end
 				# end
 			end
 
