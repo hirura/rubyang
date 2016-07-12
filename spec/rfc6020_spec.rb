@@ -4367,29 +4367,151 @@ describe 'RFC6020' do
 				end # describe 'if-feature'
 
 				describe 'max-elements' do
-					'0..1'
 
 					context '0 max-elements' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf-list leaf-list1 {
+										type string;
+									}
+								}
+							EOB
+						}
+						let!( :leaf_list1_element ){ root_xml.add_element( 'leaf-list1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf_list1_text ){ leaf_list1_element.add_text( 'leaf-list1' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf_list1 = config.edit( 'leaf-list1' )
+							leaf_list1.set( 'leaf-list1' )
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '1 max-elements' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf-list leaf-list1 {
+										type string;
+										max-elements 1;
+									}
+								}
+							EOB
+						}
+						let!( :leaf_list1_element ){ root_xml.add_element( 'leaf-list1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf_list1_text ){ leaf_list1_element.add_text( 'leaf-list1' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf_list1 = config.edit( 'leaf-list1' )
+							leaf_list1.set( 'leaf-list1' )
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '2 max-elementss' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf-list leaf-list1 {
+										type string;
+										max-elements 1;
+										max-elements 1;
+									}
+								}
+							EOB
+						}
+						subject { ->{
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+						} }
+						it { is_expected.to raise_exception Exception }
 					end
 
 				end # describe 'max-elements'
 
 				describe 'min-elements' do
-					'0..1'
 
 					context '0 min-elements' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf-list leaf-list1 {
+										type string;
+									}
+								}
+							EOB
+						}
+						let!( :leaf_list1_element ){ root_xml.add_element( 'leaf-list1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf_list1_text ){ leaf_list1_element.add_text( 'leaf-list1' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf_list1 = config.edit( 'leaf-list1' )
+							leaf_list1.set( 'leaf-list1' )
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '1 min-elements' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf-list leaf-list1 {
+										type string;
+										min-elements 0;
+									}
+								}
+							EOB
+						}
+						let!( :leaf_list1_element ){ root_xml.add_element( 'leaf-list1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf_list1_text ){ leaf_list1_element.add_text( 'leaf-list1' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf_list1 = config.edit( 'leaf-list1' )
+							leaf_list1.set( 'leaf-list1' )
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '2 min-elementss' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf-list leaf-list1 {
+										type string;
+										min-elements 0;
+										min-elements 0;
+									}
+								}
+							EOB
+						}
+						subject { ->{
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+						} }
+						it { is_expected.to raise_exception Exception }
 					end
 
 				end # describe 'min-elements'
@@ -4732,17 +4854,21 @@ describe 'RFC6020' do
 			# TODO
 			describe '7.7.3. The min-elements Statement' do
 
+				describe 'The "min-elements" statement, which is optional, takes as an argument a non-negative integer that puts a constraint on valid list entries' do
+				end # 'The "min-elements" statement, which is optional, takes as an argument a non-negative integer that puts a constraint on valid list entries'
+
 				describe 'If no "min-elements" statement is present, it defaults to zero' do
 				end # describe 'If no "min-elements" statement is present, it defaults to zero'
 
-				describe 'The behavior of the constraint depends on the type of the leaf-list’s or list’s closest ancestor node in the schema tree that is not a non- presence container' do
-				end # describe 'The behavior of the constraint depends on the type of the leaf-list’s or list’s closest ancestor node in the schema tree that is not a non- presence container'
+				describe 'The behavior of the constraint depends on the type of the leaf-list\'s or list\'s closest ancestor node in the schema tree that is not a non- presence container' do
 
-				describe 'If this ancestor is a case node, the constraint is enforced if any other node from the case exists' do
-				end # describe 'If this ancestor is a case node, the constraint is enforced if any other node from the case exists'
+					describe 'If this ancestor is a case node, the constraint is enforced if any other node from the case exists' do
+					end # describe 'If this ancestor is a case node, the constraint is enforced if any other node from the case exists'
 
-				describe 'Otherwise, it is enforced if the ancestor node exists' do
-				end # describe 'Otherwise, it is enforced if the ancestor node exists'
+					describe 'Otherwise, it is enforced if the ancestor node exists' do
+					end # describe 'Otherwise, it is enforced if the ancestor node exists'
+
+				end # describe 'The behavior of the constraint depends on the type of the leaf-list\'s or list\'s closest ancestor node in the schema tree that is not a non- presence container'
 
 			end # describe '7.7.3. The min-elements Statement'
 
