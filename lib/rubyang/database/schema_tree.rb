@@ -858,6 +858,16 @@ module Rubyang
 						yang.substmts( Rubyang::Model::DataDefStmtList ).each{ |s|
 							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
 						}
+						# min-elements start
+						yang.substmt( "min-elements" ).each{ |s|
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+						}
+						# end
+						# max-elements start
+						yang.substmt( "max-elements" ).each{ |s|
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+						}
+						# end
 					when Rubyang::Model::Choice
 						choice_arg = yang.arg
 						grouping_list += yang.substmt( 'grouping' )
@@ -1196,6 +1206,17 @@ module Rubyang
 			end
 
 			class List < InteriorSchemaNode
+				# min-elements start
+				# max-elements start
+				attr_reader :min_elements, :max_elements
+				def initialize *args
+					super
+					@min_elements = []
+					@max_elements = []
+				end
+				# end
+				# end
+
 				def keys
 					@yang.substmt( 'key' )[0].arg.split( /[ \t]+/ )
 				end

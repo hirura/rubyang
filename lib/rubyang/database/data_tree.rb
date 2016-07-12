@@ -64,7 +64,7 @@ module Rubyang
 								 @children.inject(self.evaluate_musts){ |r, c|
 									 r.and c.valid?( false )
 								 }
-							 when Rubyang::Database::DataTree::LeafList
+							 when Rubyang::Database::DataTree::LeafList, Rubyang::Database::DataTree::List
 								 tmp = Rubyang::Xpath::BasicType::Boolean.new( self.evaluate_min_elements )
 								 tmp.and Rubyang::Xpath::BasicType::Boolean.new( self.evaluate_max_elements )
 							 else
