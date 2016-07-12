@@ -3280,57 +3280,301 @@ describe 'RFC6020' do
 			describe '7.5.4. The must\'s Substatements' do
 
 				describe 'description' do
-					'0..1'
 
 					context '0 description' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										must '1' {
+										}
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit 'container1'
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '1 description' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										must '1' {
+											description description1;
+										}
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit 'container1'
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '2 descriptions' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										must '1' {
+											description description1;
+											description description2;
+										}
+									}
+								}
+							EOB
+						}
+						subject { ->{
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+						} }
+						it { is_expected.to raise_exception Exception }
 					end
 
 				end # describe 'description'
 
-				describe 'error' do
+				describe 'error-app-tag' do
+
+					context '0 error-app-tag' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										must '1' {
+										}
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit 'container1'
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
+					end
+
+					context '1 error-app-tag' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										must '1' {
+											error-app-tag error-app-tag1;
+										}
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit 'container1'
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
+					end
+
+					context '2 error-app-tags' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										must '1' {
+											error-app-tag error-app-tag1;
+											error-app-tag error-app-tag2;
+										}
+									}
+								}
+							EOB
+						}
+						subject { ->{
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+						} }
+						it { is_expected.to raise_exception Exception }
+					end
+
+				end # describe 'error-app-tag'
+
+				describe 'error-message' do
 					'0..1'
 
-					context '0 error' do
+					context '0 error-message' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										must '1' {
+										}
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit 'container1'
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
-					context '1 error' do
+					context '1 error-message' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										must '1' {
+											error-message error-message1;
+										}
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit 'container1'
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
-					context '2 errors' do
+					context '2 error-messages' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										must '1' {
+											error-message error-message1;
+											error-message error-message2;
+										}
+									}
+								}
+							EOB
+						}
+						subject { ->{
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+						} }
+						it { is_expected.to raise_exception Exception }
 					end
 
-				end # describe 'error'
-
-				describe 'error' do
-					'0..1'
-
-					context '0 error' do
-					end
-
-					context '1 error' do
-					end
-
-					context '2 errors' do
-					end
-
-				end # describe 'error'
+				end # describe 'error-message'
 
 				describe 'reference' do
 					'0..1'
 
 					context '0 reference' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										must '1' {
+										}
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit 'container1'
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '1 reference' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										must '1' {
+										}
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit 'container1'
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '2 references' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										must '1' {
+										}
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							container1 = config.edit 'container1'
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 				end # describe 'reference'
