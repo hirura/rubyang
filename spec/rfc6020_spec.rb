@@ -4855,7 +4855,117 @@ describe 'RFC6020' do
 			describe '7.7.3. The min-elements Statement' do
 
 				describe 'The "min-elements" statement, which is optional, takes as an argument a non-negative integer that puts a constraint on valid list entries' do
-				end # 'The "min-elements" statement, which is optional, takes as an argument a non-negative integer that puts a constraint on valid list entries'
+				end # describe 'The "min-elements" statement, which is optional, takes as an argument a non-negative integer that puts a constraint on valid list entries'
+
+				describe 'A valid leaf-list or list MUST have at least min-elements entries' do
+
+					context 'valid' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf-list leaf-list1 {
+										type string;
+										min-elements 0;
+									}
+								}
+							EOB
+						}
+						let!( :leaf_list1_element ){ root_xml.add_element( 'leaf-list1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf_list1_text ){ leaf_list1_element.add_text( 'leaf-list1' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf_list1 = config.edit( 'leaf-list1' )
+							leaf_list1.set( 'leaf-list1' )
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
+					end
+
+					context 'valid' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf-list leaf-list1 {
+										type string;
+										min-elements 1;
+									}
+								}
+							EOB
+						}
+						let!( :leaf_list1_element ){ root_xml.add_element( 'leaf-list1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf_list1_text ){ leaf_list1_element.add_text( 'leaf-list1' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf_list1 = config.edit( 'leaf-list1' )
+							leaf_list1.set( 'leaf-list1' )
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
+					end
+
+					context 'valid' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf-list leaf-list1 {
+										type string;
+										min-elements 2;
+									}
+								}
+							EOB
+						}
+						let!( :leaf_list1_element_1 ){ root_xml.add_element( 'leaf-list1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf_list1_text_1 ){ leaf_list1_element_1.add_text( 'leaf-list1_1' ) }
+						let!( :leaf_list1_element_2 ){ root_xml.add_element( 'leaf-list1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf_list1_text_2 ){ leaf_list1_element_2.add_text( 'leaf-list1_2' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf_list1 = config.edit( 'leaf-list1' )
+							leaf_list1.set( 'leaf-list1_1' )
+							leaf_list1.set( 'leaf-list1_2' )
+							raise unless config.valid?
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
+					end
+
+					context 'invalid' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									leaf-list leaf-list1 {
+										type string;
+										min-elements 2;
+									}
+								}
+							EOB
+						}
+						let!( :leaf_list1_element ){ root_xml.add_element( 'leaf-list1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf_list1_text ){ leaf_list1_element.add_text( 'leaf-list1' ) }
+						subject { ->{
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf_list1 = config.edit( 'leaf-list1' )
+							leaf_list1.set( 'leaf-list1' )
+							raise unless config.valid?
+						} }
+						it { is_expected.to raise_exception Exception }
+					end
+
+				end # describe 'A valid leaf-list or list MUST have at least min-elements entries'
 
 				describe 'If no "min-elements" statement is present, it defaults to zero' do
 				end # describe 'If no "min-elements" statement is present, it defaults to zero'

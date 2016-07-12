@@ -42,6 +42,16 @@ module Rubyang
 			end
 			# end
 
+			# min-elements start
+			class MinElements
+				attr_reader :arg
+				def initialize schema_node
+					@schema_node = schema_node
+					@arg = schema_node.arg
+				end
+			end
+			# end
+
 			class Type
 				attr_reader :arg
 			end
@@ -366,6 +376,7 @@ module Rubyang
 					@yang = yang
 					@parent = parent
 					@module = _module
+					@logger = Rubyang::Logger.instance
 				end
 				def to_s parent=true
 					head, vars, tail = "#<#{self.class.to_s}:0x#{(self.object_id << 1).to_s(16).rjust(14,'0')} ", Array.new, ">"
@@ -775,16 +786,6 @@ module Rubyang
 						raise "Unrecognized Expr: #{expr}"
 					end
 				end
-			end
-
-			class InteriorSchemaNode < SchemaNode
-				attr_accessor :yangs, :arg, :yang, :parent, :children
-
-				def initialize yangs, arg, yang, parent, _module
-					super yangs, arg, yang, parent, _module
-					@children = []
-					@logger = Rubyang::Logger.instance
-				end
 
 				def load_yang yang, yangs=@yangs, parent_module=yang, current_module=yang, grouping_list=[], typedef_list=[]
 					case yang
@@ -829,6 +830,11 @@ module Rubyang
 					when Rubyang::Model::LeafList
 						leaf_arg = yang.arg
 						self.children.push LeafList.new( yangs, leaf_arg, yang, self, parent_module, current_module, typedef_list )
+						# min-elements start
+						yang.substmt( "min-elements" ).each{ |s|
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+						}
+						# end
 					when Rubyang::Model::List
 						list_arg = yang.arg
 						grouping_list += yang.substmt( 'grouping' )
@@ -875,9 +881,24 @@ module Rubyang
 						@logger.debug yang
 						self.musts.push Must.new( self, yang )
 					# end
+					# min-elements start
+					when Rubyang::Model::MinElements
+						@logger.debug yang
+						self.min_elements.push MinElements.new( yang )
+					# end
 					else
 						raise "#{yang.class} is not impletented yet"
 					end
+				end
+			end
+
+			class InteriorSchemaNode < SchemaNode
+				attr_accessor :yangs, :arg, :yang, :parent, :children
+
+				def initialize yangs, arg, yang, parent, _module
+					super yangs, arg, yang, parent, _module
+					@children = []
+					@logger = Rubyang::Logger.instance
 				end
 
 				def resolve_uses uses_stmt, yangs, parent_module, current_module, grouping_list, typedef_list
@@ -1161,6 +1182,13 @@ module Rubyang
 			end
 
 			class LeafList < LeafSchemaNode
+				# min-elements start
+				attr_reader :min_elements
+				def initialize *args
+					super
+					@min_elements = []
+				end
+				# end
 			end
 
 			class Choice < InteriorSchemaNode

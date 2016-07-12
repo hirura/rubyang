@@ -64,11 +64,13 @@ module Rubyang
 								 @children.inject(self.evaluate_musts){ |r, c|
 									 r.and c.valid?( false )
 								 }
+							 when Rubyang::Database::DataTree::LeafList
+								 Rubyang::Xpath::BasicType::Boolean.new self.evaluate_min_elements
 							 else
 								 Rubyang::Xpath::BasicType::Boolean.new true
 							 end
 						 end
-					@logger.debug "#{self.class}#valid?: return: #{result}"
+					@logger.debug "#{self.class}#valid?: return: #{result} #{result.value}"
 					result
 				end
 				def load_merge_xml_recursive doc_xml
@@ -128,6 +130,17 @@ module Rubyang
 						puts
 						r.and self.evaluate_xpath( w.xpath, self )
 					}
+				end
+				# end
+
+				# min-elements start
+				def evaluate_min_elements
+					if @schema.min_elements.size > 0
+						@logger.debug "#{self.class}#evaluate_min_elements: @schema.min_elements.first.arg: #{@schema.min_elements.first.arg}"
+						if @children.size >= @schema.min_elements.first.arg.to_i then true else false end
+					else
+						true
+					end
 				end
 				# end
 
