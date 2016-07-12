@@ -1978,18 +1978,58 @@ describe 'RFC6020' do
 
 			describe 'default' do
 				'0..1'
+
+				context '0 default' do
+				end
+
+				context '1 default' do
+				end
+
+				context '2 defaults' do
+				end
+
 			end # describe 'default'
 
 			describe 'description' do
 				'0..1'
+
+				context '0 description' do
+				end
+
+				context '1 description' do
+				end
+
+				context '2 descriptions' do
+				end
+
 			end # describe 'description'
 
 			describe 'reference' do
 				'0..1'
+
+				context '0 reference' do
+				end
+
+				context '1 reference' do
+				end
+
+				context '2 references' do
+				end
+
 			end # describe 'reference'
 
 			describe 'status' do
 				'0..1'
+
+				context '0 status' do
+				end
+
+				context '1 status' do
+				end
+
+				context '2 statuss' do
+				end
+
 			end # describe 'status'
 
 			describe 'type' do
@@ -1998,6 +2038,16 @@ describe 'RFC6020' do
 
 			describe 'units' do
 				'0..1'
+
+				context '0 units' do
+				end
+
+				context '1 units' do
+				end
+
+				context '2 unitss' do
+				end
+
 			end # describe 'units'
 
 			# TODO
@@ -2050,35 +2100,116 @@ describe 'RFC6020' do
 
 				describe 'bit' do
 					'0..n'
+
+					context '0 bit' do
+					end
+
+					context '1 bit' do
+					end
+
+					context '2 bits' do
+					end
+
 				end # describe 'bit'
 
 				describe 'enum' do
 					'0..n'
+
+					context '0 enum' do
+					end
+
+					context '1 enum' do
+					end
+
+					context '2 enums' do
+					end
+
 				end # describe 'enum'
 
 				describe 'length' do
 					'0..1'
+
+					context '0 length' do
+					end
+
+					context '1 length' do
+					end
+
+					context '2 lengths' do
+					end
+
 				end # describe 'length'
 
 				describe 'path' do
 					'0..1'
+
+					context '0 path' do
+					end
+
+					context '1 path' do
+					end
+
+					context '2 paths' do
+					end
+
 				end # describe 'path'
 
 				describe 'pattern' do
 					'0..n'
+
+					context '0 pattern' do
+					end
+
+					context '1 pattern' do
+					end
+
+					context '2 patterns' do
+					end
+
 				end # describe 'pattern'
 
 				describe 'range' do
 					'0..1'
+
+					context '0 range' do
+					end
+
+					context '1 range' do
+					end
+
+					context '2 ranges' do
+					end
+
 				end # describe 'range'
 
 				describe 'require' do
 					'0..1'
+
+					context '0 require' do
+					end
+
+					context '1 require' do
+					end
+
+					context '2 requires' do
+					end
+
 				end # describe 'require'
 
 				describe 'type' do
 					'0..n'
+
+					context '0 type' do
+					end
+
+					context '1 type' do
+					end
+
+					context '2 types' do
+					end
+
 				end # describe 'type'
+
 			end # describe '7.4.1. The type\'s Substatements'
 
 		end # describe '7.4. The type Statement'
@@ -2095,71 +2226,294 @@ describe 'RFC6020' do
 
 				describe 'anyxml' do
 					'0..n'
+
+					context '0 anyxml' do
+					end
+
+					context '1 anyxml' do
+					end
+
+					context '2 anyxmls' do
+					end
+
 				end # describe 'anyxml'
 
 				describe 'choice' do
 					'0..n'
+
+					context '0 choice' do
+					end
+
+					context '1 choice' do
+					end
+
+					context '2 choices' do
+					end
+
 				end # describe 'choice'
 
 				describe 'config' do
 					'0..1'
+
+					context '0 config' do
+					end
+
+					context '1 config' do
+					end
+
+					context '2 configs' do
+					end
+
 				end # describe 'config'
 
 				describe 'container' do
 					'0..n'
+
+					context '0 container' do
+					end
+
+					context '1 container' do
+					end
+
+					context '2 containers' do
+					end
+
 				end # describe 'container'
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'grouping' do
 					'0..n'
+
+					context '0 grouping' do
+					end
+
+					context '1 grouping' do
+					end
+
+					context '2 groupings' do
+					end
+
 				end # describe 'grouping'
 
 				describe 'if' do
 					'0..n'
+
+					context '0 if' do
+					end
+
+					context '1 if' do
+					end
+
+					context '2 ifs' do
+					end
+
 				end # describe 'if'
 
 				describe 'leaf' do
 					'0..n'
+
+					context '0 leaf' do
+					end
+
+					context '1 leaf' do
+					end
+
+					context '2 leafs' do
+					end
+
 				end # describe 'leaf'
 
 				describe 'leaf' do
 					'0..n'
+
+					context '0 leaf' do
+					end
+
+					context '1 leaf' do
+					end
+
+					context '2 leafs' do
+					end
+
 				end # describe 'leaf'
 
 				describe 'list' do
 					'0..n'
+
+					context '0 list' do
+					end
+
+					context '1 list' do
+					end
+
+					context '2 lists' do
+					end
+
 				end # describe 'list'
 
 				describe 'must' do
 					'0..n'
+
+					context '0 must' do
+					end
+
+					context '1 must' do
+					end
+
+					context '2 musts' do
+					end
+
 				end # describe 'must'
 
 				describe 'presence' do
 					'0..1'
+
+					context '0 presence' do
+					end
+
+					context '1 presence' do
+					end
+
+					context '2 presences' do
+					end
+
 				end # describe 'presence'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 				describe 'typedef' do
 					'0..n'
+
+					context '0 typedef' do
+					end
+
+					context '1 typedef' do
+					end
+
+					context '2 typedefs' do
+					end
+
 				end # describe 'typedef'
 
 				describe 'uses' do
 					'0..n'
+
+					context '0 uses' do
+					end
+
+					context '1 uses' do
+					end
+
+					context '2 usess' do
+					end
+
 				end # describe 'uses'
 
 				describe 'when' do
-					'0..1'
+
+					context '0 when' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							config.edit 'container1'
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
+					end
+
+					context '1 when' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										when "'true' = 'true'";
+									}
+								}
+							EOB
+						}
+						let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							config.edit 'container1'
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
+					end
+
+					context '2 whens' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									container container1 {
+										when "'true' = 'true'";
+										when "'true' = 'true'";
+									}
+								}
+							EOB
+						}
+						subject { ->{
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+						} }
+						it { is_expected.to raise_exception Exception }
+					end
+
 				end # describe 'when'
+
 			end # describe '7.5.2. The container\'s Substatements'
 
 			# TODO
@@ -2206,18 +2560,58 @@ describe 'RFC6020' do
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'error' do
 					'0..1'
+
+					context '0 error' do
+					end
+
+					context '1 error' do
+					end
+
+					context '2 errors' do
+					end
+
 				end # describe 'error'
 
 				describe 'error' do
 					'0..1'
+
+					context '0 error' do
+					end
+
+					context '1 error' do
+					end
+
+					context '2 errors' do
+					end
+
 				end # describe 'error'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 			end # describe '7.5.4. The must\'s Substatements'
 
@@ -2350,34 +2744,114 @@ describe 'RFC6020' do
 
 				describe 'config' do
 					'0..1'
+
+					context '0 config' do
+					end
+
+					context '1 config' do
+					end
+
+					context '2 configs' do
+					end
+
 				end # describe 'config'
 
 				describe 'default' do
 					'0..1'
+
+					context '0 default' do
+					end
+
+					context '1 default' do
+					end
+
+					context '2 defaults' do
+					end
+
 				end # describe 'default'
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'if-feature' do
 					'0..n'
+
+					context '0 if-feature' do
+					end
+
+					context '1 if-feature' do
+					end
+
+					context '2 if-features' do
+					end
+
 				end # describe 'if'
 
 				describe 'mandatory' do
 					'0..1'
+
+					context '0 mandatory' do
+					end
+
+					context '1 mandatory' do
+					end
+
+					context '2 mandatorys' do
+					end
+
 				end # describe 'mandatory'
 
 				describe 'must' do
 					'0..n'
+
+					context '0 must' do
+					end
+
+					context '1 must' do
+					end
+
+					context '2 musts' do
+					end
+
 				end # describe 'must'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 				describe 'type' do
@@ -2386,10 +2860,30 @@ describe 'RFC6020' do
 
 				describe 'units' do
 					'0..1'
+
+					context '0 units' do
+					end
+
+					context '1 units' do
+					end
+
+					context '2 unitss' do
+					end
+
 				end # describe 'units'
 
 				describe 'when' do
 					'0..1'
+
+					context '0 when' do
+					end
+
+					context '1 when' do
+					end
+
+					context '2 whens' do
+					end
+
 				end # describe 'when'
 
 			end # describe '7.6.2. The leaf\'s Substatements'
@@ -2500,38 +2994,128 @@ describe 'RFC6020' do
 
 				describe 'config' do
 					'0..1'
+
+					context '0 config' do
+					end
+
+					context '1 config' do
+					end
+
+					context '2 configs' do
+					end
+
 				end # describe 'config'
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'if' do
 					'0..n'
+
+					context '0 if' do
+					end
+
+					context '1 if' do
+					end
+
+					context '2 ifs' do
+					end
+
 				end # describe 'if'
 
 				describe 'max-elements' do
 					'0..1'
+
+					context '0 max-elements' do
+					end
+
+					context '1 max-elements' do
+					end
+
+					context '2 max-elementss' do
+					end
+
 				end # describe 'max-elements'
 
 				describe 'min-elements' do
 					'0..1'
+
+					context '0 min-elements' do
+					end
+
+					context '1 min-elements' do
+					end
+
+					context '2 min-elementss' do
+					end
+
 				end # describe 'min-elements'
 
 				describe 'must' do
 					'0..n'
+
+					context '0 must' do
+					end
+
+					context '1 must' do
+					end
+
+					context '2 musts' do
+					end
+
 				end # describe 'must'
 
 				describe 'ordered' do
 					'0..1'
+
+					context '0 ordered' do
+					end
+
+					context '1 ordered' do
+					end
+
+					context '2 ordereds' do
+					end
+
 				end # describe 'ordered'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 				describe 'type' do
@@ -2540,10 +3124,30 @@ describe 'RFC6020' do
 
 				describe 'units' do
 					'0..1'
+
+					context '0 units' do
+					end
+
+					context '1 units' do
+					end
+
+					context '2 unitss' do
+					end
+
 				end # describe 'units'
 
 				describe 'when' do
 					'0..1'
+
+					context '0 when' do
+					end
+
+					context '1 when' do
+					end
+
+					context '2 whens' do
+					end
+
 				end # describe 'when'
 
 			end # describe '7.7.2. The leaf-list\'s Substatements'
@@ -2685,86 +3289,296 @@ describe 'RFC6020' do
 
 				describe 'anyxml' do
 					'0..n'
+
+					context '0 anyxml' do
+					end
+
+					context '1 anyxml' do
+					end
+
+					context '2 anyxmls' do
+					end
+
 				end # describe 'anyxml'
 
 				describe 'choice' do
 					'0..n'
+
+					context '0 choice' do
+					end
+
+					context '1 choice' do
+					end
+
+					context '2 choices' do
+					end
+
 				end # describe 'choice'
 
 				describe 'config' do
 					'0..1'
+
+					context '0 config' do
+					end
+
+					context '1 config' do
+					end
+
+					context '2 configs' do
+					end
+
 				end # describe 'config'
 
 				describe 'container' do
 					'0..n'
+
+					context '0 container' do
+					end
+
+					context '1 container' do
+					end
+
+					context '2 containers' do
+					end
+
 				end # describe 'container'
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'grouping' do
 					'0..n'
+
+					context '0 grouping' do
+					end
+
+					context '1 grouping' do
+					end
+
+					context '2 groupings' do
+					end
+
 				end # describe 'grouping'
 
 				describe 'if-feature' do
 					'0..n'
+
+					context '0 if-feature' do
+					end
+
+					context '1 if-feature' do
+					end
+
+					context '2 if-features' do
+					end
+
 				end # describe 'if-feature'
 
 				describe 'key' do
 					'0..1'
+
+					context '0 key' do
+					end
+
+					context '1 key' do
+					end
+
+					context '2 keys' do
+					end
+
 				end # describe 'key'
 
 				describe 'leaf' do
 					'0..n'
+
+					context '0 leaf' do
+					end
+
+					context '1 leaf' do
+					end
+
+					context '2 leafs' do
+					end
+
 				end # describe 'leaf'
 
 				describe 'leaf-list' do
 					'0..n'
+
+					context '0 leaf-list' do
+					end
+
+					context '1 leaf-list' do
+					end
+
+					context '2 leaf-lists' do
+					end
+
 				end # describe 'leaf-list'
 
 				describe 'list' do
 					'0..n'
+
+					context '0 list' do
+					end
+
+					context '1 list' do
+					end
+
+					context '2 lists' do
+					end
+
 				end # describe 'list'
 
 				describe 'max-elements' do
 					'0..1'
+
+					context '0 max-elements' do
+					end
+
+					context '1 max-elements' do
+					end
+
+					context '2 max-elementss' do
+					end
+
 				end # describe 'max-elements'
 
 				describe 'min-elements' do
 					'0..1'
+
+					context '0 min-elements' do
+					end
+
+					context '1 min-elements' do
+					end
+
+					context '2 min-elementss' do
+					end
+
 				end # describe 'min-elements'
 
 				describe 'must' do
 					'0..n'
+
+					context '0 must' do
+					end
+
+					context '1 must' do
+					end
+
+					context '2 musts' do
+					end
+
 				end # describe 'must'
 
 				describe 'ordered-by' do
 					'0..1'
+
+					context '0 ordered-by' do
+					end
+
+					context '1 ordered-by' do
+					end
+
+					context '2 ordered-bys' do
+					end
+
 				end # describe 'ordered-by'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 				describe 'typedef' do
 					'0..n'
+
+					context '0 typedef' do
+					end
+
+					context '1 typedef' do
+					end
+
+					context '2 typedefs' do
+					end
+
 				end # describe 'typedef'
 
 				describe 'unique' do
 					'0..n'
+
+					context '0 unique' do
+					end
+
+					context '1 unique' do
+					end
+
+					context '2 uniques' do
+					end
+
 				end # describe 'unique'
 
 				describe 'uses' do
 					'0..n'
+
+					context '0 uses' do
+					end
+
+					context '1 uses' do
+					end
+
+					context '2 usess' do
+					end
+
 				end # describe 'uses'
 
 				describe 'when' do
 					'0..1'
+
+					context '0 when' do
+					end
+
+					context '1 when' do
+					end
+
+					context '2 whens' do
+					end
+
 				end # describe 'when'
 
 			end # describe '7.8.1. The list\'s Substatements'
@@ -3054,58 +3868,198 @@ describe 'RFC6020' do
 
 				describe 'anyxml' do
 					'0..n'
+
+					context '0 anyxml' do
+					end
+
+					context '1 anyxml' do
+					end
+
+					context '2 anyxmls' do
+					end
+
 				end # describe 'anyxml'
 
 				describe 'case' do
 					'0..n'
+
+					context '0 case' do
+					end
+
+					context '1 case' do
+					end
+
+					context '2 cases' do
+					end
+
 				end # describe 'case'
 
 				describe 'config' do
 					'0..1'
+
+					context '0 config' do
+					end
+
+					context '1 config' do
+					end
+
+					context '2 configs' do
+					end
+
 				end # describe 'config'
 
 				describe 'container' do
 					'0..n'
+
+					context '0 container' do
+					end
+
+					context '1 container' do
+					end
+
+					context '2 containers' do
+					end
+
 				end # describe 'container'
 
 				describe 'default' do
 					'0..1'
+
+					context '0 default' do
+					end
+
+					context '1 default' do
+					end
+
+					context '2 defaults' do
+					end
+
 				end # describe 'default'
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'if-feature' do
 					'0..n'
+
+					context '0 if-feature' do
+					end
+
+					context '1 if-feature' do
+					end
+
+					context '2 if-features' do
+					end
+
 				end # describe 'if-feature'
 
 				describe 'leaf' do
 					'0..n'
+
+					context '0 leaf' do
+					end
+
+					context '1 leaf' do
+					end
+
+					context '2 leafs' do
+					end
+
 				end # describe 'leaf'
 
 				describe 'leaf-list' do
 					'0..n'
+
+					context '0 leaf-list' do
+					end
+
+					context '1 leaf-list' do
+					end
+
+					context '2 leaf-lists' do
+					end
+
 				end # describe 'leaf-list'
 
 				describe 'list' do
 					'0..n'
+
+					context '0 list' do
+					end
+
+					context '1 list' do
+					end
+
+					context '2 lists' do
+					end
+
 				end # describe 'list'
 
 				describe 'mandatory' do
 					'0..1'
+
+					context '0 mandatory' do
+					end
+
+					context '1 mandatory' do
+					end
+
+					context '2 mandatorys' do
+					end
+
 				end # describe 'mandatory'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 				describe 'when' do
 					'0..1'
+
+					context '0 when' do
+					end
+
+					context '1 when' do
+					end
+
+					context '2 whens' do
+					end
+
 				end # describe 'when'
 
 			end # describe '7.9.1. The choice\'s Substatements'
@@ -3166,50 +4120,170 @@ describe 'RFC6020' do
 
 				describe 'anyxml' do
 					'0..n'
+
+					context '0 anyxml' do
+					end
+
+					context '1 anyxml' do
+					end
+
+					context '2 anyxmls' do
+					end
+
 				end # describe 'anyxml'
 
 				describe 'choice' do
 					'0..n'
+
+					context '0 choice' do
+					end
+
+					context '1 choice' do
+					end
+
+					context '2 choices' do
+					end
+
 				end # describe 'choice'
 
 				describe 'container' do
 					'0..n'
+
+					context '0 container' do
+					end
+
+					context '1 container' do
+					end
+
+					context '2 containers' do
+					end
+
 				end # describe 'container'
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'if-feature' do
 					'0..n'
+
+					context '0 if-feature' do
+					end
+
+					context '1 if-feature' do
+					end
+
+					context '2 if-features' do
+					end
+
 				end # describe 'if-feature'
 
 				describe 'leaf' do
 					'0..n'
+
+					context '0 leaf' do
+					end
+
+					context '1 leaf' do
+					end
+
+					context '2 leafs' do
+					end
+
 				end # describe 'leaf'
 
 				describe 'leaf-list' do
 					'0..n'
+
+					context '0 leaf-list' do
+					end
+
+					context '1 leaf-list' do
+					end
+
+					context '2 leaf-lists' do
+					end
+
 				end # describe 'leaf-list'
 
 				describe 'list' do
 					'0..n'
+
+					context '0 list' do
+					end
+
+					context '1 list' do
+					end
+
+					context '2 lists' do
+					end
+
 				end # describe 'list'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 				describe 'uses' do
 					'0..n'
+
+					context '0 uses' do
+					end
+
+					context '1 uses' do
+					end
+
+					context '2 usess' do
+					end
+
 				end # describe 'uses'
 
 				describe 'when' do
 					'0..1'
+
+					context '0 when' do
+					end
+
+					context '1 when' do
+					end
+
+					context '2 whens' do
+					end
+
 				end # describe 'when'
 
 			end # describe '7.9.2.1.  The case\'s Substatements'
@@ -3369,34 +4443,114 @@ describe 'RFC6020' do
 
 				describe 'config' do
 					'0..1'
+
+					context '0 config' do
+					end
+
+					context '1 config' do
+					end
+
+					context '2 configs' do
+					end
+
 				end # describe 'config'
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'if-feature' do
 					'0..n'
+
+					context '0 if-feature' do
+					end
+
+					context '1 if-feature' do
+					end
+
+					context '2 if-features' do
+					end
+
 				end # describe 'if-feature'
 
 				describe 'mandatory' do
 					'0..1'
+
+					context '0 mandatory' do
+					end
+
+					context '1 mandatory' do
+					end
+
+					context '2 mandatorys' do
+					end
+
 				end # describe 'mandatory'
 
 				describe 'must' do
 					'0..n'
+
+					context '0 must' do
+					end
+
+					context '1 must' do
+					end
+
+					context '2 musts' do
+					end
+
 				end # describe 'must'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 				describe 'when' do
 					'0..1'
+
+					context '0 when' do
+					end
+
+					context '1 when' do
+					end
+
+					context '2 whens' do
+					end
+
 				end # describe 'when'
 
 			end # describe '7.10.1. The anyxml\'s Substatements'
@@ -3461,50 +4615,170 @@ describe 'RFC6020' do
 
 				describe 'anyxml' do
 					'0..n'
+
+					context '0 anyxml' do
+					end
+
+					context '1 anyxml' do
+					end
+
+					context '2 anyxmls' do
+					end
+
 				end # describe 'anyxml'
 
 				describe 'choice' do
 					'0..n'
+
+					context '0 choice' do
+					end
+
+					context '1 choice' do
+					end
+
+					context '2 choices' do
+					end
+
 				end # describe 'choice'
 
 				describe 'container' do
 					'0..n'
+
+					context '0 container' do
+					end
+
+					context '1 container' do
+					end
+
+					context '2 containers' do
+					end
+
 				end # describe 'container'
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'grouping' do
 					'0..n'
+
+					context '0 grouping' do
+					end
+
+					context '1 grouping' do
+					end
+
+					context '2 groupings' do
+					end
+
 				end # describe 'grouping'
 
 				describe 'leaf' do
 					'0..n'
+
+					context '0 leaf' do
+					end
+
+					context '1 leaf' do
+					end
+
+					context '2 leafs' do
+					end
+
 				end # describe 'leaf'
 
 				describe 'leaf-list' do
 					'0..n'
+
+					context '0 leaf-list' do
+					end
+
+					context '1 leaf-list' do
+					end
+
+					context '2 leaf-lists' do
+					end
+
 				end # describe 'leaf-list'
 
 				describe 'list' do
 					'0..n'
+
+					context '0 list' do
+					end
+
+					context '1 list' do
+					end
+
+					context '2 lists' do
+					end
+
 				end # describe 'list'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 				describe 'typedef' do
 					'0..n'
+
+					context '0 typedef' do
+					end
+
+					context '1 typedef' do
+					end
+
+					context '2 typedefs' do
+					end
+
 				end # describe 'typedef'
 
 				describe 'uses' do
 					'0..n'
+
+					context '0 uses' do
+					end
+
+					context '1 uses' do
+					end
+
+					context '2 usess' do
+					end
+
 				end # describe 'uses'
 
 			end # describe '7.11.1. The grouping\'s Substatements'
@@ -3546,30 +4820,100 @@ describe 'RFC6020' do
 
 				describe 'augment' do
 					'0..1'
+
+					context '0 augment' do
+					end
+
+					context '1 augment' do
+					end
+
+					context '2 augments' do
+					end
+
 				end # describe 'augment'
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'if-feature' do
 					'0..n'
+
+					context '0 if-feature' do
+					end
+
+					context '1 if-feature' do
+					end
+
+					context '2 if-features' do
+					end
+
 				end # describe 'if-feature'
 
 				describe 'refine' do
 					'0..1'
+
+					context '0 refine' do
+					end
+
+					context '1 refine' do
+					end
+
+					context '2 refines' do
+					end
+
 				end # describe 'refine'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 				describe 'when' do
 					'0..1'
+
+					context '0 when' do
+					end
+
+					context '1 when' do
+					end
+
+					context '2 whens' do
+					end
+
 				end # describe 'when'
 
 			end # describe '7.12.1. The uses\'s Substatements'
@@ -3673,34 +5017,114 @@ describe 'RFC6020' do
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'grouping' do
 					'0..n'
+
+					context '0 grouping' do
+					end
+
+					context '1 grouping' do
+					end
+
+					context '2 groupings' do
+					end
+
 				end # describe 'grouping'
 
 				describe 'if-feature' do
 					'0..n'
+
+					context '0 if-feature' do
+					end
+
+					context '1 if-feature' do
+					end
+
+					context '2 if-features' do
+					end
+
 				end # describe 'if-feature'
 
 				describe 'input' do
 					'0..1'
+
+					context '0 input' do
+					end
+
+					context '1 input' do
+					end
+
+					context '2 inputs' do
+					end
+
 				end # describe 'input'
 
 				describe 'output' do
 					'0..1'
+
+					context '0 output' do
+					end
+
+					context '1 output' do
+					end
+
+					context '2 outputs' do
+					end
+
 				end # describe 'output'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 				describe 'typedef' do
 					'0..n'
+
+					context '0 typedef' do
+					end
+
+					context '1 typedef' do
+					end
+
+					context '2 typedefs' do
+					end
+
 				end # describe 'typedef'
 
 			end # describe '7.13.1. The rpc\'s Substatements'
@@ -3714,38 +5138,128 @@ describe 'RFC6020' do
 
 				describe 'anyxml' do
 					'0..n'
+
+					context '0 anyxml' do
+					end
+
+					context '1 anyxml' do
+					end
+
+					context '2 anyxmls' do
+					end
+
 				end # describe 'anyxml'
 
 				describe 'choice' do
 					'0..n'
+
+					context '0 choice' do
+					end
+
+					context '1 choice' do
+					end
+
+					context '2 choices' do
+					end
+
 				end # describe 'choice'
 
 				describe 'container' do
 					'0..n'
+
+					context '0 container' do
+					end
+
+					context '1 container' do
+					end
+
+					context '2 containers' do
+					end
+
 				end # describe 'container'
 
 				describe 'grouping' do
 					'0..n'
+
+					context '0 grouping' do
+					end
+
+					context '1 grouping' do
+					end
+
+					context '2 groupings' do
+					end
+
 				end # describe 'grouping'
 
 				describe 'leaf' do
 					'0..n'
+
+					context '0 leaf' do
+					end
+
+					context '1 leaf' do
+					end
+
+					context '2 leafs' do
+					end
+
 				end # describe 'leaf'
 
 				describe 'leaf-list' do
 					'0..n'
+
+					context '0 leaf-list' do
+					end
+
+					context '1 leaf-list' do
+					end
+
+					context '2 leaf-lists' do
+					end
+
 				end # describe 'leaf-list'
 
 				describe 'list' do
 					'0..n'
+
+					context '0 list' do
+					end
+
+					context '1 list' do
+					end
+
+					context '2 lists' do
+					end
+
 				end # describe 'list'
 
 				describe 'typedef' do
 					'0..n'
+
+					context '0 typedef' do
+					end
+
+					context '1 typedef' do
+					end
+
+					context '2 typedefs' do
+					end
+
 				end # describe 'typedef'
 
 				describe 'uses' do
 					'0..n'
+
+					context '0 uses' do
+					end
+
+					context '1 uses' do
+					end
+
+					context '2 usess' do
+					end
+
 				end # describe 'uses'
 
 			end # describe '7.13.2.1.  The input\'s Substatements'
@@ -3760,38 +5274,128 @@ describe 'RFC6020' do
 
 				describe 'anyxml' do
 					'0..n'
+
+					context '0 anyxml' do
+					end
+
+					context '1 anyxml' do
+					end
+
+					context '2 anyxmls' do
+					end
+
 				end # describe 'anyxml'
 
 				describe 'choice' do
 					'0..n'
+
+					context '0 choice' do
+					end
+
+					context '1 choice' do
+					end
+
+					context '2 choices' do
+					end
+
 				end # describe 'choice'
 
 				describe 'container' do
 					'0..n'
+
+					context '0 container' do
+					end
+
+					context '1 container' do
+					end
+
+					context '2 containers' do
+					end
+
 				end # describe 'container'
 
 				describe 'grouping' do
 					'0..n'
+
+					context '0 grouping' do
+					end
+
+					context '1 grouping' do
+					end
+
+					context '2 groupings' do
+					end
+
 				end # describe 'grouping'
 
 				describe 'leaf' do
 					'0..n'
+
+					context '0 leaf' do
+					end
+
+					context '1 leaf' do
+					end
+
+					context '2 leafs' do
+					end
+
 				end # describe 'leaf'
 
 				describe 'leaf-list' do
 					'0..n'
+
+					context '0 leaf-list' do
+					end
+
+					context '1 leaf-list' do
+					end
+
+					context '2 leaf-lists' do
+					end
+
 				end # describe 'leaf-list'
 
 				describe 'list' do
 					'0..n'
+
+					context '0 list' do
+					end
+
+					context '1 list' do
+					end
+
+					context '2 lists' do
+					end
+
 				end # describe 'list'
 
 				describe 'typedef' do
 					'0..n'
+
+					context '0 typedef' do
+					end
+
+					context '1 typedef' do
+					end
+
+					context '2 typedefs' do
+					end
+
 				end # describe 'typedef'
 
 				describe 'uses' do
 					'0..n'
+
+					context '0 uses' do
+					end
+
+					context '1 uses' do
+					end
+
+					context '2 usess' do
+					end
+
 				end # describe 'uses'
 
 			end # describe '7.13.3.1.  The output\'s Substatements'
@@ -3840,54 +5444,184 @@ describe 'RFC6020' do
 
 				describe 'anyxml' do
 					'0..n'
+
+					context '0 anyxml' do
+					end
+
+					context '1 anyxml' do
+					end
+
+					context '2 anyxmls' do
+					end
+
 				end # describe 'anyxml'
 
 				describe 'choice' do
 					'0..n'
+
+					context '0 choice' do
+					end
+
+					context '1 choice' do
+					end
+
+					context '2 choices' do
+					end
+
 				end # describe 'choice'
 
 				describe 'container' do
 					'0..n'
+
+					context '0 container' do
+					end
+
+					context '1 container' do
+					end
+
+					context '2 containers' do
+					end
+
 				end # describe 'container'
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'grouping' do
 					'0..n'
+
+					context '0 grouping' do
+					end
+
+					context '1 grouping' do
+					end
+
+					context '2 groupings' do
+					end
+
 				end # describe 'grouping'
 
 				describe 'if-feature' do
 					'0..n'
+
+					context '0 if-feature' do
+					end
+
+					context '1 if-feature' do
+					end
+
+					context '2 if-features' do
+					end
+
 				end # describe 'if-feature'
 
 				describe 'leaf' do
 					'0..n'
+
+					context '0 leaf' do
+					end
+
+					context '1 leaf' do
+					end
+
+					context '2 leafs' do
+					end
+
 				end # describe 'leaf'
 
 				describe 'leaf-list' do
 					'0..n'
+
+					context '0 leaf-list' do
+					end
+
+					context '1 leaf-list' do
+					end
+
+					context '2 leaf-lists' do
+					end
+
 				end # describe 'leaf-list'
 
 				describe 'list' do
 					'0..n'
+
+					context '0 list' do
+					end
+
+					context '1 list' do
+					end
+
+					context '2 lists' do
+					end
+
 				end # describe 'list'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 				describe 'typedef' do
 					'0..n'
+
+					context '0 typedef' do
+					end
+
+					context '1 typedef' do
+					end
+
+					context '2 typedefs' do
+					end
+
 				end # describe 'typedef'
 
 				describe 'uses' do
 					'0..n'
+
+					context '0 uses' do
+					end
+
+					context '1 uses' do
+					end
+
+					context '2 usess' do
+					end
+
 				end # describe 'uses'
 
 			end # describe '7.14.1. The notification\'s Substatements'
@@ -3973,54 +5707,184 @@ describe 'RFC6020' do
 
 				describe 'anyxml' do
 					'0..n'
+
+					context '0 anyxml' do
+					end
+
+					context '1 anyxml' do
+					end
+
+					context '2 anyxmls' do
+					end
+
 				end # describe 'anyxml'
 
 				describe 'case' do
 					'0..n'
+
+					context '0 case' do
+					end
+
+					context '1 case' do
+					end
+
+					context '2 cases' do
+					end
+
 				end # describe 'case'
 
 				describe 'choice' do
 					'0..n'
+
+					context '0 choice' do
+					end
+
+					context '1 choice' do
+					end
+
+					context '2 choices' do
+					end
+
 				end # describe 'choice'
 
 				describe 'container' do
 					'0..n'
+
+					context '0 container' do
+					end
+
+					context '1 container' do
+					end
+
+					context '2 containers' do
+					end
+
 				end # describe 'container'
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'if-feature' do
 					'0..n'
+
+					context '0 if-feature' do
+					end
+
+					context '1 if-feature' do
+					end
+
+					context '2 if-features' do
+					end
+
 				end # describe 'if-feature'
 
 				describe 'leaf' do
 					'0..n'
+
+					context '0 leaf' do
+					end
+
+					context '1 leaf' do
+					end
+
+					context '2 leafs' do
+					end
+
 				end # describe 'leaf'
 
 				describe 'leaf-list' do
 					'0..n'
+
+					context '0 leaf-list' do
+					end
+
+					context '1 leaf-list' do
+					end
+
+					context '2 leaf-lists' do
+					end
+
 				end # describe 'leaf-list'
 
 				describe 'list' do
 					'0..n'
+
+					context '0 list' do
+					end
+
+					context '1 list' do
+					end
+
+					context '2 lists' do
+					end
+
 				end # describe 'list'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 				describe 'uses' do
 					'0..n'
+
+					context '0 uses' do
+					end
+
+					context '1 uses' do
+					end
+
+					context '2 usess' do
+					end
+
 				end # describe 'uses'
 
 				describe 'when' do
 					'0..1'
+
+					context '0 when' do
+					end
+
+					context '1 when' do
+					end
+
+					context '2 whens' do
+					end
+
 				end # describe 'when'
 
 			end # describe '7.15.1. The augment\'s Substatements'
@@ -4116,18 +5980,58 @@ describe 'RFC6020' do
 
 				describe 'base' do
 					'0..1'
+
+					context '0 base' do
+					end
+
+					context '1 base' do
+					end
+
+					context '2 bases' do
+					end
+
 				end # describe 'base'
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 			end # describe '7.16.1. The identity\'s Substatements'
@@ -4219,18 +6123,58 @@ describe 'RFC6020' do
 
 				describe 'argument' do
 					'0..1'
+
+					context '0 argument' do
+					end
+
+					context '1 argument' do
+					end
+
+					context '2 arguments' do
+					end
+
 				end # describe 'argument'
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 			end # describe '7.17.1. The extension\'s Substatements'
@@ -4249,6 +6193,16 @@ describe 'RFC6020' do
 
 					describe 'yin-element' do
 						'0..1'
+
+						context '0 yin-element' do
+						end
+
+						context '1 yin-element' do
+						end
+
+						context '2 yin-elements' do
+						end
+
 					end # describe 'yin-element'
 
 				end # describe '7.17.2.1.  The argument\'s Substatements'
@@ -4344,18 +6298,58 @@ describe 'RFC6020' do
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'if-feature' do
 					'0..n'
+
+					context '0 if-feature' do
+					end
+
+					context '1 if-feature' do
+					end
+
+					context '2 if-features' do
+					end
+
 				end # describe 'if-feature'
 
 				describe 'status' do
 					'0..1'
+
+					context '0 status' do
+					end
+
+					context '1 status' do
+					end
+
+					context '2 statuss' do
+					end
+
 				end # describe 'status'
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 			end # describe '7.18.1.1.  The feature\'s Substatements'
@@ -4373,6 +6367,16 @@ describe 'RFC6020' do
 
 				describe 'description' do
 					'0..1'
+
+					context '0 description' do
+					end
+
+					context '1 description' do
+					end
+
+					context '2 descriptions' do
+					end
+
 				end # describe 'description'
 
 				describe 'deviate' do
@@ -4381,6 +6385,16 @@ describe 'RFC6020' do
 
 				describe 'reference' do
 					'0..1'
+
+					context '0 reference' do
+					end
+
+					context '1 reference' do
+					end
+
+					context '2 references' do
+					end
+
 				end # describe 'reference'
 
 			end # describe '7.18.3.1.  The deviation\'s Substatements'
@@ -4394,38 +6408,128 @@ describe 'RFC6020' do
 
 				describe 'config' do
 					'0..1'
+
+					context '0 config' do
+					end
+
+					context '1 config' do
+					end
+
+					context '2 configs' do
+					end
+
 				end # describe 'config'
 
 				describe 'default' do
 					'0..1'
+
+					context '0 default' do
+					end
+
+					context '1 default' do
+					end
+
+					context '2 defaults' do
+					end
+
 				end # describe 'default'
 
 				describe 'mandatory' do
 					'0..1'
+
+					context '0 mandatory' do
+					end
+
+					context '1 mandatory' do
+					end
+
+					context '2 mandatorys' do
+					end
+
 				end # describe 'mandatory'
 
 				describe 'max-elements' do
 					'0..1'
+
+					context '0 max-elements' do
+					end
+
+					context '1 max-elements' do
+					end
+
+					context '2 max-elementss' do
+					end
+
 				end # describe 'max-elements'
 
 				describe 'min-elements' do
 					'0..1'
+
+					context '0 min-elements' do
+					end
+
+					context '1 min-elements' do
+					end
+
+					context '2 min-elementss' do
+					end
+
 				end # describe 'min-elements'
 
 				describe 'must' do
 					'0..n'
+
+					context '0 must' do
+					end
+
+					context '1 must' do
+					end
+
+					context '2 musts' do
+					end
+
 				end # describe 'must'
 
 				describe 'type' do
 					'0..1'
+
+					context '0 type' do
+					end
+
+					context '1 type' do
+					end
+
+					context '2 types' do
+					end
+
 				end # describe 'type'
 
 				describe 'unique' do
 					'0..n'
+
+					context '0 unique' do
+					end
+
+					context '1 unique' do
+					end
+
+					context '2 uniques' do
+					end
+
 				end # describe 'unique'
 
 				describe 'units' do
 					'0..1'
+
+					context '0 units' do
+					end
+
+					context '1 units' do
+					end
+
+					context '2 unitss' do
+					end
+
 				end # describe 'units'
 
 			end # describe 'The deviates\'s Substatements'
@@ -5145,18 +7249,58 @@ describe 'RFC6020' do
 
 			describe 'description' do
 				'0..1'
+
+				context '0 description' do
+				end
+
+				context '1 description' do
+				end
+
+				context '2 descriptions' do
+				end
+
 			end # description 'description'
 
 			describe 'error-app-tag' do
 				'0..1'
+
+				context '0 error-app-tag' do
+				end
+
+				context '1 error-app-tag' do
+				end
+
+				context '2 error-app-tags' do
+				end
+
 			end # description 'error-app-tag'
 
 			describe 'error-message' do
 				'0..1'
+
+				context '0 error-message' do
+				end
+
+				context '1 error-message' do
+				end
+
+				context '2 error-messages' do
+				end
+
 			end # description 'error-message'
 
 			describe 'reference' do
 				'0..1'
+
+				context '0 reference' do
+				end
+
+				context '1 reference' do
+				end
+
+				context '2 references' do
+				end
+
 			end # description 'reference'
 
 		end # describe '9.2.4.1.  The range\'s Substatements'
@@ -5697,18 +7841,58 @@ describe 'RFC6020' do
 
 			describe 'description' do
 				'0..1'
+
+				context '0 description' do
+				end
+
+				context '1 description' do
+				end
+
+				context '2 descriptions' do
+				end
+
 			end # describe 'description'
 
 			describe 'error-app-tag' do
 				'0..1'
+
+				context '0 error-app-tag' do
+				end
+
+				context '1 error-app-tag' do
+				end
+
+				context '2 error-app-tags' do
+				end
+
 			end # describe 'error-app-tag'
 
 			describe 'error-message' do
 				'0..1'
+
+				context '0 error-message' do
+				end
+
+				context '1 error-message' do
+				end
+
+				context '2 error-messages' do
+				end
+
 			end # describe 'error-message'
 
 			describe 'reference' do
 				'0..1'
+
+				context '0 reference' do
+				end
+
+				context '1 reference' do
+				end
+
+				context '2 references' do
+				end
+
 			end # describe 'reference'
 
 		end # describe '9.4.4.1.  The length\'s Substatements'
@@ -5745,18 +7929,58 @@ describe 'RFC6020' do
 
 			describe 'description' do
 				'0..1'
+
+				context '0 description' do
+				end
+
+				context '1 description' do
+				end
+
+				context '2 descriptions' do
+				end
+
 			end # describe 'description'
 
 			describe 'error-app-tag' do
 				'0..1'
+
+				context '0 error-app-tag' do
+				end
+
+				context '1 error-app-tag' do
+				end
+
+				context '2 error-app-tags' do
+				end
+
 			end # describe 'error-app-tag'
 
 			describe 'error-message' do
 				'0..1'
+
+				context '0 error-message' do
+				end
+
+				context '1 error-message' do
+				end
+
+				context '2 error-messages' do
+				end
+
 			end # describe 'error-message'
 
 			describe 'reference' do
 				'0..1'
+
+				context '0 reference' do
+				end
+
+				context '1 reference' do
+				end
+
+				context '2 references' do
+				end
+
 			end # describe 'reference'
 
 		end # describe '9.4.6.1.  The pattern\'s Substatements'
@@ -5982,18 +8206,58 @@ describe 'RFC6020' do
 
 			describe 'description' do
 				'0..1'
+
+				context '0 description' do
+				end
+
+				context '1 description' do
+				end
+
+				context '2 descriptions' do
+				end
+
 			end # describe 'description'
 
 			describe 'reference' do
 				'0..1'
+
+				context '0 reference' do
+				end
+
+				context '1 reference' do
+				end
+
+				context '2 references' do
+				end
+
 			end # describe 'reference'
 
 			describe 'status' do
 				'0..1'
+
+				context '0 status' do
+				end
+
+				context '1 status' do
+				end
+
+				context '2 statuss' do
+				end
+
 			end # describe 'status'
 
 			describe 'value' do
 				'0..1'
+
+				context '0 value' do
+				end
+
+				context '1 value' do
+				end
+
+				context '2 values' do
+				end
+
 			end # describe 'value'
 
 		end # describe '9.6.4.1.  The enum\'s Substatements'
@@ -6192,18 +8456,58 @@ describe 'RFC6020' do
 
 			describe 'description' do
 				'0..1'
+
+				context '0 description' do
+				end
+
+				context '1 description' do
+				end
+
+				context '2 descriptions' do
+				end
+
 			end # describe 'description'
 
 			describe 'reference' do
 				'0..1'
+
+				context '0 reference' do
+				end
+
+				context '1 reference' do
+				end
+
+				context '2 references' do
+				end
+
 			end # describe 'reference'
 
 			describe 'status' do
 				'0..1'
+
+				context '0 status' do
+				end
+
+				context '1 status' do
+				end
+
+				context '2 statuss' do
+				end
+
 			end # describe 'status'
 
 			describe 'position' do
 				'0..1'
+
+				context '0 position' do
+				end
+
+				context '1 position' do
+				end
+
+				context '2 positions' do
+				end
+
 			end # describe 'position'
 
 		end # describe '9.7.4.1. The bit\'s Substatements'
