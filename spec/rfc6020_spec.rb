@@ -8453,12 +8453,99 @@ describe 'RFC6020' do
 					'0..n'
 
 					context '0 uses' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									choice choice1 {
+										case case1 {
+											leaf leaf1 { type string; }
+										}
+									}
+								}
+							EOB
+						}
+						let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf1_text ){ leaf1_element.add_text( 'leaf1' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf1 = config.edit( 'leaf1' ).set( 'leaf1' )
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '1 uses' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									grouping grouping1 {
+										leaf leaf2 { type string; }
+									}
+									choice choice1 {
+										case case1 {
+											leaf leaf1 { type string; }
+											uses grouping1;
+										}
+									}
+								}
+							EOB
+						}
+						let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf1_text ){ leaf1_element.add_text( 'leaf1' ) }
+						let!( :leaf2_element ){ root_xml.add_element( 'leaf2' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf2_text ){ leaf2_element.add_text( 'leaf2' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf1 = config.edit( 'leaf1' ).set( 'leaf1' )
+							leaf2 = config.edit( 'leaf2' ).set( 'leaf2' )
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '2 usess' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									grouping grouping1 {
+										leaf leaf2 { type string; }
+									}
+									grouping grouping2 {
+										leaf leaf3 { type string; }
+									}
+									choice choice1 {
+										case case1 {
+											leaf leaf1 { type string; }
+											uses grouping1;
+											uses grouping2;
+										}
+									}
+								}
+							EOB
+						}
+						let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf1_text ){ leaf1_element.add_text( 'leaf1' ) }
+						let!( :leaf2_element ){ root_xml.add_element( 'leaf2' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf2_text ){ leaf2_element.add_text( 'leaf2' ) }
+						let!( :leaf3_element ){ root_xml.add_element( 'leaf3' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf3_text ){ leaf3_element.add_text( 'leaf3' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf1 = config.edit( 'leaf1' ).set( 'leaf1' )
+							leaf2 = config.edit( 'leaf2' ).set( 'leaf2' )
+							leaf3 = config.edit( 'leaf3' ).set( 'leaf3' )
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 				end # describe 'uses'
