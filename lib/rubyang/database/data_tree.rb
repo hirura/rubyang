@@ -794,6 +794,8 @@ module Rubyang
 					child_node = @children.find{ |c| c.schema == child_schema }
 					unless child_node
 						case child_schema.model
+						when Rubyang::Model::Anyxml
+							child_node = Anyxml.new( self, @schema_tree, child_schema )
 						when Rubyang::Model::Container
 							child_node = Container.new( self, @schema_tree, child_schema )
 							# when start
@@ -900,6 +902,27 @@ module Rubyang
 				def load_override_json json_str
 					xml_str = json_to_xml( json_str )
 					self.load_override_xml xml_str
+				end
+			end
+
+			class Anyxml < Node
+				def set arg
+					@value = REXML::Document.new( arg )
+				end
+				def value
+					@value.to_s
+				end
+				def to_xml_recursive _doc, current_namespace
+					doc = _doc.add_element @value
+					unless @schema.namespace == current_namespace
+						current_namespace = @schema.namespace
+						doc.add_namespace current_namespace
+					end
+				end
+				def to_json_recursive _hash
+					raise "anyxml to json is not implemented"
+					hash = _hash
+					hash[@schema.model.arg] = @value.to_s
 				end
 			end
 

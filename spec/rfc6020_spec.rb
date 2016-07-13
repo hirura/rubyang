@@ -50,12 +50,73 @@ describe 'RFC6020' do
 				# TODO
 				describe 'anyxml' do
 					context '0 anyxml' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+								}
+							EOB
+						}
+						let!( :dummy ){ root_xml }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '1 anyxml' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									anyxml anyxml1;
+								}
+							EOB
+						}
+						let!( :anyxml1_element ){ root_xml.add_element( 'anyxml1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :anyxml1_child_element ){ anyxml1_element.add_element( 'child' ).add_namespace( 'http://module1.rspec/anyxml1' ) }
+						let!( :anyxml1_child_text ){ anyxml1_child_element.add_text( 'anyxml1' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							anyxml1 = config.edit( 'anyxml1' )
+							anyxml1.set( anyxml1_element.to_s )
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '2 anyxmls' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									anyxml anyxml1;
+									anyxml anyxml2;
+								}
+							EOB
+						}
+						let!( :anyxml1_element ){ root_xml.add_element( 'anyxml1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :anyxml1_child_element ){ anyxml1_element.add_element( 'child' ).add_namespace( 'http://module1.rspec/anyxml1' ) }
+						let!( :anyxml1_child_text ){ anyxml1_child_element.add_text( 'anyxml1' ) }
+						let!( :anyxml2_element ){ root_xml.add_element( 'anyxml2' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :anyxml2_child_element ){ anyxml2_element.add_element( 'child' ).add_namespace( 'http://module1.rspec/anyxml2' ) }
+						let!( :anyxml2_child_text ){ anyxml2_child_element.add_text( 'anyxml2' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							anyxml1 = config.edit( 'anyxml1' )
+							anyxml1.set( anyxml1_element.to_s )
+							anyxml2 = config.edit( 'anyxml2' )
+							anyxml2.set( anyxml2_element.to_s )
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 				end
 

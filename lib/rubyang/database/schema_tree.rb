@@ -816,6 +816,9 @@ module Rubyang
 						}
 					when Rubyang::Model::Submodule
 						yangs.push yang
+					when Rubyang::Model::Anyxml
+						arg = yang.arg
+						self.children.push Anyxml.new( yangs, arg, yang, self, parent_module )
 					when Rubyang::Model::Container
 						container_arg = yang.arg
 						grouping_list += yang.substmt( 'grouping' )
@@ -1170,6 +1173,13 @@ module Rubyang
 				end
 			end
 
+			class Anyxml < SchemaNode
+				def initialize *args
+					super
+					@logger = Rubyang::Logger.instance
+				end
+			end
+
 			class Container < InteriorSchemaNode
 				attr_accessor :whens, :musts
 				def initialize *args
@@ -1248,8 +1258,6 @@ module Rubyang
 			class Output < SchemaNode
 			end
 			class Notification < SchemaNode
-			end
-			class Anyxml < SchemaNode
 			end
 
 			def initialize yangs
