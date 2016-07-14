@@ -561,13 +561,72 @@ describe 'RFC6020' do
 
 				# TODO
 				describe 'identity' do
+
 					context '0 identity' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+								}
+							EOB
+						}
+						let!( :dummy ){ root_xml }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '1 identity' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									identity identity1;
+								}
+							EOB
+						}
+						let!( :dummy ){ root_xml }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '2 identitys' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									identity identity1;
+									identity identity2 {
+										base identity1;
+									}
+									leaf leaf1 {
+										type identityref {
+											base identity1;
+										}
+									}
+								}
+							EOB
+						}
+						let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+						let!( :leaf1_text ){ leaf1_element.add_text( 'identity2' ) }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							leaf1 = config.edit 'leaf1'
+							leaf1.set 'identity2'
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 				end
 

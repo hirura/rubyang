@@ -203,6 +203,16 @@ module Rubyang
 					result
 				end
 			end
+			class Identityref < Type
+				def initialize identity_list, type_stmt
+					@arg = 'identityref'
+					@base_arg = type_stmt.substmt( 'base' ).first.arg
+					@identity_list = identity_list
+				end
+				def valid? value
+					@identity_list.select{ |identity| (identity.substmt( 'base' ).first.arg rescue nil) == @base_arg }.any?{ |identity| identity.arg == value }
+				end
+			end
 
 			class Path
 				attr_reader :xpath
@@ -797,7 +807,7 @@ module Rubyang
 					end
 				end
 
-				def load_yang yang, yangs=@yangs, parent_module=yang, current_module=yang, grouping_list=[], typedef_list=[]
+				def load_yang yang, yangs=@yangs, parent_module=yang, current_module=yang, grouping_list=[], typedef_list=[], identity_list=[]
 					case yang
 					when Rubyang::Model::Module
 						yangs.push yang
@@ -806,13 +816,14 @@ module Rubyang
 						prefix_arg    = yang.substmt( 'prefix' )[0].arg
 						grouping_list += yang.substmt( 'grouping' )
 						typedef_list  += yang.substmt( 'typedef' )
+						identity_list += yang.substmt( 'identity' )
 						yang.substmt( 'include' ).each{ |i|
 							i.substmts( Rubyang::Model::DataDefStmtList ).each{ |s|
-								self.load_yang s, yangs, parent_module, i, i.substmt( 'grouping' ), i.substmt( 'typedef' )
+								self.load_yang s, yangs, parent_module, i, i.substmt( 'grouping' ), i.substmt( 'typedef' ), i.substmt( 'identity' )
 							}
 						}
 						yang.substmts( Rubyang::Model::DataDefStmtList ).each{ |s|
-							self.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+							self.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 						}
 					when Rubyang::Model::Submodule
 						yangs.push yang
@@ -823,61 +834,64 @@ module Rubyang
 						container_arg = yang.arg
 						grouping_list += yang.substmt( 'grouping' )
 						typedef_list  += yang.substmt( 'typedef' )
+						identity_list  += yang.substmt( 'identity' )
 						self.children.push Container.new( yangs, container_arg, yang, self, parent_module )
 						# when start
 						yang.substmt( "when" ).each{ |s|
-							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 						}
 						# end
 						# must start
 						yang.substmt( "must" ).each{ |s|
-							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 						}
 						# end
 						yang.substmts( Rubyang::Model::DataDefStmtList ).each{ |s|
-							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 						}
 					when Rubyang::Model::Leaf
 						leaf_arg = yang.arg
-						self.children.push Leaf.new( yangs, leaf_arg, yang, self, parent_module, current_module, typedef_list )
+						self.children.push Leaf.new( yangs, leaf_arg, yang, self, parent_module, current_module, typedef_list, identity_list )
 					when Rubyang::Model::LeafList
 						leaf_arg = yang.arg
-						self.children.push LeafList.new( yangs, leaf_arg, yang, self, parent_module, current_module, typedef_list )
+						self.children.push LeafList.new( yangs, leaf_arg, yang, self, parent_module, current_module, typedef_list, identity_list )
 						# min-elements start
 						yang.substmt( "min-elements" ).each{ |s|
-							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 						}
 						# end
 						# max-elements start
 						yang.substmt( "max-elements" ).each{ |s|
-							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 						}
 						# end
 					when Rubyang::Model::List
 						list_arg = yang.arg
 						grouping_list += yang.substmt( 'grouping' )
 						typedef_list  += yang.substmt( 'typedef' )
+						identity_list  += yang.substmt( 'identity' )
 						self.children.push List.new( yangs, list_arg, yang, self, parent_module )
 						yang.substmts( Rubyang::Model::DataDefStmtList ).each{ |s|
-							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 						}
 						# min-elements start
 						yang.substmt( "min-elements" ).each{ |s|
-							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 						}
 						# end
 						# max-elements start
 						yang.substmt( "max-elements" ).each{ |s|
-							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 						}
 						# end
 					when Rubyang::Model::Choice
 						choice_arg = yang.arg
 						grouping_list += yang.substmt( 'grouping' )
 						typedef_list  += yang.substmt( 'typedef' )
+						identity_list  += yang.substmt( 'identity' )
 						self.children.push Choice.new( yangs, choice_arg, yang, self, parent_module )
 						yang.substmts( Rubyang::Model::DataDefStmtList ).each{ |s|
-							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 						}
 					when Rubyang::Model::Case
 						case_arg = yang.arg
@@ -885,15 +899,15 @@ module Rubyang
 						typedef_list  += yang.substmt( 'typedef' )
 						self.children.push Case.new( yangs, case_arg, yang, self, parent_module )
 						yang.substmts( Rubyang::Model::DataDefStmtList ).each{ |s|
-							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+							self.children.last.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 						}
 					when Rubyang::Model::Augment
 						target_node = self.resolve_node( yang.arg )
 						yang.substmts( Rubyang::Model::DataDefStmtList ).each{ |s|
-							target_node.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+							target_node.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 						}
 					when Rubyang::Model::Uses
-						self.resolve_uses( yang, yangs, parent_module, current_module, grouping_list, typedef_list )
+						self.resolve_uses( yang, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list )
 					# when start
 					when Rubyang::Model::When
 						require 'yaml'
@@ -934,7 +948,7 @@ module Rubyang
 					@logger = Rubyang::Logger.instance
 				end
 
-				def resolve_uses uses_stmt, yangs, parent_module, current_module, grouping_list, typedef_list
+				def resolve_uses uses_stmt, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 					case uses_stmt.arg
 					when /^[^:]+$/
 						arg = uses_stmt.arg
@@ -942,8 +956,9 @@ module Rubyang
 							grouping_stmt = grouping_list.find{ |s| s.arg == arg }
 							grouping_list += grouping_stmt.substmt( 'grouping' )
 							typedef_list  += grouping_stmt.substmt( 'typedef' )
+							identity_list += grouping_stmt.substmt( 'identity' )
 							grouping_stmt.substmts( Rubyang::Model::DataDefStmtList ).each{ |s|
-								self.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+								self.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 							}
 						else
 							include_submodule = current_module.substmt( 'include' ).map{ |s|
@@ -954,8 +969,9 @@ module Rubyang
 							grouping_stmt = include_submodule.substmt( 'grouping' ).find{ |s| s.arg == arg }
 							grouping_list = include_submodule.substmt( 'grouping' ) + grouping_stmt.substmt( 'grouping' )
 							typedef_list  = include_submodule.substmt( 'typedef' )  + grouping_stmt.substmt( 'typedef' )
+							identity_list = include_submodule.substmt( 'identity' )  + grouping_stmt.substmt( 'identity' )
 							grouping_stmt.substmt( Rubyang::Model::DataDefStmtList ).each{ |s|
-								self.load_yang s, yangs, parent_module, include_submodule, grouping_list, typedef_list
+								self.load_yang s, yangs, parent_module, include_submodule, grouping_list, typedef_list, identity_list
 							}
 						end
 					when /^[^:]+:[^:]+$/
@@ -967,8 +983,9 @@ module Rubyang
 								grouping_stmt = grouping_list.find{ |s| s.arg == arg }
 								grouping_list += grouping_stmt.substmt( 'grouping' )
 								typedef_list  += grouping_stmt.substmt( 'typedef' )
+								identity_list += grouping_stmt.substmt( 'identity' )
 								grouping_stmt.substmts( Rubyang::Model::DataDefStmtList ).each{ |s|
-									self.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+									self.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 								}
 							else
 								import_module = yangs.find{ |y|
@@ -977,8 +994,9 @@ module Rubyang
 								grouping_stmt = import_module.substmt( 'grouping' ).find{ |s| s.arg == arg }
 								grouping_list = import_module.substmt( 'grouping' ) + grouping_stmt.substmt( 'grouping' )
 								typedef_list  = import_module.substmt( 'typedef' )  + grouping_stmt.substmt( 'typedef' )
+								identity_list = import_module.substmt( 'identity' )  + grouping_stmt.substmt( 'identity' )
 								grouping_stmt.substmts( Rubyang::Model::DataDefStmtList ).each{ |s|
-									self.load_yang s, yangs, parent_module, import_module, grouping_list, typedef_list
+									self.load_yang s, yangs, parent_module, import_module, grouping_list, typedef_list, identity_list
 								}
 							end
 						when Rubyang::Model::Submodule
@@ -987,8 +1005,9 @@ module Rubyang
 								grouping_stmt = grouping_list.find{ |s| s.arg == arg }
 								grouping_list += grouping_stmt.substmt( 'grouping' )
 								typedef_list  += grouping_stmt.substmt( 'typedef' )
+								identity_list += grouping_stmt.substmt( 'identity' )
 								grouping_stmt.substmts( Rubyang::Model::DataDefStmtList ).each{ |s|
-									self.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list
+									self.load_yang s, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
 								}
 							else
 								import_module = yangs.find{ |y|
@@ -997,8 +1016,9 @@ module Rubyang
 								grouping_stmt = import_module.substmt( 'grouping' ).find{ |s| s.arg == arg }
 								grouping_list = import_module.substmt( 'grouping' ) + grouping_stmt.substmt( 'grouping' )
 								typedef_list  = import_module.substmt( 'typedef' )  + grouping_stmt.substmt( 'typedef' )
+								identity_list = import_module.substmt( 'identity' )  + grouping_stmt.substmt( 'identity' )
 								grouping_stmt.substmts( Rubyang::Model::DataDefStmtList ).each{ |s|
-									self.load_yang s, yangs, parent_module, import_module, grouping_list, typedef_list
+									self.load_yang s, yangs, parent_module, import_module, grouping_list, typedef_list, identity_list
 								}
 							end
 						else
@@ -1025,17 +1045,17 @@ module Rubyang
 			end
 
 			class LeafSchemaNode < SchemaNode
-				attr_reader :yangs, :arg, :yang, :parent, :module, :current_module, :typedef_list
-				def initialize yangs, arg, yang, parent, _module, current_module, typedef_list
+				attr_reader :yangs, :arg, :yang, :parent, :module, :current_module, :typedef_list, :identity_list
+				def initialize yangs, arg, yang, parent, _module, current_module, typedef_list, identity_list
 					super yangs, arg, yang, parent, _module
-					@type = self.resolve_type yang.substmt( 'type' )[0], yangs, current_module, typedef_list
+					@type = self.resolve_type yang.substmt( 'type' )[0], yangs, current_module, typedef_list, identity_list
 				end
 
 				def type
 					@type
 				end
 
-				def resolve_type type_stmt, yangs, current_module, typedef_list
+				def resolve_type type_stmt, yangs, current_module, typedef_list, identity_list
 					case type_stmt.arg
 					when 'int8', 'int16', 'int32', 'int64', 'uint8', 'uint16', 'uint32', 'uint64'
 						type = IntegerType.new type_stmt.arg
@@ -1101,15 +1121,17 @@ module Rubyang
 					when 'union'
 						type = UnionType.new
 						type_stmt.substmt( "type" ).each{ |s|
-							type.add_type( resolve_type s, yangs, current_module, typedef_list )
+							type.add_type( resolve_type s, yangs, current_module, typedef_list, identity_list )
 						}
+					when 'identityref'
+						type = Identityref.new identity_list, type_stmt
 					else
 						case type_stmt.arg
 						when /^[^:]+$/
 							arg = type_stmt.arg
 							if typedef_list.find{ |s| s.arg == arg }
 								typedef_stmt = typedef_list.find{ |s| s.arg == arg }
-								type = resolve_type typedef_stmt.substmt( 'type' )[0], yangs, current_module, typedef_list
+								type = resolve_type typedef_stmt.substmt( 'type' )[0], yangs, current_module, typedef_list, identity_list
 							else
 								include_submodule = current_module.substmt( 'include' ).map{ |s|
 									yangs.find{ |y| y.arg == s.arg }
@@ -1117,7 +1139,7 @@ module Rubyang
 									s.substmt( 'typedef' ).find{ |t| t.arg == arg }
 								}
 								typedef_stmt = include_submodule.substmt( 'typedef' ).find{ |s| s.arg == arg }
-								type = resolve_type typedef_stmt.substmt( 'type' )[0], yangs, include_submodule, include_submodule.substmt( 'typedef' )
+								type = resolve_type typedef_stmt.substmt( 'type' )[0], yangs, include_submodule, include_submodule.substmt( 'typedef' ), include_submodule.substmt( 'identity' )
 							end
 						when /^[^:]+:[^:]+$/
 							prefix, arg = type_stmt.arg.split(':')
@@ -1132,7 +1154,7 @@ module Rubyang
 										y.arg == current_module.substmt( 'import' ).find{ |s| s.substmt( 'prefix' )[0].arg == prefix }.arg
 									}
 									typedef_stmt = import_module.substmt( 'typedef' ).find{ |s| s.arg == arg }
-									type = resolve_type typedef_stmt.substmt( 'type' )[0], yangs, import_module, import_module.substmt( 'typedef' )
+									type = resolve_type typedef_stmt.substmt( 'type' )[0], yangs, import_module, import_module.substmt( 'typedef' ), import_module.substmt( 'identity' )
 								end
 							when Rubyang::Model::Submodule
 								case prefix
@@ -1144,7 +1166,7 @@ module Rubyang
 										y.arg == current_module.substmt( 'import' ).find{ |s| s.substmt( 'prefix' )[0].arg == prefix }.arg
 									}
 									typedef_stmt = import_module.substmt( 'typedef' ).find{ |s| s.arg == arg }
-									type = resolve_type typedef_stmt.substmt( 'type' )[0], yangs, import_module, import_module.substmt( 'typedef' )
+									type = resolve_type typedef_stmt.substmt( 'type' )[0], yangs, import_module, import_module.substmt( 'typedef' ), import_module.substmt( 'identity' )
 								end
 							else
 								raise
