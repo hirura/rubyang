@@ -1148,7 +1148,7 @@ module Rubyang
 								case prefix
 								when current_module.substmt( 'prefix' )[0].arg
 									typedef_stmt = typedef_list.find{ |s| s.arg == arg }
-									type = resolve_type typedef_stmt.substmt( 'type' )[0], yangs, current_module, typedef_list
+									type = resolve_type typedef_stmt.substmt( 'type' )[0], yangs, current_module, typedef_list, identity_list
 								else
 									import_module = yangs.find{ |y|
 										y.arg == current_module.substmt( 'import' ).find{ |s| s.substmt( 'prefix' )[0].arg == prefix }.arg
@@ -1160,7 +1160,7 @@ module Rubyang
 								case prefix
 								when current_module.substmt( 'belongs-to' )[0].substmt( 'prefix' )[0].arg
 									typedef_stmt = typedef_list.find{ |s| s.arg == arg }
-									type = resolve_type typedef_stmt.substmt( 'type' )[0], yangs, current_module, typedef_list
+									type = resolve_type typedef_stmt.substmt( 'type' )[0], yangs, current_module, typedef_list, identity_list
 								else
 									import_module = yangs.find{ |y|
 										y.arg == current_module.substmt( 'import' ).find{ |s| s.substmt( 'prefix' )[0].arg == prefix }.arg
