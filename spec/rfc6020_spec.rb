@@ -473,12 +473,60 @@ describe 'RFC6020' do
 				# TODO
 				describe 'extension' do
 					context '0 extension' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+								}
+							EOB
+						}
+						let!( :dummy ){ root_xml }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '1 extension' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									extension extension1;
+								}
+							EOB
+						}
+						let!( :dummy ){ root_xml }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '2 extensions' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									extension extension1;
+									extension extension2;
+								}
+							EOB
+						}
+						let!( :dummy ){ root_xml }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 				end
 
@@ -1210,13 +1258,60 @@ describe 'RFC6020' do
 
 				# TODO
 				describe 'reference' do
+
 					context '0 reference' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+								}
+							EOB
+						}
+						let!( :dummy ){ root_xml }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '1 reference' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									reference reference1;
+								}
+							EOB
+						}
+						let!( :dummy ){ root_xml }
+						subject {
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+							config = db.configure
+							config.to_xml( pretty: true )
+						}
+						it { is_expected.to eq doc_xml_pretty }
 					end
 
 					context '2 references' do
+						let( :yang_str ){
+							<<-EOB
+								module module1 {
+									namespace "http://module1.rspec/";
+									prefix module1;
+									reference reference1;
+									reference reference2;
+								}
+							EOB
+						}
+						let!( :dummy ){ root_xml }
+						subject { ->{
+							db.load_model Rubyang::Model::Parser.parse( yang_str )
+						} }
+						it { is_expected.to raise_exception Exception }
 					end
 				end
 
@@ -14294,6 +14389,7 @@ end # describe 'RFC6020'
      /ex:stats/ex:port[3]
 
 10. Updating a Module
+
 11. YIN
 11.1. Formal YIN Definition
 11.1.1. Usage Example
@@ -14348,6 +14444,7 @@ end # describe 'RFC6020'
        </list>
      </module>
 12. YANG ABNF Grammar
+
 13. Error Responses for YANG Related Errors
 13.1. Error Message for Data That Violates a unique Statement
 13.2. Error Message for Data That Violates a max-elements Statement
@@ -14357,12 +14454,17 @@ end # describe 'RFC6020'
 13.6. Error Message for Data That Does Not Match a leafref Type
 13.7. Error Message for Data That Violates a mandatory choice Statement
 13.8. Error Message for the "insert" Operation
+
 14. IANA Considerations
 14.1. Media type application/yang
 14.2. Media type application/yin+xml
+
 15. Security Considerations
+
 16. Contributors
+
 17. Acknowledgements
+
 18. References
 18.1. Normative References
 18.2. Informative References
