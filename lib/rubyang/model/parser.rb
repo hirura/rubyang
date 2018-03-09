@@ -129,18 +129,22 @@ module Rubyang
 
 				scanre = Regexp.union( scanre_list.map{ |scanre| scanre[1] } )
 
+				next_to_kw = false
 				until s.eos?
 					token = s.scan( scanre )
 					#p token
 					case token
-					when scanres["slcomment"] then ;
-					when scanres["blcomment"] then ;
+					when scanres["slcomment"] then
+						;
+					when scanres["blcomment"] then
+						;
 					when scanres["dqstr"] then
 						token_ = token.gsub(/^"/,'').gsub(/"$/,'').gsub(/\\n/,"\n").gsub(/\\t/,"\t").gsub(/\\"/,"\"").gsub(/\\\\/,"\\")
 						#if 0 == (token_ =~ URI.regexp)
 							#@tokens.push [:URI, token_]
 						#else
 						@tokens.push [:STRING, token_]
+						next_to_kw = false
 						#end
 					when scanres["sqstr"] then
 						token_ = token.gsub(/^'/,'').gsub(/'$/,'')
@@ -149,24 +153,50 @@ module Rubyang
 						#else @tokens.push [:STRING, token_]
 						#end
 						@tokens.push [:STRING, token_]
+						next_to_kw = false
 					when scanres["nqstr"] then
-						case token
-						when *(keywords.values) then @tokens.push [keywords.key(token), token]
-						else @tokens.push [:STRING, token]
+						if (! next_to_kw) and keywords.values.include?(token)
+							@tokens.push [keywords.key(token), token]
+							next_to_kw = true
+						else
+							@tokens.push [:STRING, token]
+							next_to_kw = false
 						end
-					when scanres["+"]  then @tokens.push ["+", token]
-					when scanres[";"]  then @tokens.push [";", token]
-					when scanres[":"]  then @tokens.push [":", token]
-					when scanres["/"]  then @tokens.push ["/", token]
-					when scanres["|"]  then @tokens.push ["|", token]
-					when scanres[".."] then @tokens.push ["..", token]
-					when scanres["="]  then @tokens.push ["=", token]
-					when scanres["{"]  then @tokens.push ["{", token]
-					when scanres["}"]  then @tokens.push ["}", token]
-					when scanres["wsp"] then ;#@tokens.push [:WSP, token]
-					when scanres["newline"] then ;#@tokens.push [:NEWLINE, token]
-					when scanres["return"] then ;#@tokens.push [:RETURN, token]
-					else raise "token not match to any scanres: #{token.inspect}"
+					when scanres["+"] then
+						@tokens.push ["+", token]
+						next_to_kw = false
+					when scanres[";"] then
+						@tokens.push [";", token]
+						next_to_kw = false
+					when scanres[":"] then
+						@tokens.push [":", token]
+						next_to_kw = false
+					when scanres["/"] then
+						@tokens.push ["/", token]
+						next_to_kw = false
+					when scanres["|"] then
+						@tokens.push ["|", token]
+						next_to_kw = false
+					when scanres[".."] then
+						@tokens.push ["..", token]
+						next_to_kw = false
+					when scanres["="] then
+						@tokens.push ["=", token]
+						next_to_kw = false
+					when scanres["{"] then
+						@tokens.push ["{", token]
+						next_to_kw = false
+					when scanres["}"] then
+						@tokens.push ["}", token]
+						next_to_kw = false
+					when scanres["wsp"] then
+						; #@tokens.push [:WSP, token]
+					when scanres["newline"] then
+						; #@tokens.push [:NEWLINE, token]
+					when scanres["return"] then
+						; #@tokens.push [:RETURN, token]
+					else
+						raise "token not match to any scanres: #{token.inspect}"
 					end
 				end
 
