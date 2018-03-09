@@ -1441,7 +1441,7 @@ rule
 
 	"integer-value"			:	"string"
 							{
-								unless /^[0-9]|[1-9][0-9]+$/ =~ val[0]
+								unless /^-?(?:[1-9][0-9]*)|0$/ =~ val[0]
 									raise ParseError, "bad integer-value, but '#{val[0]}'"
 								end
 								result = val[0]
