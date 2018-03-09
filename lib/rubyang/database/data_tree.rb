@@ -79,7 +79,13 @@ module Rubyang
 						child = edit( e.name )
 						unless e.has_elements?
 							if e.has_text?
-								child.set e.text
+								classes_have_set = [
+									Rubyang::Database::DataTree::Leaf,
+									Rubyang::Database::DataTree::LeafList,
+								]
+								if classes_have_set.include?(child.class)
+									child.set e.text
+								end
 							end
 						end
 						child.load_merge_xml_recursive e

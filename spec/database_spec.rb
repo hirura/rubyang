@@ -135,6 +135,39 @@ describe Rubyang::Database do
 			it { is_expected.to eq doc_xml_pretty }
 		end
 
+		describe 'with container that does not have child leaf' do
+			let( :yang_str ){
+				<<-EOB
+					module module1 {
+						namespace "http://module1.rspec/";
+						prefix module1;
+						leaf leaf1 { type int8; }
+						container container1 { leaf leaf2 { type string; } }
+					}
+				EOB
+			}
+			let( :value ){ '0' }
+			let!( :leaf1_element ){ root_xml.add_element( 'leaf1' ).add_namespace( 'http://module1.rspec/' ) }
+			let!( :leaf1_text ){ leaf1_element.add_text( value ) }
+			let!( :container1_element ){ root_xml.add_element( 'container1' ).add_namespace( 'http://module1.rspec/' ) }
+			subject {
+				doc_xml_pretty
+
+				doc_xml.elements['config/container1'].add_text( "    \n" )
+				pretty_formatter = REXML::Formatters::Pretty.new( 2 )
+				pretty_formatter.compact = true
+				output = ''
+				pretty_formatter.write( doc_xml, output )
+				output
+
+				db.load_model Rubyang::Model::Parser.parse( yang_str )
+				config = db.configure
+				config.load_merge_xml output
+				config.to_xml( pretty: true )
+			}
+			it { is_expected.to eq doc_xml_pretty }
+		end
+
 		describe 'with list' do
 			let( :yang_str ){
 				<<-EOB
