@@ -442,6 +442,14 @@ rule
 							{
 								result = [val[0]]
 							}
+					|	"fraction-digits-stmt" "range-stmt"
+							{
+								result = [val[0], val[1]]
+							}
+					|	"range-stmt" "fraction-digits-stmt"
+							{
+								result = [val[1], val[0]]
+							}
 
 	"fraction-digits-stmt"		:	"fraction-digits-keyword" "fraction-digits-arg-str" "stmtend"
 							{
@@ -1433,7 +1441,7 @@ rule
 
 	"integer-value"			:	"string"
 							{
-								unless /^[1-9][0-9]*$/ =~ val[0]
+								unless /^[0-9]|[1-9][0-9]+$/ =~ val[0]
 									raise ParseError, "bad integer-value, but '#{val[0]}'"
 								end
 								result = val[0]

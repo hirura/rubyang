@@ -85,6 +85,7 @@ describe Rubyang::Model do
 	let( :type_uint16_stmt )      { Rubyang::Model::Type.new( 'uint16', type_uint16_substmts ) }
 	let( :type_uint32_stmt )      { Rubyang::Model::Type.new( 'uint32', type_uint32_substmts ) }
 	let( :type_uint64_stmt )      { Rubyang::Model::Type.new( 'uint64', type_uint64_substmts ) }
+	let( :type_decimal64_stmt )   { Rubyang::Model::Type.new( 'decimal64', type_decimal64_substmts ) }
 	let( :type_union_stmt )       { Rubyang::Model::Type.new( 'union', type_union_substmts ) }
 	let( :type_derived_type_stmt ){ Rubyang::Model::Type.new( 'derived-type', type_derived_type_substmts ) }
 	let( :range1_stmt )           { Rubyang::Model::Range.new( '1', range1_substmts ) }
@@ -197,6 +198,7 @@ describe Rubyang::Model do
 	let( :type_uint8_substmts )   { [] }
 	let( :type_uint16_substmts )  { [] }
 	let( :type_uint32_substmts )  { [] }
+	let( :type_decimal64_substmts ){ [] }
 	let( :type_uint64_substmts )  { [] }
 	let( :type_union_substmts )   { [] }
 	let( :type_derived_type_substmts ){ [] }
@@ -2273,21 +2275,69 @@ describe Rubyang::Model do
 		end
 
 		context 'with built-in decimal64 argument with decimal64-specification' do
-			let( :yang_str ){
-				<<-EOB
-					module module1 {
-						namespace "http://module1.rspec/";
-						prefix module1;
-						leaf leaf1 { type decimal64 { fraction-digits 1; } }
-					}
-				EOB
-			}
-			let( :stmt_tree ){ module1_stmt }
-			let( :module1_substmts ){ [namespace_stmt, prefix_stmt, leaf1_stmt] }
-			let( :leaf1_substmts ){ [type_decimal64_stmt] }
-			let( :type_decimal64_substmts ){ [fraction_digits1_stmt] }
-			subject { Rubyang::Model::Parser.parse( yang_str ).to_yaml }
-			it { is_expected.to eq stmt_tree_yaml }
+			context "without range" do
+				let( :yang_str ){
+					<<-EOB
+						module module1 {
+							namespace "http://module1.rspec/";
+							prefix module1;
+							leaf leaf1 { type decimal64 { fraction-digits 1; } }
+						}
+					EOB
+				}
+				let( :stmt_tree ){ module1_stmt }
+				let( :module1_substmts ){ [namespace_stmt, prefix_stmt, leaf1_stmt] }
+				let( :leaf1_substmts ){ [type_decimal64_stmt] }
+				let( :type_decimal64_substmts ){ [fraction_digits1_stmt] }
+				subject { Rubyang::Model::Parser.parse( yang_str ).to_yaml }
+				it { is_expected.to eq stmt_tree_yaml }
+			end
+
+			context "with range" do
+				let( :yang_str ){
+					<<-EOB
+						module module1 {
+							namespace "http://module1.rspec/";
+							prefix module1;
+							leaf leaf1 {
+								type decimal64 {
+									fraction-digits 1;
+									range 1;
+								}
+							}
+						}
+					EOB
+				}
+				let( :stmt_tree ){ module1_stmt }
+				let( :module1_substmts ){ [namespace_stmt, prefix_stmt, leaf1_stmt] }
+				let( :leaf1_substmts ){ [type_decimal64_stmt] }
+				let( :type_decimal64_substmts ){ [fraction_digits1_stmt, range1_stmt] }
+				subject { Rubyang::Model::Parser.parse( yang_str ).to_yaml }
+				it { is_expected.to eq stmt_tree_yaml }
+			end
+
+			context "with range before fraction-digits" do
+				let( :yang_str ){
+					<<-EOB
+						module module1 {
+							namespace "http://module1.rspec/";
+							prefix module1;
+							leaf leaf1 {
+								type decimal64 {
+									range 1;
+									fraction-digits 1;
+								}
+							}
+						}
+					EOB
+				}
+				let( :stmt_tree ){ module1_stmt }
+				let( :module1_substmts ){ [namespace_stmt, prefix_stmt, leaf1_stmt] }
+				let( :leaf1_substmts ){ [type_decimal64_stmt] }
+				let( :type_decimal64_substmts ){ [fraction_digits1_stmt, range1_stmt] }
+				subject { Rubyang::Model::Parser.parse( yang_str ).to_yaml }
+				it { is_expected.to eq stmt_tree_yaml }
+			end
 		end
 
 		context 'with built-in string argument' do

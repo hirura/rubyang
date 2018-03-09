@@ -89,6 +89,15 @@ module Rubyang
 					result
 				end
 			end
+			class Decimal64Type < Type
+				def initialize arg
+					@arg = arg
+				end
+				def valid? value
+					result = true
+					result
+				end
+			end
 			class StringType < Type
 				attr_reader :length, :pattern
 				def initialize
@@ -1033,6 +1042,8 @@ module Rubyang
 							    self
 						    when '..'
 							    self
+						    when /[^:]+:[^:]+/
+							    @children.find{ |c| [c.prefix, c.model.arg].join(':') == path_splitted.first }
 						    else
 							    @children.find{ |c| c.model.arg == path_splitted.first }
 						    end
@@ -1067,6 +1078,8 @@ module Rubyang
 								raise ArgumentError, "#{s} is not valid"
 							end
 						}
+					when 'decimal64'
+						type = Decimal64Type.new type_stmt.arg
 					when 'string'
 						type = StringType.new
 						type_stmt.substmts( Rubyang::Model::TypeBodyStmtList ).each{ |s|
