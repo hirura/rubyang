@@ -1,9 +1,8 @@
 # rubyang
 
 [![Build Status](https://travis-ci.org/hirura/rubyang.svg?branch=master)](https://travis-ci.org/hirura/rubyang)
-[![Code Climate](https://codeclimate.com/github/hirura/rubyang/badges/gpa.svg)](https://codeclimate.com/github/hirura/rubyang)
-[![Test Coverage](https://codeclimate.com/github/hirura/rubyang/badges/coverage.svg)](https://codeclimate.com/github/hirura/rubyang/coverage)
-[![Issue Count](https://codeclimate.com/github/hirura/rubyang/badges/issue_count.svg)](https://codeclimate.com/github/hirura/rubyang)
+[![Maintainability](https://api.codeclimate.com/v1/badges/05f5fd598d75872b22d0/maintainability)](https://codeclimate.com/github/hirura/rubyang/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/05f5fd598d75872b22d0/test_coverage)](https://codeclimate.com/github/hirura/rubyang/test_coverage)
 [![Gem Version](https://badge.fury.io/rb/rubyang.svg)](https://badge.fury.io/rb/rubyang)
 
 YANG parser and tree structure data store
