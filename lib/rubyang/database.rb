@@ -11,7 +11,7 @@ module Rubyang
 		def initialize
 			@yangs       = Array.new
 			@schema_tree = SchemaTree.new @yangs
-			@data_tree   = DataTree.new   @schema_tree
+			@config_tree = DataTree.new @schema_tree, Rubyang::Database::DataTree::Mode::CONFIG
 		end
 
 		def to_s parent=true
@@ -19,7 +19,7 @@ module Rubyang
 			if parent
 				vars.push "@yangs=#{@yangs.to_s}"
 				vars.push "@schema_tree=#{@schema_tree.to_s( false )}"
-				vars.push "@data_tree=#{@data_tree.to_s( false )}"
+				vars.push "@config_tree=#{@config_tree.to_s( false )}"
 			end
 			head + vars.join(', ') + tail
 		end
@@ -29,11 +29,11 @@ module Rubyang
 		end
 
 		def configure
-			@data_tree.root
+			@config_tree.root
 		end
 
 		def configuration
-			@data_tree.root
+			@config_tree.root
 		end
 	end
 end

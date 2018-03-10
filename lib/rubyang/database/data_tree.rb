@@ -14,12 +14,17 @@ module Rubyang
 		class DataTree
 			include DRb::DRbUndumped
 
+			module Mode
+				CONFIG = :config
+			end
+
 			class Node
 				attr_reader :parent, :schema_tree, :schema, :children
-				def initialize parent, schema_tree, schema
+				def initialize parent, schema_tree, schema, mode
 					@parent = parent
 					@schema_tree = schema_tree
 					@schema = schema
+					@mode = mode
 					@children = []
 					@logger = Rubyang::Logger.instance
 				end
@@ -801,20 +806,20 @@ module Rubyang
 					unless child_node
 						case child_schema.model
 						when Rubyang::Model::Anyxml
-							child_node = Anyxml.new( self, @schema_tree, child_schema )
+							child_node = Anyxml.new( self, @schema_tree, child_schema, @mode )
 						when Rubyang::Model::Container
-							child_node = Container.new( self, @schema_tree, child_schema )
+							child_node = Container.new( self, @schema_tree, child_schema, @mode )
 							# when start
 							unless child_node.evaluate_whens.value
 								raise "#{arg} is not valid because of 'when' conditions"
 							end
 							# end
 						when Rubyang::Model::Leaf
-							child_node = Leaf.new( self, @schema_tree, child_schema )
+							child_node = Leaf.new( self, @schema_tree, child_schema, @mode )
 						when Rubyang::Model::List
-							child_node = List.new( self, @schema_tree, child_schema )
+							child_node = List.new( self, @schema_tree, child_schema, @mode )
 						when Rubyang::Model::LeafList
-							child_node = LeafList.new( self, @schema_tree, child_schema )
+							child_node = LeafList.new( self, @schema_tree, child_schema, @mode )
 						else
 							raise ArgumentError, "#{arg} NOT match"
 						end
@@ -978,7 +983,7 @@ module Rubyang
 					child_node = @children.find{ |c| c.key_values == args }
 					unless child_node
 						begin
-							child_node = ListElement.new( self, @schema_tree, @schema, args )
+							child_node = ListElement.new( self, @schema_tree, @schema, @mode, args )
 						rescue
 							raise ArgumentError, "#{args} NOT match"
 						end
@@ -1013,10 +1018,11 @@ module Rubyang
 			end
 
 			class ListElement < InteriorNode
-				def initialize parent, schema_tree, schema, key_values
+				def initialize parent, schema_tree, schema, mode, key_values
 					@parent = parent
 					@schema_tree = schema_tree
 					@schema = schema
+					@mode = mode
 					@children = []
 					@key_values = key_values
 					@schema.keys.zip( key_values ).each{ |key, value|
@@ -1048,7 +1054,7 @@ module Rubyang
 					child_node = @children.find{ |c| c.value == arg }
 					unless child_node
 						begin
-							child_node = LeafListElement.new( self, @schema_tree, @schema, arg )
+							child_node = LeafListElement.new( self, @schema_tree, @schema, @mode, arg )
 						rescue
 							raise ArgumentError
 						end
@@ -1066,10 +1072,11 @@ module Rubyang
 
 			class LeafListElement < LeafNode
 				attr_accessor :value
-				def initialize parent, schema_tree, schema, value
+				def initialize parent, schema_tree, schema, mode, value
 					@parent = parent
 					@schema_tree = schema_tree
 					@schema = schema
+					@mode = mode
 					@value = value
 				end
 				def to_xml_recursive _doc, current_namespace
@@ -1083,8 +1090,9 @@ module Rubyang
 			end
 
 			attr_accessor :component_manager
-			def initialize schema_tree
-				@root = Root.new( self, schema_tree, schema_tree.root )
+			def initialize schema_tree, mode=Rubyang::Database::DataTree::Mode::CONFIG
+				@root = Root.new( self, schema_tree, schema_tree.root, mode )
+				@mode = mode
 				@history = Array.new
 				@component_manager = Rubyang::Database::ComponentManager.new
 			end
@@ -1106,4 +1114,3 @@ module Rubyang
 		end
 	end
 end
-
