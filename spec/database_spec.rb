@@ -508,6 +508,67 @@ describe Rubyang::Database do
 		end
 	end
 
+	describe '#delete' do
+		context 'leaf' do
+			let( :yang_str ){
+				<<-EOB
+				module module1 {
+					namespace "http://module1.rspec/";
+					prefix module1;
+					leaf leaf1 { type int8; }
+				}
+				EOB
+			}
+			context 'when valid element' do
+				let( :value ){ '0' }
+				let!( :no_elements ){ root_xml }
+				subject {
+					db.load_model Rubyang::Model::Parser.parse( yang_str )
+					config = db.configure
+					leaf1 = config.edit 'leaf1'
+					leaf1.set value
+					config.delete 'leaf1'
+					config.to_xml( pretty: true )
+				}
+				it { is_expected.to eq doc_xml_pretty }
+			end
+		end
+
+		context 'list' do
+			let( :yang_str ){
+				<<-EOB
+				module module1 {
+					namespace "http://module1.rspec/";
+					prefix module1;
+					list list1 {
+						key leaf1;
+						leaf leaf1 {
+							type int8;
+						}
+					}
+				}
+				EOB
+			}
+			context 'when valid element' do
+				let( :value1 ){ '1' }
+				let( :value2 ){ '2' }
+				let!( :list1_element2 ){ root_xml.add_element( 'list1' ).add_namespace( 'http://module1.rspec/' ) }
+				let!( :leaf1_element2 ){ list1_element2.add_element( 'leaf1' ) }
+				let!( :leaf1_element2_text2 ){ leaf1_element2.add_text( value2 ) }
+				let!( :no_elements ){ root_xml }
+				subject {
+					db.load_model Rubyang::Model::Parser.parse( yang_str )
+					config = db.configure
+					config.edit( 'list1' ).edit( value1 )
+					config.edit( 'list1' ).edit( value2 )
+					config.edit( 'list1' ).delete value1
+					config.to_xml( pretty: true )
+				}
+				it { is_expected.to eq doc_xml_pretty }
+			end
+		end
+	end
+
 	describe 'temporal list 2' do
 		let( :yang_str ){
 			<<-EOB

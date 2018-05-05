@@ -942,6 +942,11 @@ module Rubyang
 						raise "too many match to xpath: #{arg}"
 					end
 				end
+				def delete arg
+					child_schema = find_child_schema @schema, arg
+					child_node = @children.find{ |c| c.schema == child_schema }
+					@children.delete child_node
+				end
 			end
 
 			class LeafNode < Node
@@ -1105,6 +1110,10 @@ module Rubyang
 						@children.push child_node
 					end
 					child_node
+				end
+				def delete *args
+					child_node = @children.find{ |c| c.key_values == args }
+					@children.delete child_node
 				end
 				def to_xml_recursive _doc, current_namespace
 					doc = _doc
