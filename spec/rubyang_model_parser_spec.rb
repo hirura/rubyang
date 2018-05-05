@@ -126,7 +126,9 @@ describe Rubyang::Model do
 	let( :must1_stmt )            { Rubyang::Model::Must.new( 'must1' ) }
 	let( :must2_stmt )            { Rubyang::Model::Must.new( 'must2' ) }
 	let( :config_true_stmt )      { Rubyang::Model::Config.new( 'true' ) }
+	let( :config_true_2_stmt )    { Rubyang::Model::Config.new( 'true' ) }
 	let( :config_false_stmt )     { Rubyang::Model::Config.new( 'false' ) }
+	let( :config_false_2_stmt )   { Rubyang::Model::Config.new( 'false' ) }
 	let( :presence1_stmt )        { Rubyang::Model::Presence.new( 'presence1' ) }
 	let( :presence2_stmt )        { Rubyang::Model::Presence.new( 'presence2' ) }
 	let( :mandatory_true_stmt )   { Rubyang::Model::Mandatory.new( 'true' ) }
@@ -9979,5 +9981,199 @@ describe Rubyang::Model do
 		end
 	end
 
-end
+	describe 'config-stmt' do
+		context 'when no config under no config' do
+			let( :yang_str ){
+				<<-EOB
+					module module1 {
+						namespace "http://module1.rspec/";
+						prefix module1;
+						container container1 {
+							container container2;
+						}
+					}
+				EOB
+			}
+			let( :stmt_tree ){ module1_stmt }
+			let( :module1_substmts ){ [namespace_stmt, prefix_stmt, container1_stmt] }
+			let( :container1_substmts ){ [container2_stmt] }
+			subject { Rubyang::Model::Parser.parse( yang_str ).to_yaml }
+			it { is_expected.to eq stmt_tree_yaml }
+		end
 
+		context 'when no config under config true' do
+			let( :yang_str ){
+				<<-EOB
+					module module1 {
+						namespace "http://module1.rspec/";
+						prefix module1;
+						container container1 {
+							config true;
+							container container2;
+						}
+					}
+				EOB
+			}
+			let( :stmt_tree ){ module1_stmt }
+			let( :module1_substmts ){ [namespace_stmt, prefix_stmt, container1_stmt] }
+			let( :container1_substmts ){ [config_true_stmt, container2_stmt] }
+			subject { Rubyang::Model::Parser.parse( yang_str ).to_yaml }
+			it { is_expected.to eq stmt_tree_yaml }
+		end
+
+		context 'when no config under config false' do
+			let( :yang_str ){
+				<<-EOB
+					module module1 {
+						namespace "http://module1.rspec/";
+						prefix module1;
+						container container1 {
+							config false;
+							container container2;
+						}
+					}
+				EOB
+			}
+			let( :stmt_tree ){ module1_stmt }
+			let( :module1_substmts ){ [namespace_stmt, prefix_stmt, container1_stmt] }
+			let( :container1_substmts ){ [config_false_stmt, container2_stmt] }
+			subject { Rubyang::Model::Parser.parse( yang_str ).to_yaml }
+			it { is_expected.to eq stmt_tree_yaml }
+		end
+
+		context 'when config false under no config' do
+			let( :yang_str ){
+				<<-EOB
+					module module1 {
+						namespace "http://module1.rspec/";
+						prefix module1;
+						container container1 {
+							container container2 {
+								config false;
+							}
+						}
+					}
+				EOB
+			}
+			let( :stmt_tree ){ module1_stmt }
+			let( :module1_substmts ){ [namespace_stmt, prefix_stmt, container1_stmt] }
+			let( :container1_substmts ){ [container2_stmt] }
+			let( :container2_substmts ){ [config_false_stmt] }
+			subject { Rubyang::Model::Parser.parse( yang_str ).to_yaml }
+			it { is_expected.to eq stmt_tree_yaml }
+		end
+
+		context 'when config false under config true' do
+			let( :yang_str ){
+				<<-EOB
+					module module1 {
+						namespace "http://module1.rspec/";
+						prefix module1;
+						container container1 {
+							config true;
+							container container2 {
+								config false;
+							}
+						}
+					}
+				EOB
+			}
+			let( :stmt_tree ){ module1_stmt }
+			let( :module1_substmts ){ [namespace_stmt, prefix_stmt, container1_stmt] }
+			let( :container1_substmts ){ [config_true_stmt, container2_stmt] }
+			let( :container2_substmts ){ [config_false_stmt] }
+			subject { Rubyang::Model::Parser.parse( yang_str ).to_yaml }
+			it { is_expected.to eq stmt_tree_yaml }
+		end
+
+		context 'when config false under config false' do
+			let( :yang_str ){
+				<<-EOB
+					module module1 {
+						namespace "http://module1.rspec/";
+						prefix module1;
+						container container1 {
+							config false;
+							container container2 {
+								config false;
+							}
+						}
+					}
+				EOB
+			}
+			let( :stmt_tree ){ module1_stmt }
+			let( :module1_substmts ){ [namespace_stmt, prefix_stmt, container1_stmt] }
+			let( :container1_substmts ){ [config_false_stmt, container2_stmt] }
+			let( :container2_substmts ){ [config_false_2_stmt] }
+			subject { Rubyang::Model::Parser.parse( yang_str ).to_yaml }
+			it { is_expected.to eq stmt_tree_yaml }
+		end
+
+		context 'when config true under no config' do
+			let( :yang_str ){
+				<<-EOB
+					module module1 {
+						namespace "http://module1.rspec/";
+						prefix module1;
+						container container1 {
+							container container2 {
+								config true;
+							}
+						}
+					}
+				EOB
+			}
+			let( :stmt_tree ){ module1_stmt }
+			let( :module1_substmts ){ [namespace_stmt, prefix_stmt, container1_stmt] }
+			let( :container1_substmts ){ [container2_stmt] }
+			let( :container2_substmts ){ [config_true_stmt] }
+			subject { Rubyang::Model::Parser.parse( yang_str ).to_yaml }
+			it { is_expected.to eq stmt_tree_yaml }
+		end
+
+		context 'when config true under config true' do
+			let( :yang_str ){
+				<<-EOB
+					module module1 {
+						namespace "http://module1.rspec/";
+						prefix module1;
+						container container1 {
+							config true;
+							container container2 {
+								config true;
+							}
+						}
+					}
+				EOB
+			}
+			let( :stmt_tree ){ module1_stmt }
+			let( :module1_substmts ){ [namespace_stmt, prefix_stmt, container1_stmt] }
+			let( :container1_substmts ){ [config_true_stmt, container2_stmt] }
+			let( :container2_substmts ){ [config_true_2_stmt] }
+			subject { Rubyang::Model::Parser.parse( yang_str ).to_yaml }
+			it { is_expected.to eq stmt_tree_yaml }
+		end
+
+		# TODO: should raise error
+=begin
+		context 'when config true under config false' do
+			let( :yang_str ){
+				<<-EOB
+					module module1 {
+						namespace "http://module1.rspec/";
+						prefix module1;
+						container container1 {
+							config false;
+							container container2 {
+								config true;
+							}
+						}
+					}
+				EOB
+			}
+			subject { -> { Rubyang::Model::Parser.parse( yang_str ).to_yaml } }
+			it { is_expected.to raise_exception Exception }
+		end
+=end
+	end
+end

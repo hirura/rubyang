@@ -16,15 +16,17 @@ module Rubyang
 
 			module Mode
 				CONFIG = :config
+				OPER   = :oper
 			end
 
 			class Node
 				attr_reader :parent, :schema_tree, :schema, :children
-				def initialize parent, schema_tree, schema, mode
+				def initialize parent, schema_tree, schema, db_mode, ctx_mode
 					@parent = parent
 					@schema_tree = schema_tree
 					@schema = schema
-					@mode = mode
+					@db_mode = db_mode
+					@ctx_mode = ctx_mode
 					@children = []
 					@logger = Rubyang::Logger.instance
 				end
@@ -335,8 +337,6 @@ module Rubyang
 						[self]
 					else
 						location_step.predicates.inject([self]){ |cs, predicate|
-							p 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-							p self.class
 							if cs.size > 0
 								result = cs[0].evaluate_xpath_expr predicate.expr, current
 								case result
@@ -752,17 +752,106 @@ module Rubyang
 				def find_child_schema schema, arg
 					schema.children.map{ |c|
 						case c
-						when Rubyang::Database::SchemaTree::Choice
+						when Database::SchemaTree::Choice
 							find_child_schema c, arg
-						when Rubyang::Database::SchemaTree::Case
+						when Database::SchemaTree::Case
 							find_child_schema c, arg
+						when Database::SchemaTree::Anyxml, Database::SchemaTree::Leaf, Database::SchemaTree::LeafList
+							if c.model.arg == arg
+								if @db_mode == Database::DataTree::Mode::CONFIG && @ctx_mode == Database::DataTree::Mode::CONFIG
+									if c.yang.substmt('config').any? && c.yang.substmt('config')[0].arg == 'false'
+										nil
+									else
+										c
+									end
+								elsif @db_mode == Database::DataTree::Mode::CONFIG && @ctx_mode == Database::DataTree::Mode::OPER
+									nil
+								elsif @db_mode == Database::DataTree::Mode::OPER && @ctx_mode == Database::DataTree::Mode::CONFIG
+									if c.yang.substmt('config').any? && c.yang.substmt('config')[0].arg == 'false'
+										c
+									else
+										nil
+									end
+								elsif @db_mode == Database::DataTree::Mode::OPER && @ctx_mode == Database::DataTree::Mode::OPER
+									if c.yang.substmt('config').any? && c.yang.substmt('config')[0].arg == 'true'
+										nil
+									else
+										c
+									end
+								end
+							else
+								nil
+							end
 						else
 							if c.model.arg == arg
-								c
+								if @db_mode == Database::DataTree::Mode::CONFIG && @ctx_mode == Database::DataTree::Mode::CONFIG
+									c
+								elsif @db_mode == Database::DataTree::Mode::CONFIG && @ctx_mode == Database::DataTree::Mode::OPER
+									c
+								elsif @db_mode == Database::DataTree::Mode::OPER && @ctx_mode == Database::DataTree::Mode::CONFIG
+									c
+								elsif @db_mode == Database::DataTree::Mode::OPER && @ctx_mode == Database::DataTree::Mode::OPER
+									if c.yang.substmt('config').any? && c.yang.substmt('config')[0].arg == 'true'
+										nil
+									else
+										c
+									end
+								end
 							else
 								nil
 							end
 						end
+
+=begin
+						case @db_mode
+						when Rubyang::Database::DataTree::Mode::CONFIG
+							case c
+							when Rubyang::Database::SchemaTree::Choice
+								find_child_schema c, arg
+							when Rubyang::Database::SchemaTree::Case
+								find_child_schema c, arg
+							when Rubyang::Database::SchemaTree::Leaf, Rubyang::Database::SchemaTree::LeafList
+								if c.model.arg == arg
+									c
+								else
+									nil
+								end
+							else
+								if c.model.arg == arg
+									if c.yang.substmt('config').any? && c.yang.substmt('config')[0].arg == 'false'
+										nil
+									else
+										c
+									end
+								else
+									nil
+								end
+							end
+						when Rubyang::Database::DataTree::Mode::OPER
+							case c
+							when Rubyang::Database::SchemaTree::Choice
+								find_child_schema c, arg
+							when Rubyang::Database::SchemaTree::Case
+								find_child_schema c, arg
+							when Rubyang::Database::SchemaTree::Leaf, Rubyang::Database::SchemaTree::LeafList
+								if c.model.arg == arg
+									if c.yang.substmt('config').any? && c.yang.substmt('config')[0].arg == 'false'
+										c
+									else
+										nil
+									end
+								else
+									nil
+								end
+							else
+								if c.model.arg == arg
+									c
+								else
+									nil
+								end
+							end
+						end
+=end
 					}.find{ |c| c }
 				end
 				def delete_same_choice_other_case schema, arg, children
@@ -804,23 +893,37 @@ module Rubyang
 					delete_same_choice_other_case @schema, arg, @children
 					child_node = @children.find{ |c| c.schema == child_schema }
 					unless child_node
-						case child_schema.model
-						when Rubyang::Model::Anyxml
-							child_node = Anyxml.new( self, @schema_tree, child_schema, @mode )
-						when Rubyang::Model::Container
-							child_node = Container.new( self, @schema_tree, child_schema, @mode )
-							# when start
-							unless child_node.evaluate_whens.value
-								raise "#{arg} is not valid because of 'when' conditions"
+						begin
+							ctx_mode = if child_schema.yang.substmt('config').any?
+								       case child_schema.yang.substmt('config')[0].arg
+								       when 'true'
+									       Rubyang::Database::DataTree::Mode::CONFIG
+								       when 'false'
+									       Rubyang::Database::DataTree::Mode::OPER
+								       end
+							       else
+								       @ctx_mode
+							       end
+							case child_schema.model
+							when Rubyang::Model::Anyxml
+								child_node = Anyxml.new( self, @schema_tree, child_schema, @db_mode, ctx_mode )
+							when Rubyang::Model::Container
+								child_node = Container.new( self, @schema_tree, child_schema, @db_mode, ctx_mode )
+								# when start
+								unless child_node.evaluate_whens.value
+									raise "#{arg} is not valid because of 'when' conditions"
+								end
+								# end
+							when Rubyang::Model::Leaf
+								child_node = Leaf.new( self, @schema_tree, child_schema, @db_mode, ctx_mode )
+							when Rubyang::Model::List
+								child_node = List.new( self, @schema_tree, child_schema, @db_mode, ctx_mode )
+							when Rubyang::Model::LeafList
+								child_node = LeafList.new( self, @schema_tree, child_schema, @db_mode, ctx_mode )
+							else
+								raise
 							end
-							# end
-						when Rubyang::Model::Leaf
-							child_node = Leaf.new( self, @schema_tree, child_schema, @mode )
-						when Rubyang::Model::List
-							child_node = List.new( self, @schema_tree, child_schema, @mode )
-						when Rubyang::Model::LeafList
-							child_node = LeafList.new( self, @schema_tree, child_schema, @mode )
-						else
+						rescue
 							raise ArgumentError, "#{arg} NOT match"
 						end
 						@children.push child_node
@@ -881,7 +984,13 @@ module Rubyang
 					end
 				end
 				def to_xml_recursive _doc, current_namespace=''
-					doc = _doc.add_element( 'config' )
+					root_tag = case @db_mode
+						   when Rubyang::Database::DataTree::Mode::CONFIG
+							   'config'
+						   when Rubyang::Database::DataTree::Mode::OPER
+							   'oper'
+						   end
+					doc = _doc.add_element( root_tag )
 					current_namespace = @schema_tree.root.namespace
 					doc.add_namespace( current_namespace )
 					@children.each{ |c|
@@ -889,8 +998,14 @@ module Rubyang
 					}
 				end
 				def to_json_recursive _hash
+					root_tag = case @db_mode
+						   when Rubyang::Database::DataTree::Mode::CONFIG
+							   'config'
+						   when Rubyang::Database::DataTree::Mode::OPER
+							   'oper'
+						   end
 					hash = Hash.new
-					_hash['config'] = hash
+					_hash[root_tag] = hash
 					@children.each{ |c|
 						c.to_json_recursive hash
 					}
@@ -983,7 +1098,7 @@ module Rubyang
 					child_node = @children.find{ |c| c.key_values == args }
 					unless child_node
 						begin
-							child_node = ListElement.new( self, @schema_tree, @schema, @mode, args )
+							child_node = ListElement.new( self, @schema_tree, @schema, @db_mode, @ctx_mode, args )
 						rescue
 							raise ArgumentError, "#{args} NOT match"
 						end
@@ -1018,11 +1133,12 @@ module Rubyang
 			end
 
 			class ListElement < InteriorNode
-				def initialize parent, schema_tree, schema, mode, key_values
+				def initialize parent, schema_tree, schema, db_mode, ctx_mode, key_values
 					@parent = parent
 					@schema_tree = schema_tree
 					@schema = schema
-					@mode = mode
+					@db_mode = db_mode
+					@ctx_mode = ctx_mode
 					@children = []
 					@key_values = key_values
 					@schema.keys.zip( key_values ).each{ |key, value|
@@ -1054,7 +1170,7 @@ module Rubyang
 					child_node = @children.find{ |c| c.value == arg }
 					unless child_node
 						begin
-							child_node = LeafListElement.new( self, @schema_tree, @schema, @mode, arg )
+							child_node = LeafListElement.new( self, @schema_tree, @schema, @db_mode, @ctx_mode, arg )
 						rescue
 							raise ArgumentError
 						end
@@ -1072,11 +1188,12 @@ module Rubyang
 
 			class LeafListElement < LeafNode
 				attr_accessor :value
-				def initialize parent, schema_tree, schema, mode, value
+				def initialize parent, schema_tree, schema, db_mode, ctx_mode, value
 					@parent = parent
 					@schema_tree = schema_tree
 					@schema = schema
-					@mode = mode
+					@db_mode = db_mode
+					@ctx_mode = ctx_mode
 					@value = value
 				end
 				def to_xml_recursive _doc, current_namespace
@@ -1091,8 +1208,9 @@ module Rubyang
 
 			attr_accessor :component_manager
 			def initialize schema_tree, mode=Rubyang::Database::DataTree::Mode::CONFIG
-				@root = Root.new( self, schema_tree, schema_tree.root, mode )
-				@mode = mode
+				@db_mode = mode
+				@ctx_mode = Rubyang::Database::DataTree::Mode::CONFIG
+				@root = Root.new( self, schema_tree, schema_tree.root, @db_mode, @ctx_mode )
 				@history = Array.new
 				@component_manager = Rubyang::Database::ComponentManager.new
 			end

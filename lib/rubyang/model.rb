@@ -800,6 +800,9 @@ module Rubyang
 		end
 
 		class Config < ArgStmt
+			def valid_arg? arg
+				['true', 'false'].include? arg
+			end
 		end
 
 		class Status < ArgStmt

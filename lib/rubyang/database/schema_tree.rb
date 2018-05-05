@@ -397,6 +397,7 @@ module Rubyang
 				end
 			end
 
+			# TODO: should add config_mode_context to validate and raise error if there is config true stmt in config false stmt
 			class SchemaNode
 				attr_accessor :yangs, :arg, :yang, :parent, :module
 				def initialize yangs, arg, yang, parent, _module
@@ -1195,7 +1196,7 @@ module Rubyang
 					super
 				end
 				def namespace
-					'http://rubyang/config/0.1'
+					'http://rubyang/0.1'
 				end
 				def prefix
 					''

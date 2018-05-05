@@ -23,7 +23,7 @@ describe 'RFC6020' do
 		root_xml
 	}
 	let( :root_xml_namespace ){
-		'http://rubyang/config/0.1'
+		'http://rubyang/0.1'
 	}
 
 	let( :doc_json_pretty ){

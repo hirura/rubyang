@@ -12,6 +12,7 @@ module Rubyang
 			@yangs       = Array.new
 			@schema_tree = SchemaTree.new @yangs
 			@config_tree = DataTree.new @schema_tree, Rubyang::Database::DataTree::Mode::CONFIG
+			@oper_tree   = DataTree.new @schema_tree, Rubyang::Database::DataTree::Mode::OPER
 		end
 
 		def to_s parent=true
@@ -20,6 +21,7 @@ module Rubyang
 				vars.push "@yangs=#{@yangs.to_s}"
 				vars.push "@schema_tree=#{@schema_tree.to_s( false )}"
 				vars.push "@config_tree=#{@config_tree.to_s( false )}"
+				vars.push "@oper_tree=#{@oper_tree.to_s( false )}"
 			end
 			head + vars.join(', ') + tail
 		end
@@ -34,6 +36,14 @@ module Rubyang
 
 		def configuration
 			@config_tree.root
+		end
+
+		def oper
+			@oper_tree.root
+		end
+
+		def operational
+			@oper_tree.root
 		end
 	end
 end
