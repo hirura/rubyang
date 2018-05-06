@@ -504,7 +504,6 @@ describe Rubyang::Database do
 
 				context "when an oper leaf is in the list" do
 					subject { -> {
-						puts oper_doc_xml_pretty
 						db.load_model Rubyang::Model::Parser.parse( yang_str )
 						oper = db.oper
 						oper.load_merge_xml oper_doc_xml_pretty

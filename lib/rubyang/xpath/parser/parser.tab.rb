@@ -8,6 +8,10 @@ require 'racc/parser.rb'
 module Rubyang
   module Xpath
     class Parser < Racc::Parser
+
+module_eval(<<'...end parser.y/module_eval...', 'parser.y', 836)
+@@logger = Logger.new(self.name)
+...end parser.y/module_eval...
 ##### State transition tables begin ###
 
 racc_action_table = [
@@ -746,46 +750,38 @@ Racc_debug_parser = false
 
 module_eval(<<'.,.,', 'parser.y', 5)
   def _reduce_1(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts 'statement : Expr'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { 'statement : Expr' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Expr.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 14)
+module_eval(<<'.,.,', 'parser.y', 12)
   def _reduce_2(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"LocationPath" : "RelativeLocationPath"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"LocationPath" : "RelativeLocationPath"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 22)
+module_eval(<<'.,.,', 'parser.y', 18)
   def _reduce_3(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"LocationPath" : "AbsoluteLocationPath"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"LocationPath" : "AbsoluteLocationPath"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 31)
+module_eval(<<'.,.,', 'parser.y', 25)
   def _reduce_4(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AbsoluteLocationPath" : "/"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AbsoluteLocationPath" : "/"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								axis = Rubyang::Xpath::Axis.new Rubyang::Xpath::Axis::SELF
 								node_test = Rubyang::Xpath::NodeTest.new Rubyang::Xpath::NodeTest::NodeTestType::NAME_TEST, '/'
 								predicates = Rubyang::Xpath::Predicates.new
@@ -796,12 +792,10 @@ module_eval(<<'.,.,', 'parser.y', 31)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 43)
+module_eval(<<'.,.,', 'parser.y', 35)
   def _reduce_5(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AbsoluteLocationPath" : "/" "RelativeLocationPath"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AbsoluteLocationPath" : "/" "RelativeLocationPath"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								axis = Rubyang::Xpath::Axis.new Rubyang::Xpath::Axis::SELF
 								node_test = Rubyang::Xpath::NodeTest.new Rubyang::Xpath::NodeTest::NodeTestType::NAME_TEST, '/'
 								predicates = Rubyang::Xpath::Predicates.new
@@ -812,103 +806,87 @@ module_eval(<<'.,.,', 'parser.y', 43)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 55)
+module_eval(<<'.,.,', 'parser.y', 45)
   def _reduce_6(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AbsoluteLocationPath" : "AbbreviatedAbsoluteLocationPath"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AbsoluteLocationPath" : "AbbreviatedAbsoluteLocationPath"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 64)
+module_eval(<<'.,.,', 'parser.y', 52)
   def _reduce_7(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"RelativeLocationPath" : "Step"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"RelativeLocationPath" : "Step"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::LocationPath.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 72)
+module_eval(<<'.,.,', 'parser.y', 58)
   def _reduce_8(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"RelativeLocationPath" : "RelativeLocationPath" "/" "Step"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"RelativeLocationPath" : "RelativeLocationPath" "/" "Step"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0].add val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 80)
+module_eval(<<'.,.,', 'parser.y', 64)
   def _reduce_9(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"RelativeLocationPath" : "AbbreviatedRelativeLocationPath"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"RelativeLocationPath" : "AbbreviatedRelativeLocationPath"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 89)
+module_eval(<<'.,.,', 'parser.y', 71)
   def _reduce_10(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Step" : "AxisSpecifier" "NodeTest" "Predicates"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"Step" : "AxisSpecifier" "NodeTest" "Predicates"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::LocationStep.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 97)
+module_eval(<<'.,.,', 'parser.y', 77)
   def _reduce_11(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Step" : "AbbreviatedStep"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"Step" : "AbbreviatedStep"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 106)
+module_eval(<<'.,.,', 'parser.y', 84)
   def _reduce_12(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisSpecifier" : "AxisName" "::"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisSpecifier" : "AxisName" "::"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 114)
+module_eval(<<'.,.,', 'parser.y', 90)
   def _reduce_13(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisSpecifier" : "AbbreviatedAxisSpecifier"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisSpecifier" : "AbbreviatedAxisSpecifier"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 123)
+module_eval(<<'.,.,', 'parser.y', 97)
   def _reduce_14(val, _values, result)
     								result = Rubyang::Xpath::Predicates.new
 							
@@ -916,180 +894,150 @@ module_eval(<<'.,.,', 'parser.y', 123)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 127)
+module_eval(<<'.,.,', 'parser.y', 101)
   def _reduce_15(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Predicates" : "Predicates" "Predicate"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"Predicates" : "Predicates" "Predicate"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0].push val[1]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 136)
+module_eval(<<'.,.,', 'parser.y', 108)
   def _reduce_16(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisName" : "ancestor"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisName" : "ancestor"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::ANCESTOR
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 144)
+module_eval(<<'.,.,', 'parser.y', 114)
   def _reduce_17(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisName" : "ancestor-or-self"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisName" : "ancestor-or-self"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::ANCESTOR_OR_SELF
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 152)
+module_eval(<<'.,.,', 'parser.y', 120)
   def _reduce_18(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisName" : "attribute"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisName" : "attribute"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::ATTRIBUTE
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 160)
+module_eval(<<'.,.,', 'parser.y', 126)
   def _reduce_19(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisName" : "child"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisName" : "child"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::CHILD
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 168)
+module_eval(<<'.,.,', 'parser.y', 132)
   def _reduce_20(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisName" : "descendant"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisName" : "descendant"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::DESCENDANT
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 176)
+module_eval(<<'.,.,', 'parser.y', 138)
   def _reduce_21(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisName" : "descendant-or-self"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisName" : "descendant-or-self"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::DESCENDANT_OR_SELF
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 184)
+module_eval(<<'.,.,', 'parser.y', 144)
   def _reduce_22(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisName" : "following"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisName" : "following"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::FOLLOWING
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 192)
+module_eval(<<'.,.,', 'parser.y', 150)
   def _reduce_23(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisName" : "following-sibling"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisName" : "following-sibling"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::FOLLOWING_SIBLING
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 200)
+module_eval(<<'.,.,', 'parser.y', 156)
   def _reduce_24(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisName" : "namespace"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisName" : "namespace"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::NAMESPACE
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 208)
+module_eval(<<'.,.,', 'parser.y', 162)
   def _reduce_25(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisName" : "parent"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisName" : "parent"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::PARENT
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 216)
+module_eval(<<'.,.,', 'parser.y', 168)
   def _reduce_26(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisName" : "preceding"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisName" : "preceding"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::PRECEDING
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 224)
+module_eval(<<'.,.,', 'parser.y', 174)
   def _reduce_27(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisName" : "preceding-sibling"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisName" : "preceding-sibling"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::PRECEDING_SIBLING
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 232)
+module_eval(<<'.,.,', 'parser.y', 180)
   def _reduce_28(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AxisName" : "self"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AxisName" : "self"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::SELF
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 241)
+module_eval(<<'.,.,', 'parser.y', 187)
   def _reduce_29(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"NodeTest" : "NameTest"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"NodeTest" : "NameTest"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								name_test_type = Rubyang::Xpath::NodeTest::NodeTestType::NAME_TEST
 								result = Rubyang::Xpath::NodeTest.new name_test_type, val[0]
 							
@@ -1097,12 +1045,10 @@ module_eval(<<'.,.,', 'parser.y', 241)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 250)
+module_eval(<<'.,.,', 'parser.y', 194)
   def _reduce_30(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"NodeTest" : "NodeType" "(" ")"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"NodeTest" : "NodeType" "(" ")"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								name_test_type = Rubyang::Xpath::NodeTest::NodeTestType::NODE_TYPE
 								result = Rubyang::Xpath::NodeTest.new name_test_type, val[0]
 							
@@ -1110,12 +1056,10 @@ module_eval(<<'.,.,', 'parser.y', 250)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 259)
+module_eval(<<'.,.,', 'parser.y', 201)
   def _reduce_31(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"NodeTest" : "processing-instruction" "(" "Literal" ")"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"NodeTest" : "processing-instruction" "(" "Literal" ")"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								name_test_type = Rubyang::Xpath::NodeTest::NodeTestType::PROCESSING_INSTRUCTION
 								result = Rubyang::Xpath::NodeTest.new name_test_type, val[0]
 							
@@ -1123,36 +1067,30 @@ module_eval(<<'.,.,', 'parser.y', 259)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 269)
+module_eval(<<'.,.,', 'parser.y', 209)
   def _reduce_32(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Predicate" : "[" "PredicateExpr" "]"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"Predicate" : "[" "PredicateExpr" "]"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Predicate.new val[1]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 278)
+module_eval(<<'.,.,', 'parser.y', 216)
   def _reduce_33(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"PredicateExpr" : "Expr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"PredicateExpr" : "Expr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 287)
+module_eval(<<'.,.,', 'parser.y', 223)
   def _reduce_34(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AbbreviatedAbsoluteLocationPath" : "//" "RelativeLocationPath"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AbbreviatedAbsoluteLocationPath" : "//" "RelativeLocationPath"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								raise "AbbreviatedAbsoluteLocationPath is not implemented"
 								result = val[0]
 							
@@ -1160,12 +1098,10 @@ module_eval(<<'.,.,', 'parser.y', 287)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 297)
+module_eval(<<'.,.,', 'parser.y', 231)
   def _reduce_35(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AbbreviatedRelativeLocationPath" : "RelativeLocationPath" "//" "Step"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AbbreviatedRelativeLocationPath" : "RelativeLocationPath" "//" "Step"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								raise "AbbreviatedRelativeLocationPath is not implemented"
 								result = val[0]
 							
@@ -1173,12 +1109,10 @@ module_eval(<<'.,.,', 'parser.y', 297)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 307)
+module_eval(<<'.,.,', 'parser.y', 239)
   def _reduce_36(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AbbreviatedStep" : "."'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AbbreviatedStep" : "."' }
+								@@logger.debug { "val: #{val.inspect}" }
 								axis = Rubyang::Xpath::Axis.new Rubyang::Xpath::Axis::SELF
 								node_test = Rubyang::Xpath::NodeTest.new Rubyang::Xpath::NodeTest::NodeTestType::NAME_TEST, '*'
 								predicates = Rubyang::Xpath::Predicates.new
@@ -1188,12 +1122,10 @@ module_eval(<<'.,.,', 'parser.y', 307)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 318)
+module_eval(<<'.,.,', 'parser.y', 248)
   def _reduce_37(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AbbreviatedStep" : ".."'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AbbreviatedStep" : ".."' }
+								@@logger.debug { "val: #{val.inspect}" }
 								axis = Rubyang::Xpath::Axis.new Rubyang::Xpath::Axis::PARENT
 								node_test = Rubyang::Xpath::NodeTest.new Rubyang::Xpath::NodeTest::NodeTestType::NODE_TYPE, Rubyang::Xpath::NodeTest::NodeType::NODE
 								predicates = Rubyang::Xpath::Predicates.new
@@ -1203,48 +1135,40 @@ module_eval(<<'.,.,', 'parser.y', 318)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 330)
+module_eval(<<'.,.,', 'parser.y', 258)
   def _reduce_38(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AbbreviatedAxisSpecifier" : '
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AbbreviatedAxisSpecifier" : ' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::CHILD
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 338)
+module_eval(<<'.,.,', 'parser.y', 264)
   def _reduce_39(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AbbreviatedAxisSpecifier" : "@"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AbbreviatedAxisSpecifier" : "@"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::Axis::ATTRIBUTE
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 347)
+module_eval(<<'.,.,', 'parser.y', 271)
   def _reduce_40(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Expr" : "OrExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"Expr" : "OrExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 356)
+module_eval(<<'.,.,', 'parser.y', 278)
   def _reduce_41(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"PrimaryExpr" : "VariableReference"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"PrimaryExpr" : "VariableReference"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								raise "VariableReference is not implemented"
 							
@@ -1252,25 +1176,20 @@ module_eval(<<'.,.,', 'parser.y', 356)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 365)
+module_eval(<<'.,.,', 'parser.y', 285)
   def _reduce_42(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"PrimaryExpr" : "(" "Expr" ")"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"PrimaryExpr" : "(" "Expr" ")"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[1]
-								raise "'(' Expr ')' is not implemented"
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 374)
+module_eval(<<'.,.,', 'parser.y', 291)
   def _reduce_43(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"PrimaryExpr" : "Literal"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"PrimaryExpr" : "Literal"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								literal = Rubyang::Xpath::Literal.new val[0]
 								result = Rubyang::Xpath::PrimaryExpr.new literal
 							
@@ -1278,12 +1197,10 @@ module_eval(<<'.,.,', 'parser.y', 374)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 383)
+module_eval(<<'.,.,', 'parser.y', 298)
   def _reduce_44(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"PrimaryExpr" : "Number"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"PrimaryExpr" : "Number"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								number = Rubyang::Xpath::Number.new val[0]
 								result = Rubyang::Xpath::PrimaryExpr.new number
 							
@@ -1291,492 +1208,410 @@ module_eval(<<'.,.,', 'parser.y', 383)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 392)
+module_eval(<<'.,.,', 'parser.y', 305)
   def _reduce_45(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"PrimaryExpr" : "FunctionCall"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"PrimaryExpr" : "FunctionCall"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::PrimaryExpr.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 401)
+module_eval(<<'.,.,', 'parser.y', 312)
   def _reduce_46(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionCall" : "FunctionName(" ")"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionCall" : "FunctionName(" ")"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::FunctionCall.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 409)
+module_eval(<<'.,.,', 'parser.y', 318)
   def _reduce_47(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionCall" : "FunctionName(" "Arguments" ")"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionCall" : "FunctionName(" "Arguments" ")"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::FunctionCall.new val[0], val[1]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 418)
+module_eval(<<'.,.,', 'parser.y', 325)
   def _reduce_48(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Arguments" : "Argument"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"Arguments" : "Argument"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = [val[0]]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 426)
+module_eval(<<'.,.,', 'parser.y', 331)
   def _reduce_49(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Arguments" : "Arguments" "," "Argument"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"Arguments" : "Arguments" "," "Argument"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0] + [val[1]]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 435)
+module_eval(<<'.,.,', 'parser.y', 338)
   def _reduce_50(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Argument" : "Exp"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"Argument" : "Exp"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 444)
+module_eval(<<'.,.,', 'parser.y', 345)
   def _reduce_51(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"UnionExpr" : "PathExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"UnionExpr" : "PathExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::UnionExpr.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 452)
+module_eval(<<'.,.,', 'parser.y', 351)
   def _reduce_52(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"UnionExpr" : "UnionExpr" "|" "PathExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"UnionExpr" : "UnionExpr" "|" "PathExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::UnionExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 461)
+module_eval(<<'.,.,', 'parser.y', 358)
   def _reduce_53(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"PathExpr" : "LocationPath"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"PathExpr" : "LocationPath"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::PathExpr.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 469)
+module_eval(<<'.,.,', 'parser.y', 364)
   def _reduce_54(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"PathExpr" : "FilterExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"PathExpr" : "FilterExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::PathExpr.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 477)
+module_eval(<<'.,.,', 'parser.y', 370)
   def _reduce_55(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"PathExpr" : "FilterExpr" "/" "RelativeLocationPath"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"PathExpr" : "FilterExpr" "/" "RelativeLocationPath"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::PathExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 485)
+module_eval(<<'.,.,', 'parser.y', 376)
   def _reduce_56(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"PathExpr" : "FilterExpr" "//" "RelativeLocationPath"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"PathExpr" : "FilterExpr" "//" "RelativeLocationPath"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::PathExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 494)
+module_eval(<<'.,.,', 'parser.y', 383)
   def _reduce_57(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FilterExpr" : "PrimaryExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FilterExpr" : "PrimaryExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::FilterExpr.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 502)
+module_eval(<<'.,.,', 'parser.y', 389)
   def _reduce_58(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FilterExpr" : "FilterExpr Predicat"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FilterExpr" : "FilterExpr Predicat"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::FilterExpr.new val[0], val[1]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 511)
+module_eval(<<'.,.,', 'parser.y', 396)
   def _reduce_59(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"OrExpr" : "AndExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"OrExpr" : "AndExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::OrExpr.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 519)
+module_eval(<<'.,.,', 'parser.y', 402)
   def _reduce_60(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"OrExpr" : "OrExpr" "or" "AndExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"OrExpr" : "OrExpr" "or" "AndExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::OrExpr.new val[0], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 528)
+module_eval(<<'.,.,', 'parser.y', 409)
   def _reduce_61(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AndExpr" : "EqualityExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AndExpr" : "EqualityExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::AndExpr.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 536)
+module_eval(<<'.,.,', 'parser.y', 415)
   def _reduce_62(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AndExpr" : "AndExpr" "and" "EqualityExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AndExpr" : "AndExpr" "and" "EqualityExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::AndExpr.new val[0], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 545)
+module_eval(<<'.,.,', 'parser.y', 422)
   def _reduce_63(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"EqualityExpr" : "RelationalExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"EqualityExpr" : "RelationalExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::EqualityExpr.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 553)
+module_eval(<<'.,.,', 'parser.y', 428)
   def _reduce_64(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"EqualityExpr" : "EqualityExpr" "=" "RelationalExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"EqualityExpr" : "EqualityExpr" "=" "RelationalExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::EqualityExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 561)
+module_eval(<<'.,.,', 'parser.y', 434)
   def _reduce_65(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"EqualityExpr" : "EqualityExpr" "!=" "RelationalExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"EqualityExpr" : "EqualityExpr" "!=" "RelationalExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::EqualityExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 570)
+module_eval(<<'.,.,', 'parser.y', 441)
   def _reduce_66(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"RelationalExpr" : "AdditiveExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"RelationalExpr" : "AdditiveExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::RelationalExpr.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 578)
+module_eval(<<'.,.,', 'parser.y', 447)
   def _reduce_67(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"RelationalExpr" : "RelationalExpr" "<" "AdditiveExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"RelationalExpr" : "RelationalExpr" "<" "AdditiveExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::RelationalExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 586)
+module_eval(<<'.,.,', 'parser.y', 453)
   def _reduce_68(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"RelationalExpr" : "RelationalExpr" ">" "AdditiveExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"RelationalExpr" : "RelationalExpr" ">" "AdditiveExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::RelationalExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 594)
+module_eval(<<'.,.,', 'parser.y', 459)
   def _reduce_69(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"RelationalExpr" : "RelationalExpr" "<=" "AdditiveExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"RelationalExpr" : "RelationalExpr" "<=" "AdditiveExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::RelationalExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 602)
+module_eval(<<'.,.,', 'parser.y', 465)
   def _reduce_70(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"RelationalExpr" : "RelationalExpr" ">=" "AdditiveExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"RelationalExpr" : "RelationalExpr" ">=" "AdditiveExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::RelationalExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 611)
+module_eval(<<'.,.,', 'parser.y', 472)
   def _reduce_71(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AdditiveExpr" : "MultiplicativeExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AdditiveExpr" : "MultiplicativeExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::AdditiveExpr.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 619)
+module_eval(<<'.,.,', 'parser.y', 478)
   def _reduce_72(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AdditiveExpr" : "AdditiveExpr" "+" "MultiplicativeExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AdditiveExpr" : "AdditiveExpr" "+" "MultiplicativeExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::AdditiveExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 627)
+module_eval(<<'.,.,', 'parser.y', 484)
   def _reduce_73(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"AdditiveExpr" : "AdditiveExpr" "-" "MultiplicativeExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"AdditiveExpr" : "AdditiveExpr" "-" "MultiplicativeExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::AdditiveExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 636)
+module_eval(<<'.,.,', 'parser.y', 491)
   def _reduce_74(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"MultiplicativeExpr" : "UnaryExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"MultiplicativeExpr" : "UnaryExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::MultiplicativeExpr.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 644)
+module_eval(<<'.,.,', 'parser.y', 497)
   def _reduce_75(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"MultiplicativeExpr" : "MultiplicativeExpr" "*" "UnaryExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"MultiplicativeExpr" : "MultiplicativeExpr" "*" "UnaryExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::MultiplicativeExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 652)
+module_eval(<<'.,.,', 'parser.y', 503)
   def _reduce_76(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"MultiplicativeExpr" : "MultiplicativeExpr" "div" "UnaryExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"MultiplicativeExpr" : "MultiplicativeExpr" "div" "UnaryExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::MultiplicativeExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 660)
+module_eval(<<'.,.,', 'parser.y', 509)
   def _reduce_77(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"MultiplicativeExpr" : "MultiplicativeExpr" "mod" "UnaryExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"MultiplicativeExpr" : "MultiplicativeExpr" "mod" "UnaryExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::MultiplicativeExpr.new val[0], val[1], val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 669)
+module_eval(<<'.,.,', 'parser.y', 516)
   def _reduce_78(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"UnaryExp" : "UnionExpr"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"UnaryExp" : "UnionExpr"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::UnaryExpr.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 677)
+module_eval(<<'.,.,', 'parser.y', 522)
   def _reduce_79(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"UnaryExp" : "-" "UnaryExp"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"UnaryExp" : "-" "UnaryExp"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::UnaryExpr.new val[1], val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 686)
+module_eval(<<'.,.,', 'parser.y', 529)
   def _reduce_80(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Number" : "Digits"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"Number" : "Digits"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 694)
+module_eval(<<'.,.,', 'parser.y', 535)
   def _reduce_81(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Number" : "Digits" "."'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"Number" : "Digits" "."' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 702)
+module_eval(<<'.,.,', 'parser.y', 541)
   def _reduce_82(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Number" : "Digits" "." "Digits"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"Number" : "Digits" "." "Digits"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0] + val[1] + val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 710)
+module_eval(<<'.,.,', 'parser.y', 547)
   def _reduce_83(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Number" : "." "Digits"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"Number" : "." "Digits"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = "0" + val[1] + val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 719)
+module_eval(<<'.,.,', 'parser.y', 554)
   def _reduce_84(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "last("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "last("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 727)
+module_eval(<<'.,.,', 'parser.y', 560)
   def _reduce_85(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "position("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "position("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::FunctionCall::LAST
 								result = val[0]
 							
@@ -1784,12 +1619,10 @@ module_eval(<<'.,.,', 'parser.y', 727)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 736)
+module_eval(<<'.,.,', 'parser.y', 567)
   def _reduce_86(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "count("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "count("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::FunctionCall::LAST
 								result = val[0]
 							
@@ -1797,12 +1630,10 @@ module_eval(<<'.,.,', 'parser.y', 736)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 745)
+module_eval(<<'.,.,', 'parser.y', 574)
   def _reduce_87(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "id("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "id("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::FunctionCall::LAST
 								result = val[0]
 							
@@ -1810,12 +1641,10 @@ module_eval(<<'.,.,', 'parser.y', 745)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 754)
+module_eval(<<'.,.,', 'parser.y', 581)
   def _reduce_88(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "local-name("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "local-name("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1823,12 +1652,10 @@ module_eval(<<'.,.,', 'parser.y', 754)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 763)
+module_eval(<<'.,.,', 'parser.y', 588)
   def _reduce_89(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "namespace-uri("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "namespace-uri("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1836,12 +1663,10 @@ module_eval(<<'.,.,', 'parser.y', 763)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 772)
+module_eval(<<'.,.,', 'parser.y', 595)
   def _reduce_90(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "name("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "name("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1849,12 +1674,10 @@ module_eval(<<'.,.,', 'parser.y', 772)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 781)
+module_eval(<<'.,.,', 'parser.y', 602)
   def _reduce_91(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "string("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "string("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1862,12 +1685,10 @@ module_eval(<<'.,.,', 'parser.y', 781)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 790)
+module_eval(<<'.,.,', 'parser.y', 609)
   def _reduce_92(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "concat("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "concat("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1875,12 +1696,10 @@ module_eval(<<'.,.,', 'parser.y', 790)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 799)
+module_eval(<<'.,.,', 'parser.y', 616)
   def _reduce_93(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "starts-with("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "starts-with("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1888,12 +1707,10 @@ module_eval(<<'.,.,', 'parser.y', 799)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 808)
+module_eval(<<'.,.,', 'parser.y', 623)
   def _reduce_94(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "contains("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "contains("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1901,12 +1718,10 @@ module_eval(<<'.,.,', 'parser.y', 808)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 817)
+module_eval(<<'.,.,', 'parser.y', 630)
   def _reduce_95(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "substring-before("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "substring-before("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1914,12 +1729,10 @@ module_eval(<<'.,.,', 'parser.y', 817)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 826)
+module_eval(<<'.,.,', 'parser.y', 637)
   def _reduce_96(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "substring-after("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "substring-after("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1927,12 +1740,10 @@ module_eval(<<'.,.,', 'parser.y', 826)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 835)
+module_eval(<<'.,.,', 'parser.y', 644)
   def _reduce_97(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "substring("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "substring("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1940,12 +1751,10 @@ module_eval(<<'.,.,', 'parser.y', 835)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 844)
+module_eval(<<'.,.,', 'parser.y', 651)
   def _reduce_98(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "string-length("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "string-length("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1953,12 +1762,10 @@ module_eval(<<'.,.,', 'parser.y', 844)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 853)
+module_eval(<<'.,.,', 'parser.y', 658)
   def _reduce_99(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "normalize-space("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "normalize-space("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1966,12 +1773,10 @@ module_eval(<<'.,.,', 'parser.y', 853)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 862)
+module_eval(<<'.,.,', 'parser.y', 665)
   def _reduce_100(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "translate("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "translate("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1979,12 +1784,10 @@ module_eval(<<'.,.,', 'parser.y', 862)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 871)
+module_eval(<<'.,.,', 'parser.y', 672)
   def _reduce_101(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "boolean("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "boolean("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -1992,12 +1795,10 @@ module_eval(<<'.,.,', 'parser.y', 871)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 880)
+module_eval(<<'.,.,', 'parser.y', 679)
   def _reduce_102(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "not("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "not("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -2005,12 +1806,10 @@ module_eval(<<'.,.,', 'parser.y', 880)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 889)
+module_eval(<<'.,.,', 'parser.y', 686)
   def _reduce_103(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "true("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "true("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -2018,12 +1817,10 @@ module_eval(<<'.,.,', 'parser.y', 889)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 898)
+module_eval(<<'.,.,', 'parser.y', 693)
   def _reduce_104(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "false("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "false("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -2031,12 +1828,10 @@ module_eval(<<'.,.,', 'parser.y', 898)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 907)
+module_eval(<<'.,.,', 'parser.y', 700)
   def _reduce_105(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "lang("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "lang("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -2044,12 +1839,10 @@ module_eval(<<'.,.,', 'parser.y', 907)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 916)
+module_eval(<<'.,.,', 'parser.y', 707)
   def _reduce_106(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "number("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "number("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -2057,12 +1850,10 @@ module_eval(<<'.,.,', 'parser.y', 916)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 925)
+module_eval(<<'.,.,', 'parser.y', 714)
   def _reduce_107(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "sum("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "sum("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -2070,12 +1861,10 @@ module_eval(<<'.,.,', 'parser.y', 925)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 934)
+module_eval(<<'.,.,', 'parser.y', 721)
   def _reduce_108(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "floor("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "floor("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -2083,12 +1872,10 @@ module_eval(<<'.,.,', 'parser.y', 934)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 943)
+module_eval(<<'.,.,', 'parser.y', 728)
   def _reduce_109(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "ceiling("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "ceiling("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -2096,12 +1883,10 @@ module_eval(<<'.,.,', 'parser.y', 943)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 952)
+module_eval(<<'.,.,', 'parser.y', 735)
   def _reduce_110(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "round("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "round("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 								result = Rubyang::Xpath::FunctionCall::LAST
 							
@@ -2109,168 +1894,140 @@ module_eval(<<'.,.,', 'parser.y', 952)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 961)
+module_eval(<<'.,.,', 'parser.y', 742)
   def _reduce_111(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"FunctionName(" : "current("'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"FunctionName(" : "current("' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = Rubyang::Xpath::FunctionCall::CURRENT
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 970)
+module_eval(<<'.,.,', 'parser.y', 749)
   def _reduce_112(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"VariableReference" : "$" "QName"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"VariableReference" : "$" "QName"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 979)
+module_eval(<<'.,.,', 'parser.y', 756)
   def _reduce_113(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"NameTest" : "*"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"NameTest" : "*"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								Rubyang::Xpath::NodeTest::NameTest.new '*'
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 987)
+module_eval(<<'.,.,', 'parser.y', 762)
   def _reduce_114(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"NameTest" : "NCName" ":" "*"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"NameTest" : "NCName" ":" "*"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								Rubyang::Xpath::NodeTest::NameTest.new "#{val[0]}:*"
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 995)
+module_eval(<<'.,.,', 'parser.y', 768)
   def _reduce_115(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"NameTest" : "QName"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"NameTest" : "QName"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								Rubyang::Xpath::NodeTest::NameTest.new val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1004)
+module_eval(<<'.,.,', 'parser.y', 775)
   def _reduce_116(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"NodeType" : "comment"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"NodeType" : "comment"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								Rubyang::Xpath::NodeTest::NodeType::COMMENT
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1012)
+module_eval(<<'.,.,', 'parser.y', 781)
   def _reduce_117(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"NodeType" : "text"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"NodeType" : "text"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								Rubyang::Xpath::NodeTest::NodeType::TEXT
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1020)
+module_eval(<<'.,.,', 'parser.y', 787)
   def _reduce_118(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"NodeType" : "node"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"NodeType" : "node"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								Rubyang::Xpath::NodeTest::NodeType::NODE
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1029)
+module_eval(<<'.,.,', 'parser.y', 794)
   def _reduce_119(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"QName" : "PrefixedName"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"QName" : "PrefixedName"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1037)
+module_eval(<<'.,.,', 'parser.y', 800)
   def _reduce_120(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"QName" : "UnprefixedName"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"QName" : "UnprefixedName"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1046)
+module_eval(<<'.,.,', 'parser.y', 807)
   def _reduce_121(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"PrefixedName" : "Prefix" ":" "LocalPart"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"PrefixedName" : "Prefix" ":" "LocalPart"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0] + val[1] + val[2]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1055)
+module_eval(<<'.,.,', 'parser.y', 814)
   def _reduce_122(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"UnprefixedName" : "LocalPart"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"UnprefixedName" : "LocalPart"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1064)
+module_eval(<<'.,.,', 'parser.y', 821)
   def _reduce_123(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"Prefix" : "NCName"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"Prefix" : "NCName"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1073)
+module_eval(<<'.,.,', 'parser.y', 828)
   def _reduce_124(val, _values, result)
-    								if Rubyang::Xpath::Parser::DEBUG
-									puts '"LocalPart" : "NCName"'
-									puts "val: #{val.inspect}"
-								end
+    								@@logger.debug { '"LocalPart" : "NCName"' }
+								@@logger.debug { "val: #{val.inspect}" }
 								result = val[0]
 							
     result

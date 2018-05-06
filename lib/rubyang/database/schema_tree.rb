@@ -2,6 +2,7 @@
 # vim: et ts=2 sw=2
 
 require 'json'
+require 'yaml'
 require 'base64'
 
 require_relative '../model'
@@ -14,15 +15,13 @@ module Rubyang
       class When
         attr_reader :arg, :xpath
         def initialize schema_node, schema
+          @logger = Logger.new(self.class.name)
           @schema_node = schema_node
           @schema = schema
           @arg = schema.arg
           @xpath = Rubyang::Xpath::Parser.parse @arg
-          require 'yaml'
-          puts ''
-          puts 'when xpath:'
-          puts @xpath.to_yaml
-          puts
+          @logger.debug { 'when xpath:' }
+          @logger.debug { @xpath.to_yaml }
           @schema_node.evaluate_xpath @xpath
         end
       end
@@ -229,21 +228,15 @@ module Rubyang
 
         def initialize schema_node, arg
           @xpath = Rubyang::Xpath::Parser.parse arg
+          @logger = Logger.new(self.class.name)
           #if !(@xpath[0].axis.name == Rubyang::Xpath::Axis::PARENT && @xpath[0].node_test.node_test == Rubyang::Xpath::NodeTest::NodeType::NODE)
           #raise "unsupported path: #{@xpath}"
           #end
-          if Rubyang::Xpath::Parser::DEBUG
-            require 'yaml'
-            puts
-            puts 'in Path:'
-            puts
-            puts 'schema_node:'
-            puts schema_node.to_yaml
-            puts
-            puts '@xpath:'
-            puts @xpath.to_yaml
-            puts
-          end
+          @logger.debug { 'in Path:' }
+          @logger.debug { 'schema_node:' }
+          @logger.debug { schema_node.to_yaml }
+          @logger.debug { '@xpath:' }
+          @logger.debug { @xpath.to_yaml }
           target = schema_node.evaluate_xpath( @xpath )
           if target.class != Array || target.size == 0
             raise ArgumentError, "#{arg} is not valid"
@@ -402,12 +395,12 @@ module Rubyang
       class SchemaNode
         attr_accessor :yangs, :arg, :yang, :parent, :module
         def initialize yangs, arg, yang, parent, _module
+          @logger = Logger.new(self.class.name)
           @yangs = yangs
           @arg = arg
           @yang = yang
           @parent = parent
           @module = _module
-          @logger = Logger.new(self.class.name)
         end
         def to_s parent=true
           head, vars, tail = "#<#{self.class.to_s}:0x#{(self.object_id << 1).to_s(16).rjust(14,'0')} ", Array.new, ">"
@@ -443,90 +436,50 @@ module Rubyang
         end
 
         def evaluate_xpath xpath, current=self
-          if Rubyang::Xpath::Parser::DEBUG
-            require 'yaml'
-            puts
-            puts 'in evaluate_xpath:'
-            puts
-            puts 'xpath:'
-            puts xpath.to_yaml
-            puts
-            puts 'current:'
-            puts current.class
-            puts
-          end
+          @logger.debug { 'in evaluate_xpath:' }
+          @logger.debug { 'xpath:' }
+          @logger.debug { xpath.to_yaml }
+          @logger.debug { 'current:' }
+          @logger.debug { current.class }
           evaluate_xpath_expr xpath, current
         end
 
         def evaluate_xpath_path location_path, current
-          if Rubyang::Xpath::Parser::DEBUG
-            require 'yaml'
-            puts
-            puts 'in evaluate_xpath_path:'
-            puts
-            puts 'location_path:'
-            puts location_path.to_yaml
-            puts
-            puts 'current:'
-            puts current.class
-          end
+          @logger.debug { 'in evaluate_xpath_path:' }
+          @logger.debug { 'location_path:' }
+          @logger.debug { location_path.to_yaml }
+          @logger.debug { 'current:' }
+          @logger.debug { current.class }
           first_location_step = location_path.location_step_sequence.first
-          if Rubyang::Xpath::Parser::DEBUG
-            require 'yaml'
-            puts
-            puts 'first_location_step:'
-            puts first_location_step.to_yaml
-          end
+          @logger.debug { 'first_location_step:' }
+          @logger.debug { first_location_step.to_yaml }
           candidates_by_axis = self.evaluate_xpath_axis( first_location_step, current )
-          if Rubyang::Xpath::Parser::DEBUG
-            require 'yaml'
-            puts
-            puts 'candidates_by_axis:'
-            puts candidates_by_axis.to_yaml
-          end
+          @logger.debug { 'candidates_by_axis:' }
+          @logger.debug { candidates_by_axis.to_yaml }
           candidates_by_node_test = candidates_by_axis.inject([]){ |cs, c| cs + c.evaluate_xpath_node_test( first_location_step, current ) }
-          if Rubyang::Xpath::Parser::DEBUG
-            require 'yaml'
-            puts
-            puts 'candidates_by_node_test:'
-            puts candidates_by_node_test.to_yaml
-          end
+          @logger.debug { 'candidates_by_node_test:' }
+          @logger.debug { candidates_by_node_test.to_yaml }
           candidates_by_predicates = candidates_by_node_test.inject([]){ |cs, c| cs + c.evaluate_xpath_predicates( first_location_step, current ) }
-          if Rubyang::Xpath::Parser::DEBUG
-            require 'yaml'
-            puts
-            puts 'candidates_by_predicates:'
-            puts candidates_by_predicates.to_yaml
-          end
+          @logger.debug { 'candidates_by_predicates:' }
+          @logger.debug { candidates_by_predicates.to_yaml }
           if location_path.location_step_sequence[1..-1].size == 0
             candidates_by_predicates
           else
             candidates_by_predicates.inject([]){ |cs, c|
               following_location_path = Rubyang::Xpath::LocationPath.new *(location_path.location_step_sequence[1..-1])
-              if Rubyang::Xpath::Parser::DEBUG
-                puts
-                puts 'following_location_path:'
-                puts following_location_path.to_yaml
-                puts
-              end
+              @logger.debug { 'following_location_path:' }
+              @logger.debug { following_location_path.to_yaml }
               c.evaluate_xpath_path( following_location_path, current )
             }
           end
         end
 
         def evaluate_xpath_axis location_step, current
-          if Rubyang::Xpath::Parser::DEBUG
-            require 'yaml'
-            puts
-            puts 'in evaluate_xpath_axis:'
-            puts
-            puts 'location_step:'
-            puts location_step.to_yaml
-            puts
-            puts 'current:'
-            puts current.class
-            puts
-          end
+          @logger.debug { 'in evaluate_xpath_axis:' }
+          @logger.debug { 'location_step:' }
+          @logger.debug { location_step.to_yaml }
+          @logger.debug { 'current:' }
+          @logger.debug { current.class }
           case location_step.axis.name
           when Rubyang::Xpath::Axis::SELF
             [self]
@@ -580,22 +533,14 @@ module Rubyang
         def evaluate_xpath_expr expr, current
           case expr
           when Rubyang::Xpath::Expr
-            if Rubyang::Xpath::Parser::DEBUG
-              puts
-              puts "in Expr"
-              puts "op: #{expr.op}"
-              puts
-            end
+            @logger.debug { "in Expr" }
+            @logger.debug { "op: #{expr.op}" }
             op = expr.op
             op_result = self.evaluate_xpath_expr( op, current )
           when Rubyang::Xpath::OrExpr
-            if Rubyang::Xpath::Parser::DEBUG
-              puts
-              puts "in OrExpr"
-              puts "op1: #{expr.op1}"
-              puts "op2: #{expr.op2}"
-              puts
-            end
+            @logger.debug { "in OrExpr" }
+            @logger.debug { "op1: #{expr.op1}" }
+            @logger.debug { "op2: #{expr.op2}" }
             op1 = expr.op1
             op2 = expr.op2
             op1_result = self.evaluate_xpath_expr( op1, current )
@@ -606,13 +551,9 @@ module Rubyang
               Rubyang::Xpath::BasicType::Boolean
             end
           when Rubyang::Xpath::AndExpr
-            if Rubyang::Xpath::Parser::DEBUG
-              puts
-              puts "in AndExpr"
-              puts "op1: #{expr.op1}"
-              puts "op2: #{expr.op2}"
-              puts
-            end
+            @logger.debug { "in AndExpr" }
+            @logger.debug { "op1: #{expr.op1}" }
+            @logger.debug { "op2: #{expr.op2}" }
             op1 = expr.op1
             op2 = expr.op2
             op1_result = self.evaluate_xpath_expr( op1, current )
@@ -623,14 +564,10 @@ module Rubyang
               Rubyang::Xpath::BasicType::Boolean
             end
           when Rubyang::Xpath::EqualityExpr
-            if Rubyang::Xpath::Parser::DEBUG
-              puts
-              puts "in EqualityExpr"
-              puts "op1: #{expr.op1}"
-              puts "op2: #{expr.op2}"
-              puts "operator: #{expr.operator}"
-              puts
-            end
+            @logger.debug { "in EqualityExpr" }
+            @logger.debug { "op1: #{expr.op1}" }
+            @logger.debug { "op2: #{expr.op2}" }
+            @logger.debug { "operator: #{expr.operator}" }
             op1 = expr.op1
             op2 = expr.op2
             operator = expr.operator
@@ -642,14 +579,10 @@ module Rubyang
               Rubyang::Xpath::BasicType::Boolean
             end
           when Rubyang::Xpath::RelationalExpr
-            if Rubyang::Xpath::Parser::DEBUG
-              puts
-              puts "in RelationalExpr"
-              puts "op1: #{expr.op1}"
-              puts "op2: #{expr.op2}"
-              puts "operator: #{expr.operator}"
-              puts
-            end
+            @logger.debug { "in RelationalExpr" }
+            @logger.debug { "op1: #{expr.op1}" }
+            @logger.debug { "op2: #{expr.op2}" }
+            @logger.debug { "operator: #{expr.operator}" }
             op1 = expr.op1
             op2 = expr.op2
             operator = expr.operator
@@ -661,14 +594,10 @@ module Rubyang
               Rubyang::Xpath::BasicType::Boolean
             end
           when Rubyang::Xpath::AdditiveExpr
-            if Rubyang::Xpath::Parser::DEBUG
-              puts
-              puts "in AdditiveExpr"
-              puts "op1: #{expr.op1}"
-              puts "op2: #{expr.op2}"
-              puts "operator: #{expr.operator}"
-              puts
-            end
+            @logger.debug { "in AdditiveExpr" }
+            @logger.debug { "op1: #{expr.op1}" }
+            @logger.debug { "op2: #{expr.op2}" }
+            @logger.debug { "operator: #{expr.operator}" }
             op1 = expr.op1
             op2 = expr.op2
             operator = expr.operator
@@ -680,14 +609,10 @@ module Rubyang
               Rubyang::Xpath::BasicType::Number
             end
           when Rubyang::Xpath::MultiplicativeExpr
-            if Rubyang::Xpath::Parser::DEBUG
-              puts
-              puts "in MultiplicativeExpr"
-              puts "op1: #{expr.op1}"
-              puts "op2: #{expr.op2}"
-              puts "operator: #{expr.operator}"
-              puts
-            end
+            @logger.debug { "in MultiplicativeExpr" }
+            @logger.debug { "op1: #{expr.op1}" }
+            @logger.debug { "op2: #{expr.op2}" }
+            @logger.debug { "operator: #{expr.operator}" }
             op1 = expr.op1
             op2 = expr.op2
             operator = expr.operator
@@ -699,13 +624,9 @@ module Rubyang
               Rubyang::Xpath::BasicType::Number
             end
           when Rubyang::Xpath::UnaryExpr
-            if Rubyang::Xpath::Parser::DEBUG
-              puts
-              puts "in UnaryExpr"
-              puts "op1: #{expr.op1}"
-              puts "operator: #{expr.operator}"
-              puts
-            end
+            @logger.debug { "in UnaryExpr" }
+            @logger.debug { "op1: #{expr.op1}" }
+            @logger.debug { "operator: #{expr.operator}" }
             op1 = expr.op1
             operator = expr.operator
             op1_result = self.evaluate_xpath_expr( op1, current )
@@ -715,14 +636,10 @@ module Rubyang
               Rubyang::Xpath::BasicType::Number
             end
           when Rubyang::Xpath::UnionExpr
-            if Rubyang::Xpath::Parser::DEBUG
-              puts
-              puts "in UnionExpr"
-              puts "op1: #{expr.op1}"
-              puts "op2: #{expr.op2}"
-              puts "operator: #{expr.operator}"
-              puts
-            end
+            @logger.debug { "in UnionExpr" }
+            @logger.debug { "op1: #{expr.op1}" }
+            @logger.debug { "op2: #{expr.op2}" }
+            @logger.debug { "operator: #{expr.operator}" }
             op1 = expr.op1
             op2 = expr.op2
             operator = expr.operator
@@ -734,14 +651,10 @@ module Rubyang
               Rubyang::Xpath::BasicType::NodeSet
             end
           when Rubyang::Xpath::PathExpr
-            if Rubyang::Xpath::Parser::DEBUG
-              puts
-              puts "in PathExpr"
-              puts "op1: #{expr.op1}"
-              puts "op2: #{expr.op2}"
-              puts "operator: #{expr.operator}"
-              puts
-            end
+            @logger.debug { "in PathExpr" }
+            @logger.debug { "op1: #{expr.op1}" }
+            @logger.debug { "op2: #{expr.op2}" }
+            @logger.debug { "operator: #{expr.operator}" }
             op1 = expr.op1
             op2 = expr.op2
             operator = expr.operator
@@ -760,13 +673,9 @@ module Rubyang
               Rubyang::Xpath::BasicType::NodeSet
             end
           when Rubyang::Xpath::FilterExpr
-            if Rubyang::Xpath::Parser::DEBUG
-              puts
-              puts "in FilterExpr"
-              puts "op1: #{expr.op1}"
-              puts "op2: #{expr.op2}"
-              puts
-            end
+            @logger.debug { "in FilterExpr" }
+            @logger.debug { "op1: #{expr.op1}" }
+            @logger.debug { "op2: #{expr.op2}" }
             op1 = expr.op1
             op2 = expr.op2
             op1_result = self.evaluate_xpath_expr( op1, current )
@@ -777,12 +686,8 @@ module Rubyang
               Rubyang::Xpath::BasicType::NodeSet
             end
           when Rubyang::Xpath::PrimaryExpr
-            if Rubyang::Xpath::Parser::DEBUG
-              puts
-              puts "in PrimaryExpr"
-              puts "op1: #{expr.op1}"
-              puts
-            end
+            @logger.debug { "in PrimaryExpr" }
+            @logger.debug { "op1: #{expr.op1}" }
             op1 = expr.op1
             case op1
             when Rubyang::Xpath::VariableReference
@@ -799,13 +704,9 @@ module Rubyang
               raise "Primary Expr: '#{op1}' not implemented"
             end
           when Rubyang::Xpath::FunctionCall
-            if Rubyang::Xpath::Parser::DEBUG
-              puts
-              puts "in FunctionCall"
-              puts "name: #{expr.name}"
-              puts "args: #{expr.args}"
-              puts
-            end
+            @logger.debug { "in FunctionCall" }
+            @logger.debug { "name: #{expr.name}" }
+            @logger.debug { "args: #{expr.args}" }
             name = expr.name
             case name
             when Rubyang::Xpath::FunctionCall::CURRENT
@@ -921,12 +822,10 @@ module Rubyang
             self.resolve_uses( yang, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list )
             # when start
           when Rubyang::Model::When
-            require 'yaml'
-            puts ''
-            puts 'when statement'
-            puts ''
-            puts 'yang'
-            puts yang.to_yaml
+            @logger.debug { 'when statement' }
+            @logger.debug { '' }
+            @logger.debug { 'yang' }
+            @logger.debug { yang.to_yaml }
             self.whens.push When.new( self, yang )
             # end
             # must start
@@ -1319,9 +1218,9 @@ module Rubyang
   end
 end
 
-    if __FILE__ == $0
-      require_relative '../../rubyang'
-      yang_str =<<-EOB
+if __FILE__ == $0
+  require_relative '../../rubyang'
+  yang_str =<<-EOB
     module module1 {
       namespace "http://module1.rspec/";
       prefix module1;
@@ -1334,8 +1233,8 @@ end
         }
       }
     }
-      EOB
-      db = Rubyang::Database.new
-      db.load_model Rubyang::Model::Parser.parse( yang_str )
-      puts db.configure.schema.to_json
-    end
+  EOB
+  db = Rubyang::Database.new
+  db.load_model Rubyang::Model::Parser.parse( yang_str )
+  @logger.debug { db.configure.schema.to_json }
+end

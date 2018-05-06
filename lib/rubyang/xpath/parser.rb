@@ -10,14 +10,13 @@ require_relative 'parser/parser.tab.rb'
 module Rubyang
   module Xpath
     class Parser
-      DEBUG ||= false
-
       def self.parse( xpath_str )
         parser = self.new
         parser.parse( xpath_str )
       end
 
       def initialize
+        @logger = Logger.new(self.class.name)
       end
 
       def parse( xpath_str )
@@ -113,27 +112,19 @@ module Rubyang
 
         until s.eos?
           token = s.scan( scanre )
-          if DEBUG
-            p token
-          end
+          @logger.debug { token }
           next if "S" == scanre_list.find{ |s| s[1] =~ token }[0]
           @tokens.push [scanre_list.find{ |s| s[1] =~ token }[0], token]
-          if DEBUG
-            p @tokens.last
-          end
+          @logger.debug { @tokens.last }
         end
 
-        if DEBUG
-          p 'run do_parse'
-        end
+        @logger.debug { 'run do_parse' }
         result = self.do_parse
         result
       end
 
       def next_token
-        if DEBUG
-          p @tokens.first
-        end
+        @logger.debug { @tokens.first }
         @tokens.shift
       end
     end
