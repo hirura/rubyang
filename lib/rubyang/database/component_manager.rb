@@ -3,8 +3,7 @@
 
 require 'open3'
 require 'drb/drb'
-
-require_relative '../../rubyang'
+require 'rubyang'
 
 module Rubyang
   class Database

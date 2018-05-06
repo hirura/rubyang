@@ -2,13 +2,11 @@
 # vim: et ts=2 sw=2
 
 require 'bundler/setup'
-
 require 'sinatra/base'
 require 'sinatra/reloader'
 require 'sinatra/content_for'
-
-require_relative '../../rubyang'
-require_relative 'make_json_schema'
+require 'rubyang'
+require 'rubyang/webui/make_json_schema'
 
 module Rubyang
   module WebUI

@@ -1,8 +1,6 @@
 # coding: utf-8
 # vim: et ts=2 sw=2
 
-require 'spec_helper'
-
 RSpec.describe Rubyang::Database::Logger do
   let(:name){ 'spec' }
   let(:internal_logger){

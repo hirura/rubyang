@@ -2,8 +2,7 @@
 # vim: et ts=2 sw=2
 
 require 'strscan'
-
-#require_relative 'parser/parser.tab.rb'
+#require 'rubyang/cli/parser/parser.tab.rb'
 
 module Rubyang
   class Cli

@@ -1,13 +1,11 @@
 # coding: utf-8
 # vim: et ts=2 sw=2
 
-require 'spec_helper'
-
 require 'rexml/document'
 require 'rexml/formatters/pretty'
 require 'json'
 
-describe 'RFC6020' do
+RSpec.describe 'RFC6020' do
   let( :doc_xml_pretty ){
     pretty_formatter = REXML::Formatters::Pretty.new( 2 )
     pretty_formatter.compact = true

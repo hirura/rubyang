@@ -3,9 +3,8 @@
 
 require 'drb/drb'
 require 'readline'
-
-require_relative '../rubyang'
-require_relative 'cli/parser'
+require 'rubyang'
+require 'rubyang/cli/parser'
 
 module Rubyang
   class Cli

@@ -1,10 +1,9 @@
 # coding: utf-8
 # vim: et ts=2 sw=2
 
-require 'spec_helper'
 require 'yaml'
 
-describe Rubyang::Model do
+RSpec.describe Rubyang::Model do
   let( :stmt_tree_yaml )        { stmt_tree.to_yaml }
 
   let( :module1_stmt )          { Rubyang::Model::Module.new( 'module1', module1_substmts ) }

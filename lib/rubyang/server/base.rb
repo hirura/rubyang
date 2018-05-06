@@ -1,10 +1,9 @@
 # coding: utf-8
 # vim: et ts=2 sw=2
 
-require_relative '../../rubyang'
-
 require 'fileutils'
 require 'drb/drb'
+require 'rubyang'
 
 module Rubyang
   module Server

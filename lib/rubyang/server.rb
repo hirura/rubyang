@@ -1,7 +1,7 @@
 # coding: utf-8
 # vim: et ts=2 sw=2
 
-require_relative '../rubyang'
+require 'rubyang'
 
 module Rubyang
   module Server

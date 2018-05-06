@@ -2,12 +2,10 @@
 # vim: et ts=2 sw=2
 
 require 'bundler/setup'
-
 require 'sinatra/base'
 require 'sinatra/reloader'
 require 'sinatra/respond_with'
-
-require_relative '../../rubyang'
+require 'rubyang'
 
 module Rubyang
   module RestAPI

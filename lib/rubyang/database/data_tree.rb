@@ -6,10 +6,9 @@ require 'rexml/document'
 require 'rexml/formatters/pretty'
 require 'json'
 require 'yaml'
-
-require_relative '../xpath'
-require_relative 'helper'
-require_relative 'component_manager'
+require 'rubyang/xpath'
+require 'rubyang/database/helper'
+require 'rubyang/database/component_manager'
 
 module Rubyang
   class Database

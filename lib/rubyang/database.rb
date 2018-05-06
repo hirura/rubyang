@@ -1,12 +1,11 @@
 # coding: utf-8
 # vim: et ts=2 sw=2
 
-require_relative 'model'
-require_relative 'xpath'
-
-require_relative 'database/logger'
-require_relative 'database/schema_tree'
-require_relative 'database/data_tree'
+require 'rubyang/model'
+require 'rubyang/xpath'
+require 'rubyang/database/logger'
+require 'rubyang/database/schema_tree'
+require 'rubyang/database/data_tree'
 
 module Rubyang
   class Database

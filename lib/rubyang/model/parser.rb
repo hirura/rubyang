@@ -3,8 +3,7 @@
 
 require 'uri'
 require 'strscan'
-
-require_relative 'parser/parser.tab'
+require 'rubyang/model/parser/parser.tab'
 
 module Rubyang
   module Model

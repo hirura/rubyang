@@ -2,7 +2,6 @@
 # vim: et ts=2 sw=2
 
 require 'bundler/setup'
-
 require 'fileutils'
 require 'drb/drb'
 

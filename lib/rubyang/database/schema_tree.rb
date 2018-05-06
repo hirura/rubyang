@@ -4,9 +4,8 @@
 require 'json'
 require 'yaml'
 require 'base64'
-
-require_relative '../model'
-require_relative '../xpath'
+require 'rubyang/model'
+require 'rubyang/xpath'
 
 module Rubyang
   class Database

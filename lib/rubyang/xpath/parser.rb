@@ -2,10 +2,8 @@
 # vim: et ts=2 sw=2
 
 require 'strscan'
-
-require_relative '../xpath.rb'
-
-require_relative 'parser/parser.tab.rb'
+require 'rubyang/xpath'
+require 'rubyang/xpath/parser/parser.tab.rb'
 
 module Rubyang
   module Xpath

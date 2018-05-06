@@ -1,8 +1,8 @@
 # coding: utf-8
 # vim: et ts=2 sw=2
 
-require_relative 'model/logger'
-require_relative 'model/parser'
+require 'rubyang/model/logger'
+require 'rubyang/model/parser'
 
 module Rubyang
   module Model
