@@ -1,4 +1,6 @@
 # coding: utf-8
+# vim: et ts=2 sw=2
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'rubyang/version'
@@ -6,29 +8,23 @@ require 'rubyang/version'
 Gem::Specification.new do |spec|
   spec.name          = "rubyang"
   spec.version       = Rubyang::VERSION
+  spec.license       = "Apache-2.0"
+  spec.summary       = %q{Pure Ruby YANG parser and tree structure data store implementation}
+  spec.description   = %q{Pure Ruby YANG parser and tree structure data store implementation}
   spec.authors       = ["hirura"]
   spec.email         = ["hirura@gmail.com"]
-
-  spec.summary       = %q{YANG parser and tree structure data store}
-  spec.description   = %q{YANG parser and tree structure data store}
   spec.homepage      = "https://github.com/hirura/rubyang"
-  spec.license       = "Apache-2.0"
 
-  # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
-  # delete this section to allow pushing this gem to any host.
-  #if spec.respond_to?(:metadata)
-  #  spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
-  #else
-  #  raise "RubyGems 2.0 or newer is required to protect against public gem pushes."
-  #end
-
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.files         = `git ls-files -z`.split("\x0").reject { |f|
+    f.match(%r{^(test|spec|features)/})
+  }
   spec.require_paths = ["lib"]
+
+  spec.required_ruby_version = '>= 2.0.0'
 
   spec.add_dependency "sinatra",         '~> 1.0'
   spec.add_dependency "sinatra-contrib", '~> 1.0'
+  spec.add_dependency "rack-test",       '~> 0.6.3'
 
   spec.add_development_dependency "bundler",                   '~> 1.16'
   spec.add_development_dependency "rake",                      '~> 11.0'
