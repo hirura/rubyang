@@ -29,7 +29,7 @@ module Rubyang
           @db_mode = db_mode
           @ctx_mode = ctx_mode
           @children = []
-          @logger = Rubyang::Logger.instance
+          @logger = Logger.new(self.class.name)
         end
         def to_s parent=true
           head, vars, tail = "#<#{self.class.to_s}:0x#{(self.object_id << 1).to_s(16).rjust(14,'0')} ", Array.new, ">"
@@ -79,7 +79,7 @@ module Rubyang
                        Rubyang::Xpath::BasicType::Boolean.new true
                      end
                    end
-          @logger.debug "#{self.class}#valid?: return: #{result} #{result.value}"
+          @logger.debug { "#{self.class}#valid?: return: #{result} #{result.value}" }
           result
         end
         def load_merge_xml_recursive doc_xml
@@ -151,7 +151,7 @@ module Rubyang
         # min-elements start
         def evaluate_min_elements
           if @schema.min_elements.size > 0
-            @logger.debug "#{self.class}#evaluate_min_elements: @schema.min_elements.first.arg: #{@schema.min_elements.first.arg}"
+            @logger.debug { "#{self.class}#evaluate_min_elements: @schema.min_elements.first.arg: #{@schema.min_elements.first.arg}" }
             if @children.size >= @schema.min_elements.first.arg.to_i then true else false end
           else
             true
@@ -162,7 +162,7 @@ module Rubyang
         # min-elements start
         def evaluate_max_elements
           if @schema.max_elements.size > 0
-            @logger.debug "#{self.class}#evaluate_max_elements: @schema.max_elements.first.arg: #{@schema.max_elements.first.arg}"
+            @logger.debug { "#{self.class}#evaluate_max_elements: @schema.max_elements.first.arg: #{@schema.max_elements.first.arg}" }
             if @children.size <= @schema.max_elements.first.arg.to_i then true else false end
           else
             true

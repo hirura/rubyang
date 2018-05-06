@@ -4,6 +4,7 @@
 require_relative 'model'
 require_relative 'xpath'
 
+require_relative 'database/logger'
 require_relative 'database/schema_tree'
 require_relative 'database/data_tree'
 

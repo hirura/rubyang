@@ -36,8 +36,8 @@ module Rubyang
           @schema = schema
           @arg = schema.arg
           @xpath = Rubyang::Xpath::Parser.parse @arg
-          @logger = Rubyang::Logger.instance
-          @logger.debug @xpath
+          @logger = Logger.new(self.class.name)
+          @logger.debug { @xpath }
           @schema_node.evaluate_xpath @xpath
         end
       end
@@ -407,7 +407,7 @@ module Rubyang
           @yang = yang
           @parent = parent
           @module = _module
-          @logger = Rubyang::Logger.instance
+          @logger = Logger.new(self.class.name)
         end
         def to_s parent=true
           head, vars, tail = "#<#{self.class.to_s}:0x#{(self.object_id << 1).to_s(16).rjust(14,'0')} ", Array.new, ">"
@@ -931,17 +931,17 @@ module Rubyang
             # end
             # must start
           when Rubyang::Model::Must
-            @logger.debug yang
+            @logger.debug { yang }
             self.musts.push Must.new( self, yang )
             # end
             # min-elements start
           when Rubyang::Model::MinElements
-            @logger.debug yang
+            @logger.debug { yang }
             self.min_elements.push MinElements.new( yang )
             # end
             # max-elements start
           when Rubyang::Model::MaxElements
-            @logger.debug yang
+            @logger.debug { yang }
             self.max_elements.push MaxElements.new( yang )
             # end
           else
@@ -956,7 +956,7 @@ module Rubyang
         def initialize yangs, arg, yang, parent, _module
           super yangs, arg, yang, parent, _module
           @children = []
-          @logger = Rubyang::Logger.instance
+          @logger = Logger.new(self.class.name)
         end
 
         def resolve_uses uses_stmt, yangs, parent_module, current_module, grouping_list, typedef_list, identity_list
@@ -1213,7 +1213,7 @@ module Rubyang
       class Anyxml < SchemaNode
         def initialize *args
           super
-          @logger = Rubyang::Logger.instance
+          @logger = Logger.new(self.class.name)
         end
       end
 

@@ -1,6 +1,7 @@
 # coding: utf-8
 # vim: et ts=2 sw=2
 
+require_relative 'model/logger'
 require_relative 'model/parser'
 
 module Rubyang
@@ -143,8 +144,6 @@ module Rubyang
 
     class ArgStmt < BaseStmt
       def initialize arg, substmts=[]
-        p self.class.name
-        p arg
         super substmts
         @arg = arg
         unless valid_arg? arg

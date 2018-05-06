@@ -1,6 +1,7 @@
 # coding utf-8
 # vim: et ts=2 sw=2
 
+require_relative 'xpath/logger'
 require_relative 'xpath/parser'
 require_relative 'database/data_tree'
 
