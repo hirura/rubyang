@@ -169,21 +169,21 @@ module Rubyang
           when scanres[";"] then
             @tokens.push [";", token]
             next_to_kw = false
-          when scanres[":"] then
-            @tokens.push [":", token]
-            next_to_kw = false
-          when scanres["/"] then
-            @tokens.push ["/", token]
-            next_to_kw = false
-          when scanres["|"] then
-            @tokens.push ["|", token]
-            next_to_kw = false
-          when scanres[".."] then
-            @tokens.push ["..", token]
-            next_to_kw = false
-          when scanres["="] then
-            @tokens.push ["=", token]
-            next_to_kw = false
+          #when scanres[":"] then
+          #  @tokens.push [":", token]
+          #  next_to_kw = false
+          #when scanres["/"] then
+          #  @tokens.push ["/", token]
+          #  next_to_kw = false
+          #when scanres["|"] then
+          #  @tokens.push ["|", token]
+          #  next_to_kw = false
+          #when scanres[".."] then
+          #  @tokens.push ["..", token]
+          #  next_to_kw = false
+          #when scanres["="] then
+          #  @tokens.push ["=", token]
+          #  next_to_kw = false
           when scanres["{"] then
             @tokens.push ["{", token]
             next_to_kw = false
@@ -199,6 +199,8 @@ module Rubyang
           else
             raise "token not match to any scanres: #{token.inspect}"
           end
+
+          #p @tokens.last
         end
 
         result = self.do_parse

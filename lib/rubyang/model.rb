@@ -143,6 +143,8 @@ module Rubyang
 
     class ArgStmt < BaseStmt
       def initialize arg, substmts=[]
+        p self.class.name
+        p arg
         super substmts
         @arg = arg
         unless valid_arg? arg
@@ -198,17 +200,33 @@ module Rubyang
           :'typedef'      => 0..Float::INFINITY,
           :'uses'         => 0..Float::INFINITY,
           :'yang-version' => 0..1,
+          :'unknown'      => 0..Float::INFINITY,
         }
       end
     end
 
     class YangVersion < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Namespace < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Prefix < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Import < ArgStmt
@@ -216,25 +234,42 @@ module Rubyang
         {
           :'prefix'        => 1..1,
           :'revision-date' => 0..1,
+          :'unknown'       => 0..Float::INFINITY,
         }
       end
     end
 
     class RevisionDate < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Include < ArgStmt
       def substatements
         {
           :'revision-date' => 0..1,
+          :'unknown'       => 0..Float::INFINITY,
         }
       end
     end
 
     class Organization < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Contact < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Revision < ArgStmt
@@ -242,6 +277,7 @@ module Rubyang
         {
           :'description' => 0..1,
           :'reference'   => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -274,6 +310,7 @@ module Rubyang
           :'typedef'      => 0..Float::INFINITY,
           :'uses'         => 0..Float::INFINITY,
           :'yang-version' => 0..1,
+          :'unknown'      => 0..Float::INFINITY,
         }
       end
     end
@@ -281,7 +318,8 @@ module Rubyang
     class BelongsTo < ArgStmt
       def substatements
         {
-          :'prefix' => 1..1,
+          :'prefix'  => 1..1,
+          :'unknown' => 0..Float::INFINITY,
         }
       end
     end
@@ -295,6 +333,7 @@ module Rubyang
           :'status'      => 0..1,
           :'type'        => 1..1,
           :'units'       => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -312,6 +351,7 @@ module Rubyang
           :'type'             => 0..Float::INFINITY,
           :'fraction-digits'  => 0..1,
           :'base'             => 0..1,
+          :'unknown'          => 0..Float::INFINITY,
         }
       end
     end
@@ -323,6 +363,7 @@ module Rubyang
           :'status'      => 0..1,
           :'description' => 0..1,
           :'reference'   => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -334,26 +375,57 @@ module Rubyang
           :'status'      => 0..1,
           :'description' => 0..1,
           :'reference'   => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
 
     class Value < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class FractionDigits < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Identityref < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Leafref < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Position < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Union < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Length < ArgStmt
@@ -363,11 +435,17 @@ module Rubyang
           :'error-app-tag' => 0..1,
           :'description'   => 0..1,
           :'reference'     => 0..1,
+          :'unknown'       => 0..Float::INFINITY,
         }
       end
     end
 
     class Path < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Pattern < ArgStmt
@@ -377,6 +455,7 @@ module Rubyang
           :'error-app-tag' => 0..1,
           :'description'   => 0..1,
           :'reference'     => 0..1,
+          :'unknown'       => 0..Float::INFINITY,
         }
       end
     end
@@ -388,17 +467,33 @@ module Rubyang
           :'error-app-tag' => 0..1,
           :'description'   => 0..1,
           :'reference'     => 0..1,
+          :'unknown'       => 0..Float::INFINITY,
         }
       end
     end
 
     class RequireInstance < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Units < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Default < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Container < ArgStmt
@@ -421,6 +516,7 @@ module Rubyang
           :'typedef'     => 0..Float::INFINITY,
           :'uses'        => 0..Float::INFINITY,
           :'when'        => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -432,17 +528,33 @@ module Rubyang
           :'error-app-tag' => 0..1,
           :'error-message' => 0..1,
           :'reference'     => 0..1,
+          :'unknown'       => 0..Float::INFINITY,
         }
       end
     end
 
     class ErrorMessage < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class ErrorAppTag < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Presence < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Leaf < ArgStmt
@@ -459,11 +571,17 @@ module Rubyang
           :'type'        => 1..1,
           :'units'       => 0..1,
           :'when'        => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
 
     class Mandatory < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class LeafList < ArgStmt
@@ -481,17 +599,33 @@ module Rubyang
           :'type'         => 1..1,
           :'units'        => 0..1,
           :'when'         => 0..1,
+          :'unknown'      => 0..Float::INFINITY,
         }
       end
     end
 
     class MinElements < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class MaxElements < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class OrderedBy < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class List < ArgStmt
@@ -518,14 +652,25 @@ module Rubyang
           :'unique'       => 0..Float::INFINITY,
           :'uses'         => 0..Float::INFINITY,
           :'when'         => 0..1,
+          :'unknown'      => 0..Float::INFINITY,
         }
       end
     end
 
     class Key < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Unique < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Choice < ArgStmt
@@ -545,6 +690,7 @@ module Rubyang
           :'reference'   => 0..1,
           :'status'      => 0..1,
           :'when'        => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -564,6 +710,7 @@ module Rubyang
           :'status'      => 0..1,
           :'uses'        => 0..Float::INFINITY,
           :'when'        => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -579,6 +726,7 @@ module Rubyang
           :'reference'   => 0..1,
           :'status'      => 0..1,
           :'when'        => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -598,6 +746,7 @@ module Rubyang
           :'status'      => 0..1,
           :'typedef'     => 0..Float::INFINITY,
           :'uses'        => 0..Float::INFINITY,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -612,6 +761,7 @@ module Rubyang
           :'reference'   => 0..1,
           :'status'      => 0..1,
           :'when'        => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -630,6 +780,7 @@ module Rubyang
           :'reference'    => 0..1,
           :'status'       => 0..1,
           :'when'         => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -645,6 +796,7 @@ module Rubyang
           :'reference'   => 0..1,
           :'status'      => 0..1,
           :'typedef'     => 0..Float::INFINITY,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -661,6 +813,7 @@ module Rubyang
           :'list'        => 0..Float::INFINITY,
           :'typedef'     => 0..Float::INFINITY,
           :'uses'        => 0..Float::INFINITY,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -677,6 +830,7 @@ module Rubyang
           :'list'        => 0..Float::INFINITY,
           :'typedef'     => 0..Float::INFINITY,
           :'uses'        => 0..Float::INFINITY,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -697,6 +851,7 @@ module Rubyang
           :'status'      => 0..1,
           :'typedef'     => 0..Float::INFINITY,
           :'uses'        => 0..Float::INFINITY,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -717,6 +872,7 @@ module Rubyang
           :'status'      => 0..1,
           :'uses'        => 0..Float::INFINITY,
           :'when'        => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -728,6 +884,7 @@ module Rubyang
           :'description' => 0..1,
           :'reference'   => 0..1,
           :'status'      => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -742,6 +899,7 @@ module Rubyang
           :'description' => 0..1,
           :'reference'   => 0..1,
           :'status'      => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -750,14 +908,25 @@ module Rubyang
       def substatements
         {
           :'yin-element' => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
 
     class YinElement < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class ConformanceRelated < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Feature < ArgStmt
@@ -767,11 +936,17 @@ module Rubyang
           :'if-feature'  => 0..Float::INFINITY,
           :'reference'   => 0..1,
           :'status'      => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
 
     class IfFeature < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Deviation < ArgStmt
@@ -780,6 +955,7 @@ module Rubyang
           :'description' => 0..1,
           :'deviate'     => 1..Float::INFINITY,
           :'reference'   => 0..1,
+          :'unknown'     => 0..Float::INFINITY,
         }
       end
     end
@@ -796,23 +972,44 @@ module Rubyang
           :'type'         => 0..1,
           :'unique'       => 0..Float::INFINITY,
           :'units'        => 0..1,
+          :'unknown'      => 0..Float::INFINITY,
         }
       end
     end
 
     class Config < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
       def valid_arg? arg
         ['true', 'false'].include? arg
       end
     end
 
     class Status < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Description < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class Reference < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
     end
 
     class When < ArgStmt
@@ -821,6 +1018,21 @@ module Rubyang
           :'description'  => 0..1,
           :'reference'    => 0..1,
         }
+      end
+    end
+
+    class Unknown < ArgStmt
+      def substatements
+        {
+          :'unknown' => 0..Float::INFINITY,
+        }
+      end
+      def initialize name, arg='', substmts=[]
+        super arg, substmts
+        @name = name
+      end
+      def name
+        @name
       end
     end
 
@@ -893,6 +1105,7 @@ module Rubyang
         { :name => 'when',             :class => Rubyang::Model::When },
         { :name => 'yang-version',     :class => Rubyang::Model::YangVersion },
         { :name => 'yin-element',      :class => Rubyang::Model::YinElement },
+        { :name => 'unknown',          :class => Rubyang::Model::Unknown },
       ]
       def self.find key
         case key

@@ -2336,7 +2336,7 @@ describe Rubyang::Model do
 				let( :stmt_tree ){ module1_stmt }
 				let( :module1_substmts ){ [namespace_stmt, prefix_stmt, leaf1_stmt] }
 				let( :leaf1_substmts ){ [type_decimal64_stmt] }
-				let( :type_decimal64_substmts ){ [fraction_digits1_stmt, range1_stmt] }
+				let( :type_decimal64_substmts ){ [range1_stmt, fraction_digits1_stmt] }
 				subject { Rubyang::Model::Parser.parse( yang_str ).to_yaml }
 				it { is_expected.to eq stmt_tree_yaml }
 			end
