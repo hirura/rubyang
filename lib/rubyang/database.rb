@@ -29,13 +29,27 @@ module Rubyang
     end
 
     def load_model model
-      @schema_tree.load model
+      case model
+      when String
+        @schema_tree.load Rubyang::Model::Parser.parse(model)
+      when Model::Module, Model::Submodule
+        @schema_tree.load model
+      else
+        raise ArgumentError, "Argument must be one of an instance of String, Rubyang::Model::Module or Rubyang::Model::Submodule"
+      end
     end
 
     def load_models models
       module_dependency_tree = ModuleDependencyTree.new
       models.each{ |m|
-        module_dependency_tree.register m
+        case m
+        when String
+          module_dependency_tree.register Rubyang::Model::Parser.parse(m)
+        when Model::Module, Model::Submodule
+          module_dependency_tree.register m
+        else
+          raise ArgumentError, "Element of argument must be one of an instance of String, Rubyang::Model::Module or Rubyang::Model::Submodule"
+        end
       }
       module_dependency_tree.list_loadable.each{ |m|
         @schema_tree.load m

@@ -43,18 +43,56 @@ RSpec.describe Rubyang::Database do
   let( :db ){ Rubyang::Database.new }
 
   describe '#load_model' do
-    let( :yang_str ){
-      <<-EOB
+    context "when argument is Rubyang::Model::Module" do
+      let( :yang_str ){
+        <<-EOB
         module module1 {
           namespace "http://module1.rspec/";
           prefix module1;
         }
-      EOB
-    }
-    subject { ->{
-      db.load_model Rubyang::Model::Parser.parse(yang_str)
-    } }
-    it { is_expected.not_to raise_error }
+        EOB
+      }
+      subject { ->{
+        db.load_model Rubyang::Model::Parser.parse(yang_str)
+      } }
+      it { is_expected.not_to raise_error }
+    end
+
+    context "when argument is Rubyang::Model::Submodule" do
+      let( :yang_str ){
+        <<-EOB
+        submodule submodule1 {
+          belongs-to module1 { prefix module1; }
+        }
+        EOB
+      }
+      subject { ->{
+        db.load_model Rubyang::Model::Parser.parse(yang_str)
+      } }
+      it { is_expected.not_to raise_error }
+    end
+
+    context "when argument is String" do
+      let( :yang_str ){
+        <<-EOB
+        module module1 {
+          namespace "http://module1.rspec/";
+          prefix module1;
+        }
+        EOB
+      }
+      subject { ->{
+        db.load_model yang_str
+      } }
+      it { is_expected.not_to raise_error }
+    end
+
+    context "when argument is Integer" do
+      subject { ->{
+        db.load_model 1
+      } }
+      it { is_expected.to raise_error ArgumentError }
+    end
   end
 
   describe '#load_models' do
@@ -63,21 +101,52 @@ RSpec.describe Rubyang::Database do
         module module1 {
           namespace "http://module1.rspec/";
           prefix module1;
+          include submodule1;
         }
       EOB
     }
     let( :yang_str2 ){
       <<-EOB
-        module module2 {
-          namespace "http://module2.rspec/";
-          prefix module2;
+        submodule submodule1 {
+          belongs-to module1 { prefix module1; }
         }
       EOB
     }
-    subject { ->{
-      db.load_models [Rubyang::Model::Parser.parse(yang_str1), Rubyang::Model::Parser.parse(yang_str2)]
-    } }
-    it { is_expected.not_to raise_error }
+
+    context "when args are Rubyang::Model::Module and Rubyand::Model::Submodule" do
+      subject { ->{
+        db.load_models [Rubyang::Model::Parser.parse(yang_str1), Rubyang::Model::Parser.parse(yang_str2)]
+      } }
+      it { is_expected.not_to raise_error }
+    end
+
+    context "when args are String" do
+      subject { ->{
+        db.load_models [yang_str1, yang_str2]
+      } }
+      it { is_expected.not_to raise_error }
+    end
+
+    context "when args contains both Rubyang::Model::Module and String" do
+      subject { ->{
+        db.load_models [Rubyang::Model::Parser.parse(yang_str1), yang_str2]
+      } }
+      it { is_expected.not_to raise_error }
+    end
+
+    context "when args contains both Rubyang::Model::Subodule and String" do
+      subject { ->{
+        db.load_models [yang_str1, Rubyang::Model::Parser.parse(yang_str2)]
+      } }
+      it { is_expected.not_to raise_error }
+    end
+
+    context "when args contains Integer" do
+      subject { ->{
+        db.load_models [1]
+      } }
+      it { is_expected.to raise_error ArgumentError }
+    end
   end
 
   describe 'to_xml' do
