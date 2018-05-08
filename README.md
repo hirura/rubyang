@@ -38,7 +38,7 @@ require 'rubyang'
 You can specify YANG model as String:
 
 ```ruby
-yang = <<EOB
+yang_string = <<-'EOB'
 module rubyang-example {
   namespace 'http://rubyang/example';
   prefix 'rubyang-example';
@@ -60,7 +60,7 @@ db = Rubyang::Database.new
 You can load YANG model to DB:
 
 ```ruby
-db.load_model Rubyang::Model::Parser.parse( yang )
+db.load_model yang_string
 ```
 
 Then configurations can be set with YANG model:
