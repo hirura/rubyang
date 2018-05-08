@@ -42,6 +42,44 @@ RSpec.describe Rubyang::Database do
 
   let( :db ){ Rubyang::Database.new }
 
+  describe '#load_model' do
+    let( :yang_str ){
+      <<-EOB
+        module module1 {
+          namespace "http://module1.rspec/";
+          prefix module1;
+        }
+      EOB
+    }
+    subject { ->{
+      db.load_model Rubyang::Model::Parser.parse(yang_str)
+    } }
+    it { is_expected.not_to raise_error }
+  end
+
+  describe '#load_models' do
+    let( :yang_str1 ){
+      <<-EOB
+        module module1 {
+          namespace "http://module1.rspec/";
+          prefix module1;
+        }
+      EOB
+    }
+    let( :yang_str2 ){
+      <<-EOB
+        module module2 {
+          namespace "http://module2.rspec/";
+          prefix module2;
+        }
+      EOB
+    }
+    subject { ->{
+      db.load_models [Rubyang::Model::Parser.parse(yang_str1), Rubyang::Model::Parser.parse(yang_str2)]
+    } }
+    it { is_expected.not_to raise_error }
+  end
+
   describe 'to_xml' do
     let( :yang_str ){
       <<-EOB

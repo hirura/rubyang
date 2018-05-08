@@ -4,6 +4,7 @@
 require 'rubyang/model'
 require 'rubyang/xpath'
 require 'rubyang/database/logger'
+require 'rubyang/database/module_dependency_tree'
 require 'rubyang/database/schema_tree'
 require 'rubyang/database/data_tree'
 
@@ -29,6 +30,16 @@ module Rubyang
 
     def load_model model
       @schema_tree.load model
+    end
+
+    def load_models models
+      module_dependency_tree = ModuleDependencyTree.new
+      models.each{ |m|
+        module_dependency_tree.register m
+      }
+      module_dependency_tree.list_loadable.each{ |m|
+        @schema_tree.load m
+      }
     end
 
     def configure
