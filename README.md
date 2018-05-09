@@ -38,12 +38,24 @@ require 'rubyang'
 You can specify YANG model as String:
 
 ```ruby
-yang_string = <<-'EOB'
-module rubyang-example {
-  namespace 'http://rubyang/example';
-  prefix 'rubyang-example';
+yang_string_1 = <<-'EOB'
+module rubyang-example-1 {
+  namespace 'http://rubyang/example/1';
+  prefix 'rubyang-example-1';
   container container1 {
     leaf leaf1 {
+      type string;
+    }
+  }
+}
+EOB
+
+yang_string_2 = <<-'EOB'
+module rubyang-example-2 {
+  namespace 'http://rubyang/example/2';
+  prefix 'rubyang-example-2';
+  container container2 {
+    leaf leaf2 {
       type string;
     }
   }
@@ -57,11 +69,14 @@ And prepare DB for configurations:
 db = Rubyang::Database.new
 ```
 
-You can load YANG model to DB:
+You can load YANG models to DB:
 
 ```ruby
-db.load_model yang_string
+yang_string_list = [yang_string_1, yang_string_2]
+db.load_models yang_string_list
 ```
+
+The YANG models' dependencies are taken care automatically based on their `import` and `include` statements.
 
 Then configurations can be set with YANG model:
 
