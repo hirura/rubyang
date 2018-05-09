@@ -1352,7 +1352,7 @@ Racc_token_to_s_table = [
   "\"identifier\"",
   "\"identifier-arg\"" ]
 
-Racc_debug_parser = true
+Racc_debug_parser = false
 
 ##### State transition tables end #####
 
@@ -3559,7 +3559,7 @@ module_eval(<<'.,.,', 'parser.y', 1472)
 
 # reduce 447 omitted
 
-module_eval(<<'.,.,', 'parser.y', 1490)
+module_eval(<<'.,.,', 'parser.y', 1486)
   def _reduce_448(val, _values, result)
     								result = Rubyang::Model::Deviate.new( val[1] )
 							
@@ -3567,7 +3567,7 @@ module_eval(<<'.,.,', 'parser.y', 1490)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1494)
+module_eval(<<'.,.,', 'parser.y', 1490)
   def _reduce_449(val, _values, result)
     								substmts = val[3]
 								result = Rubyang::Model::Deviate.new( val[1], substmts )
@@ -3576,7 +3576,7 @@ module_eval(<<'.,.,', 'parser.y', 1494)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1500)
+module_eval(<<'.,.,', 'parser.y', 1496)
   def _reduce_450(val, _values, result)
     								result = []
 							
@@ -3584,7 +3584,7 @@ module_eval(<<'.,.,', 'parser.y', 1500)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1504)
+module_eval(<<'.,.,', 'parser.y', 1500)
   def _reduce_451(val, _values, result)
     								result = val[0] + [val[1]]
 							
@@ -3610,7 +3610,7 @@ module_eval(<<'.,.,', 'parser.y', 1504)
 
 # reduce 460 omitted
 
-module_eval(<<'.,.,', 'parser.y', 1519)
+module_eval(<<'.,.,', 'parser.y', 1515)
   def _reduce_461(val, _values, result)
     								unless ['not-supported', 'add', 'replace', 'delete'].include? val[0]
 									raise "deviate statement's argument must be 'not-supported' or 'add' or 'replace' or 'delete', but '#{val[0]}'"
@@ -3621,7 +3621,7 @@ module_eval(<<'.,.,', 'parser.y', 1519)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1527)
+module_eval(<<'.,.,', 'parser.y', 1523)
   def _reduce_462(val, _values, result)
     								unless /^(min|max|[+-]?[0-9]+(\.[0-9]+)*)(\s*\.\.\s*(min|max|[+-]?[0-9]+(\.[0-9]+)*))*(\s*\|\s*(min|max|[+-]?[0-9]+(\.[0-9]+)*)(\s*\.\.\s*(min|max|[+-]?[0-9]+(\.[0-9]+)*))*)*$/ =~ val[0]
 									raise "bad range-arg-str, but '#{val[0]}"
@@ -3632,7 +3632,7 @@ module_eval(<<'.,.,', 'parser.y', 1527)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1535)
+module_eval(<<'.,.,', 'parser.y', 1531)
   def _reduce_463(val, _values, result)
     								unless /^(min|max|[+]?[0-9]+)(\s*\.\.\s*(min|max|[+]?[0-9]+))*(\s*\|\s*(min|max|[+]?[0-9]+)(\s*\.\.\s*(min|max|[+]?[0-9]+))*)*$/ =~ val[0]
 									raise "bad length-arg-str, but '#{val[0]}'"
@@ -3643,7 +3643,7 @@ module_eval(<<'.,.,', 'parser.y', 1535)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1543)
+module_eval(<<'.,.,', 'parser.y', 1539)
   def _reduce_464(val, _values, result)
     								unless /^\d\d\d\d-\d\d-\d\d$/ =~ val[0]
 									raise ParseError, "bad date-arg-str"
@@ -3654,7 +3654,7 @@ module_eval(<<'.,.,', 'parser.y', 1543)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1551)
+module_eval(<<'.,.,', 'parser.y', 1547)
   def _reduce_465(val, _values, result)
     								unless /^\/(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*(\/(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*)*$/ =~ val[0]
 									raise ParseError, "bad absolute-schema-nodeid"
@@ -3665,7 +3665,7 @@ module_eval(<<'.,.,', 'parser.y', 1551)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1559)
+module_eval(<<'.,.,', 'parser.y', 1555)
   def _reduce_466(val, _values, result)
     								unless /^(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*(\/(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*)*$/ =~ val[0]
 									raise ParseError, "bad absolute-schema-nodeid"
@@ -3676,7 +3676,7 @@ module_eval(<<'.,.,', 'parser.y', 1559)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1567)
+module_eval(<<'.,.,', 'parser.y', 1563)
   def _reduce_467(val, _values, result)
     								unless /^(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*/ =~ val[0]
 									raise ParseError, "bad identifier"
@@ -3687,7 +3687,7 @@ module_eval(<<'.,.,', 'parser.y', 1567)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1575)
+module_eval(<<'.,.,', 'parser.y', 1571)
   def _reduce_468(val, _values, result)
     								unless /^([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:([a-zA-Z]|_)[a-zA-Z0-9_\.-]*/ =~ val[0]
 									raise ParseError, "bad prefix:identifier"
@@ -3698,7 +3698,7 @@ module_eval(<<'.,.,', 'parser.y', 1575)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1583)
+module_eval(<<'.,.,', 'parser.y', 1579)
   def _reduce_469(val, _values, result)
     								unless /^(\/(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*(\[\s*(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*\s*=\s*current\s*\(\s*\)\s*\/\s*(\.\.\s*\/\s*)+((([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*\s*\/\s*)*(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*\s*\])*)+$/ =~ val[0] || /^(\.\.\/)+(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*((\[\s*(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*\s*=\s*current\s*\(\s*\)\s*\/\s*(\.\.\s*\/\s*)+((([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*\s*\/\s*)*(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*\s*\])*(\/(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*(\[\s*(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*\s*=\s*current\s*\(\s*\)\s*\/\s*(\.\.\s*\/\s*)+((([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*\s*\/\s*)*(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*\s*\])*)+)?$/ =~ val[0]
 									raise ParseError, "bad path-arg-str, but '#{val[0]}'"
@@ -3719,7 +3719,7 @@ module_eval(<<'.,.,', 'parser.y', 1583)
 
 # reduce 474 omitted
 
-module_eval(<<'.,.,', 'parser.y', 1601)
+module_eval(<<'.,.,', 'parser.y', 1597)
   def _reduce_475(val, _values, result)
     								unless /^([a-zA-Z]|_)[a-zA-Z0-9_\.-]*$/ =~ val[0]
 									raise ParseError, "bad identifier-arg-str"
@@ -3730,7 +3730,7 @@ module_eval(<<'.,.,', 'parser.y', 1601)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1609)
+module_eval(<<'.,.,', 'parser.y', 1605)
   def _reduce_476(val, _values, result)
     								unless /^(([a-zA-Z]|_)[a-zA-Z0-9_\.-]*:)?([a-zA-Z]|_)[a-zA-Z0-9_\.-]*$/ =~ val[0]
 									raise ParseError, "bad identifier-ref-arg-str"
@@ -3741,7 +3741,7 @@ module_eval(<<'.,.,', 'parser.y', 1609)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1617)
+module_eval(<<'.,.,', 'parser.y', 1613)
   def _reduce_477(val, _values, result)
     								unless /^-?(?:[1-9][0-9]*)|0$/ =~ val[0]
 									raise ParseError, "bad integer-value, but '#{val[0]}'"
@@ -3754,7 +3754,7 @@ module_eval(<<'.,.,', 'parser.y', 1617)
 
 # reduce 478 omitted
 
-module_eval(<<'.,.,', 'parser.y', 1626)
+module_eval(<<'.,.,', 'parser.y', 1622)
   def _reduce_479(val, _values, result)
     								result = val[0] + val[2]
 							
@@ -3764,7 +3764,7 @@ module_eval(<<'.,.,', 'parser.y', 1626)
 
 # reduce 480 omitted
 
-module_eval(<<'.,.,', 'parser.y', 1633)
+module_eval(<<'.,.,', 'parser.y', 1629)
   def _reduce_481(val, _values, result)
     								result = []
 							
@@ -3772,7 +3772,7 @@ module_eval(<<'.,.,', 'parser.y', 1633)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 1637)
+module_eval(<<'.,.,', 'parser.y', 1633)
   def _reduce_482(val, _values, result)
     								result = val[1]
 							

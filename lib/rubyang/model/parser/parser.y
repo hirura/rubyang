@@ -1477,10 +1477,6 @@ rule
 					|	"reference-stmt"
 					|	"typedef-stmt"
 					|	"deviate-stmt"
-					#|	"deviate-not-supported-stmt"
-					#|	"deviate-add-stmt"
-					#|	"deviate-replace-stmt"
-					#|	"deviate-delete-stmt"
 
 	"deviation-arg-str"		:	"deviation-arg"
 
