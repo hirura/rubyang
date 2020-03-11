@@ -1,6 +1,6 @@
 # rubyang
 
-[![Build Status](https://travis-ci.org/hirura/rubyang.svg?branch=master)](https://travis-ci.org/hirura/rubyang)
+[![Build Status](https://travis-ci.com/hirura/rubyang.svg?branch=master)](https://travis-ci.com/hirura/rubyang)
 [![Maintainability](https://api.codeclimate.com/v1/badges/05f5fd598d75872b22d0/maintainability)](https://codeclimate.com/github/hirura/rubyang/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/05f5fd598d75872b22d0/test_coverage)](https://codeclimate.com/github/hirura/rubyang/test_coverage)
 [![Gem Version](https://badge.fury.io/rb/rubyang.svg)](https://badge.fury.io/rb/rubyang)
